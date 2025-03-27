@@ -59,6 +59,29 @@ const styles = StyleSheet.create({
     padding: '3 6',
     borderRadius: 3,
   },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  projectItem: {
+    marginBottom: 8,
+  },
+  projectName: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  projectDescription: {
+    fontSize: 10,
+  },
+  projectTech: {
+    fontSize: 10,
+    color: '#666',
+  },
+  projectLink: {
+    fontSize: 10,
+    color: '#544cd7',
+  }
 });
 
 const ResumePDF = ({ data }) => {
@@ -138,13 +161,13 @@ const ResumePDF = ({ data }) => {
         {/* Projects */}
         {data.projects.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.subHeader}>Projects</Text>
+            <Text style={styles.sectionTitle}>Projects</Text>
             {data.projects.map((project, index) => (
-              <View key={index} style={{ marginBottom: 10 }}>
-                <Text style={styles.itemTitle}>{project.name}</Text>
-                <Text style={styles.itemSubtitle}>Technologies: {project.technologies}</Text>
-                <Text style={styles.itemDetails}>{project.description}</Text>
-                {project.link && <Text style={styles.links}>Link: {project.link}</Text>}
+              <View key={index} style={styles.projectItem}>
+                <Text style={styles.projectName}>{project.name}</Text>
+                <Text style={styles.projectDescription}>{project.description}</Text>
+                <Text style={styles.projectTech}>{project.technologies}</Text>
+                <Text style={styles.projectLink}>{project.link}</Text>
               </View>
             ))}
           </View>

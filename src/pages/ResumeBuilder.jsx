@@ -1,7 +1,7 @@
 import React from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Download } from 'lucide-react';
-import PersonalInfoSection from '../components/PersonalInfoSection';
+import PersonalInfoSection from '../components/PersonalInfoSection';s
 import EducationSection from '../components/EducationSection';
 import ExperienceSection from '../components/ExperienceSection';
 import SkillsSection from '../components/SkillsSection';
@@ -17,18 +17,20 @@ const ResumeBuilder = () => {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Resume Builder</h1>
-          <PDFDownloadLink
-            document={<ResumePDF data={state} />}
-            fileName={`${state.personalInfo.name || 'resume'}.pdf`}
-            className="flex items-center space-x-2 px-4 py-2 bg-[#544cd7] text-white rounded-lg hover:bg-[#4038ac] transition-colors"
-          >
-            {({ loading }) => (
-              <>
-                <Download size={20} />
-                <span>{loading ? 'Preparing...' : 'Download PDF'}</span>
-              </>
-            )}
-          </PDFDownloadLink>
+          {state && (
+            <PDFDownloadLink
+              document={<ResumePDF data={state} />}
+              fileName={`${state.personalInfo.name || 'resume'}.pdf`}
+              className="flex items-center space-x-2 px-4 py-2 bg-[#544cd7] text-white rounded-lg hover:bg-[#4038ac] transition-colors"
+            >
+              {({ loading }) => (
+                <div className="flex items-center space-x-2">
+                  <Download size={20} />
+                  <Text>{loading ? 'Preparing...' : 'Download PDF'}</Text>
+                </div>
+              )}
+            </PDFDownloadLink>
+          )}
         </div>
 
         <div className="space-y-8">
