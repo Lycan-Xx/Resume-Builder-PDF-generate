@@ -18,6 +18,23 @@ const EducationSection = () => {
     });
   };
 
+  const handleRemoveEducation = (index) => {
+    dispatch({
+      type: 'REMOVE_EDUCATION',
+      payload: index,
+    });
+  };
+
+  const handleInputChange = (index, field, value) => {
+    dispatch({
+      type: 'UPDATE_EDUCATION',
+      payload: {
+        index,
+        data: { [field]: value }
+      }
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -38,33 +55,39 @@ const EducationSection = () => {
               type="text"
               placeholder="Institution"
               value={edu.institution}
+              onChange={(e) => handleInputChange(index, 'institution', e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent"
             />
             <input
               type="text"
               placeholder="Degree"
               value={edu.degree}
+              onChange={(e) => handleInputChange(index, 'degree', e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent"
             />
             <input
               type="text"
               placeholder="Major"
               value={edu.major}
+              onChange={(e) => handleInputChange(index, 'major', e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent"
             />
             <input
               type="text"
               placeholder="Graduation Date"
               value={edu.graduationDate}
+              onChange={(e) => handleInputChange(index, 'graduationDate', e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent"
             />
             <input
               type="text"
               placeholder="GPA (Optional)"
               value={edu.gpa}
+              onChange={(e) => handleInputChange(index, 'gpa', e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent"
             />
             <button
+              onClick={() => handleRemoveEducation(index)}
               className="flex items-center justify-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
               <Trash2 size={20} />

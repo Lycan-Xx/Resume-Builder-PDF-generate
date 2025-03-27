@@ -4,7 +4,7 @@ import { useResume } from '../context/ResumeContext';
 const PersonalInfoSection = () => {
   const { state, dispatch } = useResume();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith('links.')) {
       const linkType = name.split('.')[1];

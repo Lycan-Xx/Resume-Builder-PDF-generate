@@ -1,43 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
-interface ResumeState {
-  personalInfo: {
-    name: string;
-    email: string;
-    phone: string;
-    location: string;
-    links: {
-      linkedin?: string;
-      github?: string;
-    };
-  };
-  education: Array<{
-    institution: string;
-    degree: string;
-    major: string;
-    graduationDate: string;
-    gpa?: string;
-  }>;
-  experience: Array<{
-    company: string;
-    position: string;
-    startDate: string;
-    endDate: string;
-    responsibilities: string[];
-  }>;
-  skills: {
-    technical: string[];
-    soft: string[];
-  };
-  projects: Array<{
-    name: string;
-    description: string;
-    technologies: string[];
-    links: string[];
-  }>;
-}
-
-const initialState: ResumeState = {
+const initialState = {
   personalInfo: {
     name: '',
     email: '',
@@ -54,27 +17,7 @@ const initialState: ResumeState = {
   projects: [],
 };
 
-type Action =
-  | { type: 'UPDATE_PERSONAL_INFO'; payload: Partial<ResumeState['personalInfo']> }
-  | { type: 'ADD_EDUCATION'; payload: ResumeState['education'][0] }
-  | { type: 'UPDATE_EDUCATION'; payload: { index: number; data: Partial<ResumeState['education'][0]> } }
-  | { type: 'REMOVE_EDUCATION'; payload: number }
-  | { type: 'ADD_EXPERIENCE'; payload: ResumeState['experience'][0] }
-  | { type: 'UPDATE_EXPERIENCE'; payload: { index: number; field: keyof ResumeState['experience'][0]; value: string } }
-  | { type: 'REMOVE_EXPERIENCE'; payload: number }
-  | { type: 'ADD_RESPONSIBILITY'; payload: { expIndex: number } }
-  | { type: 'UPDATE_RESPONSIBILITY'; payload: { expIndex: number; respIndex: number; value: string } }
-  | { type: 'REMOVE_RESPONSIBILITY'; payload: { expIndex: number; respIndex: number } }
-  | { type: 'UPDATE_SKILLS'; payload: Partial<ResumeState['skills']> }
-  | { type: 'ADD_TECHNICAL_SKILL'; payload: string }
-  | { type: 'ADD_SOFT_SKILL'; payload: string }
-  | { type: 'REMOVE_TECHNICAL_SKILL'; payload: string }
-  | { type: 'REMOVE_SOFT_SKILL'; payload: string }
-  | { type: 'ADD_PROJECT'; payload: ResumeState['projects'][0] }
-  | { type: 'UPDATE_PROJECT'; payload: { index: number; data: Partial<ResumeState['projects'][0]> } }
-  | { type: 'REMOVE_PROJECT'; payload: number };
-
-const resumeReducer = (state: ResumeState, action: Action): ResumeState => {
+const resumeReducer = (state, action) => {
   switch (action.type) {
     case 'UPDATE_PERSONAL_INFO':
       return {
@@ -228,7 +171,9 @@ const resumeReducer = (state: ResumeState, action: Action): ResumeState => {
   }
 };
 
-export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ResumeContext = createContext(null);
+
+export const ResumeProvider = ({ children }) => {
   const [state, dispatch] = useReducer(resumeReducer, initialState);
   return (
     <ResumeContext.Provider value={{ state, dispatch }}>
@@ -236,11 +181,6 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     </ResumeContext.Provider>
   );
 };
-
-const ResumeContext = createContext<{
-  state: ResumeState;
-  dispatch: React.Dispatch<Action>;
-} | null>(null);
 
 export const useResume = () => {
   const context = useContext(ResumeContext);
