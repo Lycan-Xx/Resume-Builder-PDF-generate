@@ -18,7 +18,7 @@ const ResumeBuilder = () => {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Resume Builder</h1>
           <PDFDownloadLink
-            document={<ResumePDF />}
+            document={<ResumePDF data={state} />}
             fileName={`${state.personalInfo.name || 'resume'}.pdf`}
             className="flex items-center space-x-2 px-4 py-2 bg-[#544cd7] text-white rounded-lg hover:bg-[#4038ac] transition-colors"
           >

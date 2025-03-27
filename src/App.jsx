@@ -25,7 +25,11 @@ const RootLayout = () => {
 // Create router configuration
 const router = createBrowserRouter([
   {
-    element: <RootLayout />,
+    element: (
+      <ResumeProvider>
+        <RootLayout />
+      </ResumeProvider>
+    ),
     children: [
       {
         path: "/",
@@ -33,15 +37,16 @@ const router = createBrowserRouter([
       },
       {
         path: "/builder",
-        element: (
-          <ResumeProvider>
-            <ResumeBuilder />
-          </ResumeProvider>
-        )
+        element: <ResumeBuilder />
       }
     ]
   }
-]);
+], {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true
+  }
+});
 
 function App() {
   return <RouterProvider router={router} />;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-import { useResume } from '../context/ResumeContext';
 
 const styles = StyleSheet.create({
   page: {
@@ -62,30 +61,28 @@ const styles = StyleSheet.create({
   },
 });
 
-const ResumePDF = () => {
-  const { state } = useResume();
-
+const ResumePDF = ({ data }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         {/* Header / Personal Info */}
         <View style={styles.section}>
-          <Text style={styles.header}>{state.personalInfo.name}</Text>
-          <Text style={styles.contactInfo}>{state.personalInfo.email} | {state.personalInfo.phone}</Text>
-          <Text style={styles.contactInfo}>{state.personalInfo.location}</Text>
-          {state.personalInfo.links.linkedin && (
-            <Text style={styles.links}>LinkedIn: {state.personalInfo.links.linkedin}</Text>
+          <Text style={styles.header}>{data.personalInfo.name}</Text>
+          <Text style={styles.contactInfo}>{data.personalInfo.email} | {data.personalInfo.phone}</Text>
+          <Text style={styles.contactInfo}>{data.personalInfo.location}</Text>
+          {data.personalInfo.links.linkedin && (
+            <Text style={styles.links}>LinkedIn: {data.personalInfo.links.linkedin}</Text>
           )}
-          {state.personalInfo.links.github && (
-            <Text style={styles.links}>GitHub: {state.personalInfo.links.github}</Text>
+          {data.personalInfo.links.github && (
+            <Text style={styles.links}>GitHub: {data.personalInfo.links.github}</Text>
           )}
         </View>
 
         {/* Experience */}
-        {state.experience.length > 0 && (
+        {data.experience.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.subHeader}>Professional Experience</Text>
-            {state.experience.map((exp, index) => (
+            {data.experience.map((exp, index) => (
               <View key={index} style={{ marginBottom: 10 }}>
                 <Text style={styles.itemTitle}>{exp.position} at {exp.company}</Text>
                 <Text style={styles.itemSubtitle}>{exp.location} | {exp.startDate} - {exp.endDate}</Text>
@@ -98,10 +95,10 @@ const ResumePDF = () => {
         )}
 
         {/* Education */}
-        {state.education.length > 0 && (
+        {data.education.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.subHeader}>Education</Text>
-            {state.education.map((edu, index) => (
+            {data.education.map((edu, index) => (
               <View key={index} style={{ marginBottom: 10 }}>
                 <Text style={styles.itemTitle}>{edu.institution}</Text>
                 <Text style={styles.itemSubtitle}>{edu.degree} in {edu.major}</Text>
@@ -112,24 +109,24 @@ const ResumePDF = () => {
         )}
 
         {/* Skills */}
-        {(state.skills.technical.length > 0 || state.skills.soft.length > 0) && (
+        {(data.skills.technical.length > 0 || data.skills.soft.length > 0) && (
           <View style={styles.section}>
             <Text style={styles.subHeader}>Skills</Text>
-            {state.skills.technical.length > 0 && (
+            {data.skills.technical.length > 0 && (
               <View style={{ marginBottom: 10 }}>
                 <Text style={styles.itemTitle}>Technical Skills</Text>
                 <View style={styles.skillsContainer}>
-                  {state.skills.technical.map((skill, index) => (
+                  {data.skills.technical.map((skill, index) => (
                     <Text key={index} style={styles.skill}>{skill}</Text>
                   ))}
                 </View>
               </View>
             )}
-            {state.skills.soft.length > 0 && (
+            {data.skills.soft.length > 0 && (
               <View>
                 <Text style={styles.itemTitle}>Soft Skills</Text>
                 <View style={styles.skillsContainer}>
-                  {state.skills.soft.map((skill, index) => (
+                  {data.skills.soft.map((skill, index) => (
                     <Text key={index} style={styles.skill}>{skill}</Text>
                   ))}
                 </View>
@@ -139,10 +136,10 @@ const ResumePDF = () => {
         )}
 
         {/* Projects */}
-        {state.projects.length > 0 && (
+        {data.projects.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.subHeader}>Projects</Text>
-            {state.projects.map((project, index) => (
+            {data.projects.map((project, index) => (
               <View key={index} style={{ marginBottom: 10 }}>
                 <Text style={styles.itemTitle}>{project.name}</Text>
                 <Text style={styles.itemSubtitle}>Technologies: {project.technologies}</Text>
