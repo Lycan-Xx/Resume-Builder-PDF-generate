@@ -86,14 +86,15 @@ const EducationSection = () => {
               onChange={(e) => handleInputChange(index, 'gpa', e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent"
             />
-            <button
-              onClick={() => handleRemoveEducation(index)}
-              className="flex items-center justify-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-            >
-              <Trash2 size={20} />
-              <span>Remove</span>
-            </button>
           </div>
+
+          <button
+            onClick={() => handleRemoveEducation(index)}
+            className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <Trash2 size={20} />
+            <span>Remove Education</span>
+          </button>
         </div>
       ))}
     </div>

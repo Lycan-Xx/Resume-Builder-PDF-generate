@@ -32,7 +32,7 @@ const resumeReducer = (state, action) => {
         education: [...state.education, action.payload],
       };
     case 'UPDATE_EDUCATION':
-      return {
+      return { 
         ...state,
         education: state.education.map((edu, index) => 
           index === action.payload.index 
