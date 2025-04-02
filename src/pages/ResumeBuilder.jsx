@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PDFViewer } from '@react-pdf/renderer';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Download, Eye, EyeOff } from 'lucide-react';
 import PersonalInfoSection from '../components/PersonalInfoSection';
 import EducationSection from '../components/EducationSection';
 import ExperienceSection from '../components/ExperienceSection';
@@ -20,6 +20,7 @@ const sections = [
 const ResumeBuilder = () => {
   const { state } = useResume();
   const [currentSection, setCurrentSection] = useState(0);
+  const [showPreview, setShowPreview] = useState(false);
 
   const CurrentSectionComponent = sections[currentSection].component;
   const isLastSection = currentSection === sections.length - 1;
@@ -29,6 +30,10 @@ const ResumeBuilder = () => {
     if (currentSection < sections.length - 1) {
       setCurrentSection(currentSection + 1);
     }
+  };
+
+  const togglePreview = () => {
+    setShowPreview(!showPreview);
   };
 
   return (
@@ -56,9 +61,27 @@ const ResumeBuilder = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 pt-16">
-        <div className="flex gap-8">
+        {/* Preview Toggle Button - Only visible on mobile */}
+        <button
+          onClick={togglePreview}
+          className="md:hidden mb-4 flex items-center space-x-2 px-4 py-2 bg-[#544cd7] text-white rounded-lg hover:bg-[#4038ac] transition-colors"
+        >
+          {showPreview ? (
+            <>
+              <EyeOff size={20} />
+              <span>Hide Preview</span>
+            </>
+          ) : (
+            <>
+              <Eye size={20} />
+              <span>Show Preview</span>
+            </>
+          )}
+        </button>
+
+        <div className="flex flex-col md:flex-row gap-8">
           {/* Form Section */}
-          <div className="flex-1 bg-white rounded-lg shadow-lg p-6">
+          <div className={`flex-1 bg-white rounded-lg shadow-lg p-6 ${showPreview ? 'hidden md:block' : 'block'}`}>
             <div className="mb-6">
               <h1 className="text-2xl font-bold text-gray-900">{sections[currentSection].name}</h1>
               <div className="text-sm text-gray-500">
@@ -91,7 +114,10 @@ const ResumeBuilder = () => {
           </div>
 
           {/* Live Preview */}
-          <div className="flex-1 sticky top-24 h-[calc(100vh-120px)]">
+          <div 
+            className={`flex-1 md:sticky md:top-24 h-[calc(100vh-180px)] md:h-[calc(100vh-120px)] 
+              ${showPreview ? 'block' : 'hidden md:block'}`}
+          >
             <div className="bg-white rounded-lg shadow-lg h-full overflow-hidden">
               <PDFViewer width="100%" height="100%" className="w-full h-full">
                 <ResumePDF data={state} />
