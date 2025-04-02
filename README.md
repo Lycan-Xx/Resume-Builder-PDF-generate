@@ -145,3 +145,10 @@ src/
 *   **ESLint:** A JavaScript linter for identifying and fixing code quality issues.
 
 This overview should provide a solid foundation for understanding the project structure and component logic. Good luck!
+
+
+
+## Features to add
+
+- Sign up and sign in with google - also implement a firebase backend
+- 
