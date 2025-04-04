@@ -165,6 +165,24 @@ const resumeReducer = (state, action) => {
         ...state,
         projects: state.projects.filter((_, index) => index !== action.payload),
       };
+
+    case 'RESET_FORM':
+      return {
+        personalInfo: {
+          name: '',
+          email: '',
+          phone: '',
+          location: '',
+          links: {},
+        },
+        education: [],
+        experience: [],
+        skills: {
+          technical: [],
+          soft: [],
+        },
+        projects: [],
+      };
     
     default:
       return state;
