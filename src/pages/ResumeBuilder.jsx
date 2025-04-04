@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PDFViewer } from '@react-pdf/renderer';
 import { ArrowRight, Download, Eye, EyeOff } from 'lucide-react';
+import Navbar from '../components/Navbar';
 import PersonalInfoSection from '../components/PersonalInfoSection';
 import EducationSection from '../components/EducationSection';
 import ExperienceSection from '../components/ExperienceSection';
@@ -24,7 +25,6 @@ const ResumeBuilder = () => {
 
   const CurrentSectionComponent = sections[currentSection].component;
   const isLastSection = currentSection === sections.length - 1;
-  const progress = ((currentSection + 1) / sections.length) * 100;
 
   const handleNext = () => {
     if (currentSection < sections.length - 1) {
@@ -38,29 +38,78 @@ const ResumeBuilder = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Progress Bar */}
-      <div className="fixed top-[64px] left-0 right-0 h-2 bg-gray-200 z-10">
-        <div className="flex h-full">
-          {sections.map((section, index) => {
-            const sectionProgress = index < currentSection ? 100 : 
-                                  index === currentSection ? 
-                                  (progress - (index / sections.length * 100)) * sections.length : 0;
-            return (
-              <div
-                key={section.id}
-                className="h-full transition-all duration-300"
-                style={{
-                  width: `${100 / sections.length}%`,
-                  backgroundColor: section.color,
-                  opacity: sectionProgress > 0 ? 1 : 0.1
-                }}
-              />
-            );
-          })}
+      {/* Main Navbar */}
+      <Navbar />
+
+      {/* Secondary Navbar (Progress Bar) */}
+      <div className="bg-white shadow-sm py-3 fixed top-[64px] left-0 right-0 z-10">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-medium text-gray-800">
+              {sections[currentSection].name}
+            </h2>
+            <span className="text-sm text-gray-500">
+              Step {currentSection + 1} of {sections.length}
+            </span>
+          </div>
+          
+          <div className="flex relative">
+            {sections.map((section, index) => {
+              const isActive = index === currentSection;
+              const isCompleted = index < currentSection;
+              
+              return (
+                <div
+                  key={section.id}
+                  className="flex-1 flex flex-col items-center relative"
+                >
+                  {/* Connector Line */}
+                  {index > 0 && (
+                    <div 
+                      className="absolute top-4 -left-1/2 w-full h-1 transition-all duration-500"
+                      style={{ 
+                        backgroundColor: isCompleted || isActive ? section.color : '#e5e7eb',
+                        opacity: isCompleted ? 1 : isActive ? 0.7 : 0.3
+                      }}
+                    />
+                  )}
+                  
+                  {/* Circle Step Indicator */}
+                  <div 
+                    className={`w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all duration-300 ${
+                      isActive ? 'ring-4 ring-opacity-30' : ''
+                    }`}
+                    style={{ 
+                      backgroundColor: isCompleted ? section.color : isActive ? section.color : '#f3f4f6',
+                      color: isCompleted || isActive ? 'white' : '#6b7280',
+                      ringColor: section.color
+                    }}
+                  >
+                    {isCompleted ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      index + 1
+                    )}
+                  </div>
+                  
+                  {/* Section Name */}
+                  <span 
+                    className={`mt-2 text-xs font-medium transition-all duration-300 ${
+                      isActive ? 'text-gray-900' : isCompleted ? 'text-gray-700' : 'text-gray-500'
+                    }`}
+                  >
+                    {section.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 pt-16">
+      <div className="container mx-auto px-4 py-8 pt-28">
         {/* Preview Toggle Button - Only visible on mobile */}
         <button
           onClick={togglePreview}
