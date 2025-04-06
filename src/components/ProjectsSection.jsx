@@ -3,8 +3,8 @@ import { Plus, Trash2, ExternalLink, Code, FileText } from 'lucide-react';
 import { useResume } from '../context/ResumeContext';
 
 const ProjectsSection = () => {
-  const { state, dispatch } = useResume();
-  
+  const { state, dispatch, debouncedUpdatePreview } = useResume();
+
   const handleAddProject = () => {
     dispatch({
       type: 'ADD_PROJECT',
@@ -15,38 +15,27 @@ const ProjectsSection = () => {
         link: '',
       },
     });
+    debouncedUpdatePreview();
   };
-  
+
   const handleRemoveProject = (index) => {
     dispatch({
       type: 'REMOVE_PROJECT',
       payload: index,
     });
+    debouncedUpdatePreview();
   };
-  
+
   const handleInputChange = (index, field, value) => {
-    // Input validation (commented out as requested)
-    /*
-    if (field === 'name' && value.length > 100) {
-      return;
-    }
-    if (field === 'link' && value !== '' && !value.startsWith('http')) {
-      return;
-    }
-    if (field === 'description' && value.length > 500) {
-      return;
-    }
-    */
-    
     dispatch({
       type: 'UPDATE_PROJECT',
       payload: {
         index,
-        data: { [field]: value }
-      }
+        data: { [field]: value },
+      },
     });
   };
-  
+
   return (
     <div className="space-y-8 p-1">
       <div className="flex justify-between items-center mb-6">
@@ -61,7 +50,7 @@ const ProjectsSection = () => {
           <span className="font-medium">Add Project</span>
         </button>
       </div>
-      
+
       {state.projects.length === 0 && (
         <div className="bg-gray-50/70 p-8 rounded-lg border border-dashed border-gray-300 flex flex-col items-center justify-center text-center">
           <FileText size={36} className="text-gray-400 mb-2" />
@@ -75,10 +64,10 @@ const ProjectsSection = () => {
           </button>
         </div>
       )}
-      
+
       {state.projects.map((project, index) => (
-        <div 
-          key={index} 
+        <div
+          key={index}
           className="bg-white p-6 rounded-lg space-y-5 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -91,11 +80,14 @@ const ProjectsSection = () => {
                 type="text"
                 placeholder="e.g. Portfolio Website"
                 value={project.name || ''}
-                onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange(index, 'name', e.target.value)
+                }
+                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="text-sm font-medium text-gray-600 flex items-center">
                 <ExternalLink size={16} className="mr-1 text-[#0A9396]" />
@@ -105,11 +97,14 @@ const ProjectsSection = () => {
                 type="url"
                 placeholder="e.g. https://myproject.com"
                 value={project.link || ''}
-                onChange={(e) => handleInputChange(index, 'link', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange(index, 'link', e.target.value)
+                }
+                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="text-sm font-medium text-gray-600 flex items-center">
                 <Code size={16} className="mr-1 text-[#0A9396]" />
@@ -119,12 +114,15 @@ const ProjectsSection = () => {
                 type="text"
                 placeholder="e.g. React, Node.js, MongoDB"
                 value={project.technologies || ''}
-                onChange={(e) => handleInputChange(index, 'technologies', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange(index, 'technologies', e.target.value)
+                }
+                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
           </div>
-          
+
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-600">
               Project Description
@@ -132,12 +130,15 @@ const ProjectsSection = () => {
             <textarea
               placeholder="Describe your project, its purpose, and your role..."
               value={project.description || ''}
-              onChange={(e) => handleInputChange(index, 'description', e.target.value)}
+              onChange={(e) =>
+                handleInputChange(index, 'description', e.target.value)
+              }
+              onBlur={debouncedUpdatePreview}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               rows={4}
             />
           </div>
-          
+
           <div className="pt-3">
             <button
               onClick={() => handleRemoveProject(index)}

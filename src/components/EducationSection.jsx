@@ -3,7 +3,7 @@ import { Plus, Trash2, GraduationCap, Calendar } from 'lucide-react';
 import { useResume } from '../context/ResumeContext';
 
 const EducationSection = () => {
-  const { state, dispatch } = useResume();
+  const { state, dispatch, debouncedUpdatePreview } = useResume();
   
   const handleAddEducation = () => {
     dispatch({
@@ -16,6 +16,7 @@ const EducationSection = () => {
         gpa: '',
       },
     });
+    debouncedUpdatePreview();
   };
   
   const handleRemoveEducation = (index) => {
@@ -23,29 +24,10 @@ const EducationSection = () => {
       type: 'REMOVE_EDUCATION',
       payload: index,
     });
+    debouncedUpdatePreview();
   };
   
   const handleInputChange = (index, field, value) => {
-    // Input validation (commented out as requested)
-    /*
-    if (field === 'institution' && value.length > 100) {
-      return;
-    }
-    if (field === 'degree' && value.length > 100) {
-      return;
-    }
-    if (field === 'major' && value.length > 100) {
-      return;
-    }
-    if (field === 'graduationDate' && 
-        !/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$|^(0[1-9]|1[0-2])\/(19|20)\d\d$|^(19|20)\d\d$|^Present$|^Expected (0[1-9]|1[0-2])\/(19|20)\d\d$/.test(value)) {
-      return;
-    }
-    if (field === 'gpa' && value !== '' && (isNaN(parseFloat(value)) || parseFloat(value) < 0 || parseFloat(value) > 4.0)) {
-      return;
-    }
-    */
-    
     dispatch({
       type: 'UPDATE_EDUCATION',
       payload: {
@@ -97,6 +79,7 @@ const EducationSection = () => {
                 placeholder="University or School Name"
                 value={edu.institution}
                 onChange={(e) => handleInputChange(index, 'institution', e.target.value)}
+                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -108,6 +91,7 @@ const EducationSection = () => {
                 placeholder="Bachelor's, Master's, PhD, etc."
                 value={edu.degree}
                 onChange={(e) => handleInputChange(index, 'degree', e.target.value)}
+                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -119,6 +103,7 @@ const EducationSection = () => {
                 placeholder="Computer Science, Business, etc."
                 value={edu.major}
                 onChange={(e) => handleInputChange(index, 'major', e.target.value)}
+                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -131,6 +116,7 @@ const EducationSection = () => {
                   placeholder="MM/YYYY (or Expected MM/YYYY)"
                   value={edu.graduationDate}
                   onChange={(e) => handleInputChange(index, 'graduationDate', e.target.value)}
+                  onBlur={debouncedUpdatePreview}
                   className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
                 />
                 <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -144,6 +130,7 @@ const EducationSection = () => {
                 placeholder="e.g., 3.8/4.0"
                 value={edu.gpa}
                 onChange={(e) => handleInputChange(index, 'gpa', e.target.value)}
+                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>

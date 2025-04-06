@@ -3,79 +3,50 @@ import { Plus, X, Tag, Shield } from 'lucide-react';
 import { useResume } from '../context/ResumeContext';
 
 const SkillsSection = () => {
-  const { state, dispatch } = useResume();
+  const { state, dispatch, debouncedUpdatePreview } = useResume();
   const [newTechnicalSkill, setNewTechnicalSkill] = useState('');
   const [newSoftSkill, setNewSoftSkill] = useState('');
 
-  // Primary teal color from the image
-  const primaryColor = '#0A9396';
-
   const handleAddTechnicalSkill = (e) => {
     e.preventDefault();
-    
-    // Validation (commented out)
-    /*
-    if (newTechnicalSkill.trim().length === 0) {
-      return;
-    }
-    
-    if (newTechnicalSkill.trim().length > 50) {
-      return;
-    }
-    
-    if (state.skills.technical.includes(newTechnicalSkill.trim())) {
-      return; // Prevent duplicates
-    }
-    */
-    
+
     if (newTechnicalSkill.trim()) {
       dispatch({
         type: 'ADD_TECHNICAL_SKILL',
-        payload: newTechnicalSkill.trim()
+        payload: newTechnicalSkill.trim(),
       });
       setNewTechnicalSkill('');
+      debouncedUpdatePreview();
     }
   };
 
   const handleAddSoftSkill = (e) => {
     e.preventDefault();
-    
-    // Validation (commented out)
-    /*
-    if (newSoftSkill.trim().length === 0) {
-      return;
-    }
-    
-    if (newSoftSkill.trim().length > 50) {
-      return;
-    }
-    
-    if (state.skills.soft.includes(newSoftSkill.trim())) {
-      return; // Prevent duplicates
-    }
-    */
-    
+
     if (newSoftSkill.trim()) {
       dispatch({
         type: 'ADD_SOFT_SKILL',
-        payload: newSoftSkill.trim()
+        payload: newSoftSkill.trim(),
       });
       setNewSoftSkill('');
+      debouncedUpdatePreview();
     }
   };
 
   const handleRemoveTechnicalSkill = (skill) => {
     dispatch({
       type: 'REMOVE_TECHNICAL_SKILL',
-      payload: skill
+      payload: skill,
     });
+    debouncedUpdatePreview();
   };
 
   const handleRemoveSoftSkill = (skill) => {
     dispatch({
       type: 'REMOVE_SOFT_SKILL',
-      payload: skill
+      payload: skill,
     });
+    debouncedUpdatePreview();
   };
 
   return (
@@ -90,19 +61,20 @@ const SkillsSection = () => {
           <Tag size={18} className="mr-2 text-[#0A9396]" />
           Technical Skills
         </h3>
-        
+
         <form onSubmit={handleAddTechnicalSkill} className="flex gap-3">
           <div className="flex-1 relative">
             <input
               type="text"
               value={newTechnicalSkill}
               onChange={(e) => setNewTechnicalSkill(e.target.value)}
+              onBlur={debouncedUpdatePreview}
               placeholder="Add programming languages, tools, frameworks..."
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none pr-12"
             />
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400">
               {newTechnicalSkill.length > 0 && (
-                <button 
+                <button
                   type="button"
                   onClick={() => setNewTechnicalSkill('')}
                   className="p-1 hover:bg-gray-100 rounded-full"
@@ -120,10 +92,11 @@ const SkillsSection = () => {
             <span className="font-medium">Add</span>
           </button>
         </form>
-        
+
         {state.skills.technical.length === 0 ? (
           <div className="text-gray-500 text-sm italic py-2">
-            No technical skills added yet. Add skills like React, JavaScript, Python, etc.
+            No technical skills added yet. Add skills like React, JavaScript,
+            Python, etc.
           </div>
         ) : (
           <div className="flex flex-wrap gap-2 pt-2">
@@ -152,19 +125,20 @@ const SkillsSection = () => {
           <Shield size={18} className="mr-2 text-[#544cd7]" />
           Soft Skills
         </h3>
-        
+
         <form onSubmit={handleAddSoftSkill} className="flex gap-3">
           <div className="flex-1 relative">
             <input
               type="text"
               value={newSoftSkill}
               onChange={(e) => setNewSoftSkill(e.target.value)}
+              onBlur={debouncedUpdatePreview}
               placeholder="Add communication, leadership, problem-solving skills..."
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent transition-all outline-none pr-12"
             />
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400">
               {newSoftSkill.length > 0 && (
-                <button 
+                <button
                   type="button"
                   onClick={() => setNewSoftSkill('')}
                   className="p-1 hover:bg-gray-100 rounded-full"
@@ -173,6 +147,7 @@ const SkillsSection = () => {
                 </button>
               )}
             </div>
+          
           </div>
           <button
             type="submit"
@@ -182,10 +157,11 @@ const SkillsSection = () => {
             <span className="font-medium">Add</span>
           </button>
         </form>
-        
+
         {state.skills.soft.length === 0 ? (
           <div className="text-gray-500 text-sm italic py-2">
-            No soft skills added yet. Add skills like Communication, Leadership, etc.
+            No soft skills added yet. Add skills like Communication, Leadership,
+            etc.
           </div>
         ) : (
           <div className="flex flex-wrap gap-2 pt-2">
