@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Download, X } from 'lucide-react';
 import ResumePDF from './ResumePDF';
+import { useResume } from '../context/ResumeContext';
+
+const MemoizedPDFViewer = memo(({ data }) => (
+  <PDFViewer width="100%" height="100%" className="w-full h-full">
+    <ResumePDF data={data} />
+  </PDFViewer>
+));
 
 const PreviewModal = ({ isOpen, onClose, data }) => {
+  const { debouncedState } = useResume();
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
-        <div 
+        <div
           className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
           onClick={onClose}
         ></div>
@@ -39,11 +48,9 @@ const PreviewModal = ({ isOpen, onClose, data }) => {
                 </button>
               </div>
             </div>
-            
+
             <div className="w-full h-[80vh] overflow-auto bg-gray-100 rounded-lg">
-              <PDFViewer width="100%" height="100%" className="w-full h-full">
-                <ResumePDF data={data} />
-              </PDFViewer>
+              <MemoizedPDFViewer data={debouncedState} />
             </div>
           </div>
         </div>

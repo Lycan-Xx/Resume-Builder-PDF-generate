@@ -4,20 +4,27 @@ import HomePage from './pages/HomePage';
 import ResumeBuilder from './pages/ResumeBuilder';
 import { ResumeProvider } from './context/ResumeContext';
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <HomePage />
+    },
+    {
+      path: "/builder",
+      element: (
+        <ResumeProvider>
+          <ResumeBuilder />
+        </ResumeProvider>
+      )
+    }
+  ],
   {
-    path: "/",
-    element: <HomePage />
-  },
-  {
-    path: "/builder",
-    element: (
-      <ResumeProvider>
-        <ResumeBuilder />
-      </ResumeProvider>
-    )
+    future: {
+      v7_startTransition: true
+    }
   }
-]);
+);
 
 function App() {
   return (

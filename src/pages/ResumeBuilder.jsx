@@ -12,15 +12,35 @@ import ResumePDF from '../components/ResumePDF';
 import { useResume } from '../context/ResumeContext';
 
 const sections = [
-  { id: 'personal', name: 'Personal Info', color: '#544cd7', component: PersonalInfoSection },
-  { id: 'education', name: 'Education', color: '#10b981', component: EducationSection },
-  { id: 'experience', name: 'Experience', color: '#f59e0b', component: ExperienceSection },
+  {
+    id: 'personal',
+    name: 'Personal Info',
+    color: '#544cd7',
+    component: PersonalInfoSection,
+  },
+  {
+    id: 'education',
+    name: 'Education',
+    color: '#10b981',
+    component: EducationSection,
+  },
+  {
+    id: 'experience',
+    name: 'Experience',
+    color: '#f59e0b',
+    component: ExperienceSection,
+  },
   { id: 'skills', name: 'Skills', color: '#ef4444', component: SkillsSection },
-  { id: 'projects', name: 'Projects', color: '#8b5cf6', component: ProjectsSection },
+  {
+    id: 'projects',
+    name: 'Projects',
+    color: '#8b5cf6',
+    component: ProjectsSection,
+  },
 ];
 
 const ResumeBuilder = () => {
-  const { state, dispatch } = useResume();
+  const { previewState, dispatch } = useResume();
   const [currentSection, setCurrentSection] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
 
@@ -38,7 +58,6 @@ const ResumeBuilder = () => {
   };
 
   const resetForm = () => {
-    // Assuming your context has a reset action
     dispatch({ type: 'RESET_FORM' });
   };
 
@@ -48,7 +67,7 @@ const ResumeBuilder = () => {
       <Navbar />
 
       {/* Progress Navigation Bar */}
-      <ProgressNavbar 
+      <ProgressNavbar
         sections={sections}
         currentSection={currentSection}
         setCurrentSection={setCurrentSection}
@@ -76,14 +95,18 @@ const ResumeBuilder = () => {
 
         <div className="flex flex-col md:flex-row gap-8">
           {/* Form Section */}
-          <div className={`flex-1 bg-white rounded-lg shadow-lg p-6 ${showPreview ? 'hidden md:block' : 'block'}`}>
+          <div
+            className={`flex-1 bg-white rounded-lg shadow-lg p-6 ${
+              showPreview ? 'hidden md:block' : 'block'
+            }`}
+          >
             <CurrentSectionComponent />
 
             <div className="mt-8 flex justify-end">
               {isLastSection ? (
                 <a
                   href="#"
-                  download={`${state.personalInfo.name || 'resume'}.pdf`}
+                  download={`${previewState.personalInfo.name || 'resume'}.pdf`}
                   className="flex items-center space-x-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 >
                   <Download size={20} />
@@ -102,13 +125,13 @@ const ResumeBuilder = () => {
           </div>
 
           {/* Live Preview */}
-          <div 
+          <div
             className={`flex-1 md:sticky md:top-24 h-[calc(100vh-180px)] md:h-[calc(100vh-120px)] 
               ${showPreview ? 'block' : 'hidden md:block'}`}
           >
             <div className="bg-white rounded-lg shadow-lg h-full overflow-hidden">
               <PDFViewer width="100%" height="100%" className="w-full h-full">
-                <ResumePDF data={state} />
+                <ResumePDF data={previewState} />
               </PDFViewer>
             </div>
           </div>
