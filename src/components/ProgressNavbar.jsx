@@ -85,7 +85,7 @@ const ProgressNavbar = ({
                   
                   {/* Circle Step Indicator */}
                   <div 
-                    className={`w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all duration-300 ${
+                    className={`w-12 h-12 rounded-lg flex items-center justify-center z-10 transition-all duration-300 ${
                       isActive ? 'ring-4 ring-opacity-30' : ''
                     }`}
                     style={{ 
@@ -99,7 +99,7 @@ const ProgressNavbar = ({
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     ) : (
-                      index + 1
+                      section.icon
                     )}
                   </div>
                   
@@ -121,7 +121,7 @@ const ProgressNavbar = ({
       {/* Reset Confirmation Modal */}
       {showResetModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 h-4 max-w-md w-full mx-4">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4"> {/* Removed h-4 */}
             <div className="flex items-center text-red-500 mb-4">
               <AlertTriangle className="mr-2" size={24} />
               <h3 className="text-xl font-semibold">Reset Form</h3>
