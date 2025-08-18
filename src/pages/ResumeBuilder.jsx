@@ -1,158 +1,84 @@
-import React, { useState } from 'react';
-import { PDFViewer } from '@react-pdf/renderer';
-import { ArrowRight, Download, Eye, EyeOff, UserCircle2, GraduationCap, Briefcase, Code2, FolderGit2 } from 'lucide-react';
-import Navbar from '../components/Navbar';
-import ProgressNavbar from '../components/ProgressNavbar';
-import PersonalInfoSection from '../components/PersonalInfoSection';
-import EducationSection from '../components/EducationSection';
-import ExperienceSection from '../components/ExperienceSection';
-import SkillsSection from '../components/SkillsSection';
-import ProjectsSection from '../components/ProjectsSection';
-import ResumePDF from '../components/ResumePDF';
-import { useResume } from '../context/ResumeContext';
+"use client"
 
-const sections = [
-  {
-	id: 'personal',
-	name: 'Personal Info',
-	color: '#544cd7',
-	component: PersonalInfoSection,
-	icon: <UserCircle2 size={24} />,
-  },
+import { useState } from "react"
+import { PDFViewer } from "@react-pdf/renderer"
+import Navbar from "../components/Navbar"
+import SectionsNavbar from "../components/SectionsNavbar"
+import BasicsSection from "../components/sections/BasicsSection"
+import SummarySection from "../components/sections/SummarySection"
+import ExperienceSection from "../components/sections/ExperienceSection"
+import EducationSection from "../components/sections/EducationSection"
+import SkillsSection from "../components/sections/SkillsSection"
+import LanguagesSection from "../components/sections/LanguagesSection"
+import ResumePDF from "../components/ResumePDF"
+import { useResume } from "../contexts/ResumeContext"
 
-  {
-	id: 'education',
-	name: 'Education',
-	color: '#10b981',
-	component: EducationSection,
-	icon: <GraduationCap size={24} />,
-  },
-
-  {
-	id: 'experience',
-	name: 'Experience',
-	color: '#f59e0b',
-	component: ExperienceSection,
-	icon: <Briefcase size={24} />,
-  },
-
-  { id: 'skills',
-	name: 'Skills',
-	color: '#ef4444',
-	component: SkillsSection,
-	icon: <Code2 size={24} />,
-
-  },
-
-  {
-	id: 'projects',
-	name: 'Projects',
-	color: '#8b5cf6',
-	component: ProjectsSection,
-	icon: <FolderGit2 size={24} />,
-  },
-];
+const sectionComponents = {
+  basics: BasicsSection,
+  summary: SummarySection,
+  experience: ExperienceSection,
+  education: EducationSection,
+  skills: SkillsSection,
+  languages: LanguagesSection,
+  // Add more sections as they're created
+  awards: () => <div className="p-8 text-center text-gray-500">Awards section coming soon...</div>,
+  profiles: () => <div className="p-8 text-center text-gray-500">Profiles section coming soon...</div>,
+  projects: () => <div className="p-8 text-center text-gray-500">Projects section coming soon...</div>,
+  interests: () => <div className="p-8 text-center text-gray-500">Interests section coming soon...</div>,
+  certifications: () => <div className="p-8 text-center text-gray-500">Certifications section coming soon...</div>,
+  publications: () => <div className="p-8 text-center text-gray-500">Publications section coming soon...</div>,
+  volunteering: () => <div className="p-8 text-center text-gray-500">Volunteering section coming soon...</div>,
+  references: () => <div className="p-8 text-center text-gray-500">References section coming soon...</div>,
+}
 
 const ResumeBuilder = () => {
-  const { previewState, dispatch } = useResume();
-  const [currentSection, setCurrentSection] = useState(0);
-  const [showPreview, setShowPreview] = useState(false);
+  const { state } = useResume()
+  const [activeSection, setActiveSection] = useState("basics")
+  const [showPreview, setShowPreview] = useState(false)
 
-  const CurrentSectionComponent = sections[currentSection].component;
-  const isLastSection = currentSection === sections.length - 1;
-
-  const handleNext = () => {
-	if (currentSection < sections.length - 1) {
-	  setCurrentSection(currentSection + 1);
-	}
-  };
-
-  const togglePreview = () => {
-	setShowPreview(!showPreview);
-  };
-
-  const resetForm = () => {
-	dispatch({ type: 'RESET_FORM' });
-  };
+  const ActiveSectionComponent = sectionComponents[activeSection]
 
   return (
-	<div className="min-h-screen bg-gray-50">
-	  {/* Main Navbar */}
-	  <Navbar />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Main Navbar */}
+      <Navbar />
 
-	  {/* Progress Navigation Bar */}
-	  <ProgressNavbar
-		sections={sections}
-		currentSection={currentSection}
-		setCurrentSection={setCurrentSection}
-		resetForm={resetForm}
-	  />
+      {/* Sections Navigation Bar */}
+      <SectionsNavbar activeSection={activeSection} onSectionChange={setActiveSection} />
 
-	  <div className="container mx-auto px-4 py-8 pt-28">
-		{/* Preview Toggle Button - Only visible on mobile */}
-		<button
-		  onClick={togglePreview}
-		  className="md:hidden mb-4 flex items-center space-x-2 px-4 py-2 bg-[#544cd7] text-white rounded-lg hover:bg-[#4038ac] transition-colors"
-		>
-		  {showPreview ? (
-			<>
-			  <EyeOff size={20} />
-			  <span>Hide Preview</span>
-			</>
-		  ) : (
-			<>
-			  <Eye size={20} />
-			  <span>Show Preview</span>
-			</>
-		  )}
-		</button>
+      <div className="flex h-[calc(100vh-140px)]">
+        {/* Left Panel - Form */}
+        <div className={`${showPreview ? "hidden lg:block" : "block"} w-full lg:w-1/2 overflow-y-auto`}>
+          <div className="p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <ActiveSectionComponent />
+            </div>
+          </div>
+        </div>
 
-		<div className="flex flex-col md:flex-row gap-8">
-		  {/* Form Section */}
-		  <div
-			className={`flex-1 bg-white rounded-lg shadow-lg p-6 ${
-			  showPreview ? 'hidden md:block' : 'block'
-			}`}
-		  >
-			<CurrentSectionComponent />
+        {/* Right Panel - PDF Preview */}
+        <div
+          className={`${showPreview ? "block" : "hidden lg:block"} w-full lg:w-1/2 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700`}
+        >
+          <div className="h-full p-4">
+            <div className="h-full bg-white rounded-lg shadow-sm overflow-hidden">
+              <PDFViewer width="100%" height="100%" className="border-0">
+                <ResumePDF data={{ state }} template={state.selectedTemplate} />
+              </PDFViewer>
+            </div>
+          </div>
+        </div>
+      </div>
 
-			<div className="mt-8 flex justify-end">
-			  {isLastSection ? (
-				<a
-				  href="#"
-				  download={`${previewState.personalInfo.name || 'resume'}.pdf`}
-				  className="flex items-center space-x-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-				>
-				  <Download size={20} />
-				  <span>Download Resume</span>
-				</a>
-			  ) : (
-				<button
-				  onClick={handleNext}
-				  className="flex items-center space-x-2 px-6 py-3 bg-[#544cd7] text-white rounded-lg hover:bg-[#4038ac] transition-colors"
-				>
-				  <span>Next Section</span>
-				  <ArrowRight size={20} />
-				</button>
-			  )}
-			</div>
-		  </div>
+      {/* Mobile Preview Toggle */}
+      <button
+        onClick={() => setShowPreview(!showPreview)}
+        className="lg:hidden fixed bottom-6 right-6 bg-primary-500 hover:bg-primary-600 text-white p-4 rounded-full shadow-lg transition-colors z-50"
+      >
+        {showPreview ? "📝" : "👁️"}
+      </button>
+    </div>
+  )
+}
 
-		  {/* Live Preview */}
-		  <div
-			className={`flex-1 md:sticky md:top-24 h-[calc(100vh-180px)] md:h-[calc(100vh-120px)] 
-			  ${showPreview ? 'block' : 'hidden md:block'}`}
-		  >
-			<div className="bg-white rounded-lg shadow-lg h-full overflow-hidden">
-			  <PDFViewer width="100%" height="100%" className="w-full h-full">
-				<ResumePDF data={previewState} />
-			  </PDFViewer>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	</div>
-  );
-};
-
-export default ResumeBuilder;
+export default ResumeBuilder

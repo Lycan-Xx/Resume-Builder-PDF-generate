@@ -1,17 +1,88 @@
-import React from 'react';
-import { FileText } from 'lucide-react';
+"use client"
+import { FileText, Moon, Sun, Undo, Redo, Download, Settings } from "lucide-react"
+import { useTheme } from "../contexts/ThemeContext"
+import { useResume } from "../contexts/ResumeContext"
 
 const Navbar = () => {
+  const { isDark, toggleTheme } = useTheme()
+  const { state, dispatch } = useResume()
+
+  const handleUndo = () => dispatch({ type: "UNDO" })
+  const handleRedo = () => dispatch({ type: "REDO" })
+
+  const canUndo = state.history.past.length > 0
+  const canRedo = state.history.future.length > 0
+
   return (
-    <nav className="bg-[#544cd7] text-white p-4">
-      <div className="container mx-auto flex items-center justify-between">
-        <a href="/" className="flex items-center space-x-2 text-xl font-bold">
-          <FileText size={24} />
-          <span>ResumeForge</span>
-        </a>
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+      <div className="flex items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center space-x-3">
+          <div className="p-2 bg-primary-500 rounded-lg">
+            <FileText className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">ResumeForge</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Professional Resume Builder</p>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center space-x-2">
+          {/* Undo/Redo */}
+          <div className="flex items-center space-x-1 mr-4">
+            <button
+              onClick={handleUndo}
+              disabled={!canUndo}
+              className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              title="Undo"
+            >
+              <Undo className="w-5 h-5" />
+            </button>
+            <button
+              onClick={handleRedo}
+              disabled={!canRedo}
+              className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              title="Redo"
+            >
+              <Redo className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Template Selector */}
+          <select
+            value={state.selectedTemplate}
+            onChange={(e) => dispatch({ type: "SET_TEMPLATE", template: e.target.value })}
+            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          >
+            <option value="modern">Modern Template</option>
+            <option value="classic">Classic Template</option>
+            <option value="minimal">Minimal Template</option>
+          </select>
+
+          {/* Export Button */}
+          <button className="flex items-center space-x-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors btn-hover">
+            <Download className="w-4 h-4" />
+            <span>Export</span>
+          </button>
+
+          {/* Settings */}
+          <button className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 transition-colors">
+            <Settings className="w-5 h-5" />
+          </button>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 transition-colors"
+            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

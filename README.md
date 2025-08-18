@@ -16,7 +16,7 @@ This project is a React-based resume builder application. It allows users to inp
 
 ### File Structure
 
-```
+\`\`\`
 .
 ├── .gitignore              # Specifies intentionally untracked files that Git should ignore.
 ├── eslint.config.js        # Configuration file for ESLint, a JavaScript linter.
@@ -29,11 +29,11 @@ This project is a React-based resume builder application. It allows users to inp
 ├── vite.config.js          # Configuration files for Vite, a build tool.
 ├── vite.config.ts          # Configuration files for Vite, a build tool.
 └── src                     # Contains the source code for the React application.
-```
+\`\`\`
 
 ### `src` Directory Breakdown
 
-```
+\`\`\`
 src/
 ├── App.jsx                 # The main application component. It sets up the React Router and the ResumeProvider.
 ├── components/           # Contains reusable UI components.
@@ -50,7 +50,7 @@ src/
 └── pages/                # Contains components that represent different pages in the application.
 	├── HomePage.jsx         # The home page of the application.
 	└── ResumeBuilder.jsx    # The main page where users build their resume.
-```
+\`\`\`
 
 ### Component Logic and Nesting
 
@@ -151,4 +151,4 @@ This overview should provide a solid foundation for understanding the project st
 ## Features to add
 
 - Sign up and sign in with google - also implement a firebase backend
-- 
+-

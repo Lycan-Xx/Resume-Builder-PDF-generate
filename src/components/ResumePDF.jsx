@@ -1,203 +1,270 @@
-import React, { memo } from 'react';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Font } from "@react-pdf/renderer"
+
+// Register fonts
+Font.register({
+  family: "Inter",
+  fonts: [
+    { src: "https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" },
+    {
+      src: "https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2",
+      fontWeight: "bold",
+    },
+  ],
+})
 
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
-    fontFamily: 'Helvetica',
-  },
-  section: {
-    marginBottom: 10,
+    fontFamily: "Inter",
+    fontSize: 10,
+    lineHeight: 1.4,
+    padding: 40,
+    backgroundColor: "#ffffff",
   },
   header: {
-    fontSize: 24,
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
-  subHeader: {
-    fontSize: 16,
+  name: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#1f2937",
+    marginBottom: 5,
+  },
+  headline: {
+    fontSize: 12,
+    color: "#6b7280",
     marginBottom: 10,
-    color: '#544cd7',
-    borderBottom: '1 solid #544cd7',
-    paddingBottom: 5,
   },
   contactInfo: {
-    fontSize: 10,
-    marginBottom: 5,
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 15,
+    fontSize: 9,
+    color: "#4b5563",
   },
-  links: {
-    fontSize: 10,
-    color: '#544cd7',
-    marginBottom: 5,
+  section: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#1f2937",
+    marginBottom: 10,
+    paddingBottom: 3,
+    borderBottom: "1 solid #e5e7eb",
+  },
+  item: {
+    marginBottom: 12,
+  },
+  itemHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 3,
   },
   itemTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginBottom: 3,
+    fontSize: 11,
+    fontWeight: "bold",
+    color: "#1f2937",
   },
   itemSubtitle: {
     fontSize: 10,
-    marginBottom: 2,
+    color: "#6b7280",
+    marginBottom: 3,
   },
-  itemDetails: {
-    fontSize: 10,
-    marginBottom: 5,
+  itemDate: {
+    fontSize: 9,
+    color: "#9ca3af",
   },
-  bullet: {
-    fontSize: 10,
+  description: {
+    fontSize: 9,
+    color: "#4b5563",
+    lineHeight: 1.3,
+  },
+  bulletPoint: {
+    fontSize: 9,
+    color: "#4b5563",
     marginLeft: 10,
     marginBottom: 2,
   },
   skillsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 5,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
   },
   skill: {
-    fontSize: 10,
-    backgroundColor: '#f3f4f6',
-    padding: '3 6',
+    fontSize: 9,
+    backgroundColor: "#f3f4f6",
+    padding: "3 8",
     borderRadius: 3,
+    color: "#374151",
   },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
+  twoColumn: {
+    flexDirection: "row",
+    gap: 20,
   },
-  projectItem: {
-    marginBottom: 8,
+  column: {
+    flex: 1,
   },
-  projectName: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  projectDescription: {
-    fontSize: 10,
-  },
-  projectTech: {
-    fontSize: 10,
-    color: '#666',
-  },
-  projectLink: {
-    fontSize: 10,
-    color: '#544cd7',
-  },
-});
+})
 
-const ResumePDF = memo(({ data }) => {
+const ResumePDF = ({ data, template = "modern" }) => {
+  const { state } = data
+
+  const renderBasics = () => (
+    <View style={styles.header}>
+      <Text style={styles.name}>{state.basics.fullName}</Text>
+      {state.basics.headline && <Text style={styles.headline}>{state.basics.headline}</Text>}
+      <View style={styles.contactInfo}>
+        {state.basics.email && <Text>{state.basics.email}</Text>}
+        {state.basics.phone && <Text>{state.basics.phone}</Text>}
+        {state.basics.location && <Text>{state.basics.location}</Text>}
+        {state.basics.website && <Text>{state.basics.website}</Text>}
+      </View>
+    </View>
+  )
+
+  const renderSummary = () => {
+    if (!state.summary.content) return null
+
+    // Strip HTML tags for PDF
+    const cleanContent = state.summary.content.replace(/<[^>]*>/g, "")
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Professional Summary</Text>
+        <Text style={styles.description}>{cleanContent}</Text>
+      </View>
+    )
+  }
+
+  const renderExperience = () => {
+    if (!state.experience.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Professional Experience</Text>
+        {state.experience.map((exp, index) => (
+          <View key={index} style={styles.item}>
+            <View style={styles.itemHeader}>
+              <Text style={styles.itemTitle}>{exp.position}</Text>
+              <Text style={styles.itemDate}>
+                {exp.startDate} - {exp.current ? "Present" : exp.endDate}
+              </Text>
+            </View>
+            <Text style={styles.itemSubtitle}>
+              {exp.company} • {exp.location}
+            </Text>
+            {exp.description && <Text style={styles.description}>{exp.description}</Text>}
+            {exp.achievements &&
+              exp.achievements.map(
+                (achievement, idx) =>
+                  achievement && (
+                    <Text key={idx} style={styles.bulletPoint}>
+                      • {achievement}
+                    </Text>
+                  ),
+              )}
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  const renderEducation = () => {
+    if (!state.education.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Education</Text>
+        {state.education.map((edu, index) => (
+          <View key={index} style={styles.item}>
+            <View style={styles.itemHeader}>
+              <Text style={styles.itemTitle}>{edu.degree}</Text>
+              <Text style={styles.itemDate}>
+                {edu.startDate} - {edu.endDate}
+              </Text>
+            </View>
+            <Text style={styles.itemSubtitle}>
+              {edu.institution} • {edu.location}
+            </Text>
+            {edu.fieldOfStudy && <Text style={styles.description}>Field of Study: {edu.fieldOfStudy}</Text>}
+            {edu.gpa && <Text style={styles.description}>GPA: {edu.gpa}</Text>}
+            {edu.honors && <Text style={styles.description}>Honors: {edu.honors}</Text>}
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  const renderSkills = () => {
+    if (!state.skills.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Skills</Text>
+        <View style={styles.skillsContainer}>
+          {state.skills.map((skill, index) => (
+            <Text key={index} style={styles.skill}>
+              {skill.name}
+            </Text>
+          ))}
+        </View>
+      </View>
+    )
+  }
+
+  const renderLanguages = () => {
+    if (!state.languages.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Languages</Text>
+        {state.languages.map((lang, index) => (
+          <View key={index} style={styles.item}>
+            <Text style={styles.itemTitle}>
+              {lang.name} - {lang.proficiency}
+            </Text>
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  if (template === "modern") {
+    return (
+      <Document>
+        <Page size="A4" style={styles.page}>
+          {renderBasics()}
+          {renderSummary()}
+          <View style={styles.twoColumn}>
+            <View style={styles.column}>
+              {renderExperience()}
+              {renderEducation()}
+            </View>
+            <View style={styles.column}>
+              {renderSkills()}
+              {renderLanguages()}
+            </View>
+          </View>
+        </Page>
+      </Document>
+    )
+  }
+
+  // Classic template (single column)
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header / Personal Info */}
-        <View style={styles.section}>
-          <Text style={styles.header}>{data.personalInfo.name}</Text>
-          <Text style={styles.contactInfo}>
-            {data.personalInfo.email} | {data.personalInfo.phone}
-          </Text>
-          <Text style={styles.contactInfo}>{data.personalInfo.location}</Text>
-          {data.personalInfo.links?.linkedin && (
-            <Text style={styles.links}>
-              LinkedIn: {data.personalInfo.links.linkedin}
-            </Text>
-          )}
-          {data.personalInfo.links?.github && (
-            <Text style={styles.links}>
-              GitHub: {data.personalInfo.links.github}
-            </Text>
-          )}
-        </View>
-
-        {/* Experience */}
-        {data.experience.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.subHeader}>Professional Experience</Text>
-            {data.experience.map((exp, index) => (
-              <View key={index} style={{ marginBottom: 10 }}>
-                <Text style={styles.itemTitle}>
-                  {exp.position} at {exp.company}
-                </Text>
-                <Text style={styles.itemSubtitle}>
-                  {exp.location} | {exp.startDate} - {exp.endDate}
-                </Text>
-                {exp.responsibilities.map((resp, idx) => (
-                  <Text key={idx} style={styles.bullet}>
-                    • {resp}
-                  </Text>
-                ))}
-              </View>
-            ))}
-          </View>
-        )}
-
-        {/* Education */}
-        {data.education.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.subHeader}>Education</Text>
-            {data.education.map((edu, index) => (
-              <View key={index} style={{ marginBottom: 10 }}>
-                <Text style={styles.itemTitle}>{edu.institution}</Text>
-                <Text style={styles.itemSubtitle}>
-                  {edu.degree} in {edu.major}
-                </Text>
-                <Text style={styles.itemDetails}>
-                  Graduated: {edu.graduationDate}
-                  {edu.gpa && ` | GPA: ${edu.gpa}`}
-                </Text>
-              </View>
-            ))}
-          </View>
-        )}
-
-        {/* Skills */}
-        {(data.skills.technical.length > 0 || data.skills.soft.length > 0) && (
-          <View style={styles.section}>
-            <Text style={styles.subHeader}>Skills</Text>
-            {data.skills.technical.length > 0 && (
-              <View style={{ marginBottom: 10 }}>
-                <Text style={styles.itemTitle}>Technical Skills</Text>
-                <View style={styles.skillsContainer}>
-                  {data.skills.technical.map((skill, index) => (
-                    <Text key={index} style={styles.skill}>
-                      {skill}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-            )}
-            {data.skills.soft.length > 0 && (
-              <View>
-                <Text style={styles.itemTitle}>Soft Skills</Text>
-                <View style={styles.skillsContainer}>
-                  {data.skills.soft.map((skill, index) => (
-                    <Text key={index} style={styles.skill}>
-                      {skill}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-            )}
-          </View>
-        )}
-
-        {/* Projects */}
-        {data.projects.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Projects</Text>
-            {data.projects.map((project, index) => (
-              <View key={index} style={styles.projectItem}>
-                <Text style={styles.projectName}>{project.name}</Text>
-                <Text style={styles.projectDescription}>
-                  {project.description}
-                </Text>
-                <Text style={styles.projectTech}>{project.technologies}</Text>
-                <Text style={styles.projectLink}>{project.link}</Text>
-              </View>
-            ))}
-          </View>
-        )}
+        {renderBasics()}
+        {renderSummary()}
+        {renderExperience()}
+        {renderEducation()}
+        {renderSkills()}
+        {renderLanguages()}
       </Page>
     </Document>
-  );
-});
+  )
+}
 
-export default ResumePDF;
+export default ResumePDF

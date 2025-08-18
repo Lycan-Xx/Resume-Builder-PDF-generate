@@ -1,37 +1,32 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import ResumeBuilder from './pages/ResumeBuilder';
-import { ResumeProvider } from './context/ResumeContext';
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { ThemeProvider } from "./contexts/ThemeContext"
+import { ResumeProvider } from "./contexts/ResumeContext"
+import HomePage from "./pages/HomePage"
+import ResumeBuilder from "./pages/ResumeBuilder"
 
-const router = createBrowserRouter(
-  [
-    {
-      path: "/",
-      element: <HomePage />
-    },
-    {
-      path: "/builder",
-      element: (
-        <ResumeProvider>
-          <ResumeBuilder />
-        </ResumeProvider>
-      )
-    }
-  ],
+const router = createBrowserRouter([
   {
-    future: {
-      v7_startTransition: true
-    }
-  }
-);
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/builder",
+    element: (
+      <ResumeProvider>
+        <ResumeBuilder />
+      </ResumeProvider>
+    ),
+  },
+])
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <RouterProvider router={router} />
-    </div>
-  );
+    <ThemeProvider>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+        <RouterProvider router={router} />
+      </div>
+    </ThemeProvider>
+  )
 }
 
-export default App;
+export default App

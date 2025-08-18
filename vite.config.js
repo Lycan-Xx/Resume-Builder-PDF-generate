@@ -1,15 +1,14 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
 
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    include: ["react-pdf", "@react-pdf/renderer"],
   },
   build: {
-    sourcemap: true
+    commonjsOptions: {
+      include: [/react-pdf/, /node_modules/],
+    },
   },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  }
-});
+})

@@ -1,0 +1,103 @@
+import React from 'react';
+import { Heart, Plus, Trash2, MoreHorizontal } from 'lucide-react';
+import { useResume } from '../context/ResumeContext';
+
+const InterestsSection = () => {
+  const { state, dispatch, debouncedUpdatePreview } = useResume();
+
+  const handleAddInterest = () => {
+    dispatch({
+      type: 'ADD_INTEREST',
+      payload: {
+        name: '',
+        description: '',
+      },
+    });
+  };
+
+  const handleRemoveInterest = (index) => {
+    dispatch({
+      type: 'REMOVE_INTEREST',
+      payload: index,
+    });
+    debouncedUpdatePreview();
+  };
+
+  const handleInputChange = (index, field, value) => {
+    dispatch({
+      type: 'UPDATE_INTEREST',
+      payload: { index, field, value },
+    });
+    debouncedUpdatePreview();
+  };
+
+  return (
+    <div className="bg-gray-900 text-white min-h-screen p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-3">
+          <Heart className="w-6 h-6" />
+          <h2 className="text-2xl font-bold">Interests</h2>
+        </div>
+        <button className="p-2 hover:bg-gray-800 rounded transition-colors">
+          <MoreHorizontal size={20} />
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {state.interests && state.interests.map((interest, index) => (
+          <div key={index} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+                <div>
+                  <h3 className="font-semibold text-white">
+                    {interest.name || 'Interest'}
+                  </h3>
+                  <p className="text-sm text-gray-400">
+                    {interest.description || 'Description'}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => handleRemoveInterest(index)}
+                className="p-1 hover:bg-gray-700 rounded transition-colors"
+              >
+                <Trash2 size={16} className="text-gray-400" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Interest"
+                value={interest.name}
+                onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                onBlur={debouncedUpdatePreview}
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              
+              <textarea
+                placeholder="Description"
+                value={interest.description}
+                onChange={(e) => handleInputChange(index, 'description', e.target.value)}
+                onBlur={debouncedUpdatePreview}
+                rows={2}
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              />
+            </div>
+          </div>
+        ))}
+
+        <button
+          onClick={handleAddInterest}
+          className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-gray-700 border-dashed rounded-lg text-gray-400 hover:text-white hover:border-gray-600 transition-colors"
+        >
+          <Plus size={20} />
+          <span>Add a new item</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default InterestsSection;
