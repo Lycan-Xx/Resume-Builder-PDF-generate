@@ -1,5 +1,7 @@
 import React from 'react';
 import { Plus, Trash2, GraduationCap, Calendar } from 'lucide-react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { useResume } from '../context/ResumeContext';
 
 const EducationSection = () => {
@@ -111,12 +113,13 @@ const EducationSection = () => {
             <div className="space-y-1">
               <label className="text-sm font-medium text-gray-600">Graduation Date</label>
               <div className="relative">
-                <input
-                  type="text"
-                  placeholder="MM/YYYY (or Expected MM/YYYY)"
-                  value={edu.graduationDate}
-                  onChange={(e) => handleInputChange(index, 'graduationDate', e.target.value)}
+                <DatePicker
+                  selected={edu.graduationDate ? new Date(edu.graduationDate) : null}
+                  onChange={(date) => handleInputChange(index, 'graduationDate', date.toISOString())}
                   onBlur={debouncedUpdatePreview}
+                  dateFormat="MMMM, yyyy" // Format as "January, 2058"
+                  showMonthYearPicker
+                  placeholderText="Select Month and Year"
                   className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
                 />
                 <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
