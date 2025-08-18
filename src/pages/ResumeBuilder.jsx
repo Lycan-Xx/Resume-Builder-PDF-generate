@@ -4,31 +4,57 @@ import { useState } from "react"
 import { PDFViewer } from "@react-pdf/renderer"
 import Navbar from "../components/Navbar"
 import SectionsNavbar from "../components/SectionsNavbar"
-import BasicsSection from "../components/sections/BasicsSection"
-import SummarySection from "../components/sections/SummarySection"
-import ExperienceSection from "../components/sections/ExperienceSection"
-import EducationSection from "../components/sections/EducationSection"
-import SkillsSection from "../components/sections/SkillsSection"
-import LanguagesSection from "../components/sections/LanguagesSection"
 import ResumePDF from "../components/ResumePDF"
 import { useResume } from "../contexts/ResumeContext"
 
+// Personal Info Sections
+import BasicsSection from "../components/sections/BasicsSection"
+import SummarySection from "../components/sections/SummarySection"
+import ProfilesSection from "../components/ProfilesSection"
+
+// Work Experience Sections
+import ExperienceSection from "../components/sections/ExperienceSection"
+import ProjectsSection from "../components/ProjectsSection"
+import VolunteeringSection from "../components/VolunteeringSection"
+
+// Education Sections
+import EducationSection from "../components/sections/EducationSection"
+import CertificationsSection from "../components/CertificationsSection"
+import AwardsSection from "../components/AwardsSection"
+import PublicationsSection from "../components/PublicationsSection"
+
+// Skills Sections
+import SkillsSection from "../components/sections/SkillsSection"
+import LanguagesSection from "../components/sections/LanguagesSection"
+import InterestsSection from "../components/InterestsSection"
+
+// References
+import ReferencesSection from "../components/ReferencesSection"
+
 const sectionComponents = {
+  // Personal Info
   basics: BasicsSection,
   summary: SummarySection,
+  profiles: ProfilesSection,
+
+  // Work Experience
   experience: ExperienceSection,
+  projects: ProjectsSection,
+  volunteering: VolunteeringSection,
+
+  // Education
   education: EducationSection,
+  certifications: CertificationsSection,
+  awards: AwardsSection,
+  publications: PublicationsSection,
+
+  // Skills
   skills: SkillsSection,
   languages: LanguagesSection,
-  // Add more sections as they're created
-  awards: () => <div className="p-8 text-center text-gray-500">Awards section coming soon...</div>,
-  profiles: () => <div className="p-8 text-center text-gray-500">Profiles section coming soon...</div>,
-  projects: () => <div className="p-8 text-center text-gray-500">Projects section coming soon...</div>,
-  interests: () => <div className="p-8 text-center text-gray-500">Interests section coming soon...</div>,
-  certifications: () => <div className="p-8 text-center text-gray-500">Certifications section coming soon...</div>,
-  publications: () => <div className="p-8 text-center text-gray-500">Publications section coming soon...</div>,
-  volunteering: () => <div className="p-8 text-center text-gray-500">Volunteering section coming soon...</div>,
-  references: () => <div className="p-8 text-center text-gray-500">References section coming soon...</div>,
+  interests: InterestsSection,
+
+  // References
+  references: ReferencesSection
 }
 
 const ResumeBuilder = () => {

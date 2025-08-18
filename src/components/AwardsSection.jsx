@@ -1,6 +1,6 @@
 import React from 'react';
 import { Award, Plus, Trash2, MoreHorizontal } from 'lucide-react';
-import { useResume } from '../context/ResumeContext';
+import { useResume } from '../contexts/ResumeContext';
 
 const AwardsSection = () => {
   const { state, dispatch, debouncedUpdatePreview } = useResume();
