@@ -1,6 +1,4 @@
-import React from 'react';
-import { BookOpen, Plus, Trash2, MoreHorizontal } from 'lucide-react';
-import { useResume } from '../context/ResumeContext';
+import { useResume } from '../contexts/ResumeContext';
 
 const PublicationsSection = () => {
   const { state, dispatch, debouncedUpdatePreview } = useResume();

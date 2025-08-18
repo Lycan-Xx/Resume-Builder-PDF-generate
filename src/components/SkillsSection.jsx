@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Plus, X, Tag, Shield } from 'lucide-react';
-import { useResume } from '../context/ResumeContext';
+import { useState } from 'react';
+import { useResume } from '../contexts/ResumeContext';
 
 const SkillsSection = () => {
   const { state, dispatch, debouncedUpdatePreview } = useResume();
