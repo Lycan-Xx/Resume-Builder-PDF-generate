@@ -1,9 +1,9 @@
 import React from 'react';
 import { Plus, Trash2, Calendar } from 'lucide-react';
-import { useResume } from '../context/ResumeContext';
+import { useResume } from '../contexts/ResumeContext';
 
 const ExperienceSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
 
   const handleAddExperience = () => {
     dispatch({
@@ -17,7 +17,6 @@ const ExperienceSection = () => {
         responsibilities: [''],
       },
     });
-    debouncedUpdatePreview();
   };
 
   const handleRemoveExperience = (index) => {
@@ -25,7 +24,6 @@ const ExperienceSection = () => {
       type: 'REMOVE_EXPERIENCE',
       payload: index,
     });
-    debouncedUpdatePreview();
   };
 
   const handleInputChange = (index, field, value) => {
@@ -40,7 +38,6 @@ const ExperienceSection = () => {
       type: 'ADD_RESPONSIBILITY',
       payload: { expIndex },
     });
-    debouncedUpdatePreview();
   };
 
   const handleUpdateResponsibility = (expIndex, respIndex, value) => {
@@ -55,7 +52,6 @@ const ExperienceSection = () => {
       type: 'REMOVE_RESPONSIBILITY',
       payload: { expIndex, respIndex },
     });
-    debouncedUpdatePreview();
   };
 
   return (
@@ -103,7 +99,6 @@ const ExperienceSection = () => {
                 onChange={(e) =>
                   handleInputChange(expIndex, 'company', e.target.value)
                 }
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -119,7 +114,6 @@ const ExperienceSection = () => {
                 onChange={(e) =>
                   handleInputChange(expIndex, 'position', e.target.value)
                 }
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -135,7 +129,6 @@ const ExperienceSection = () => {
                 onChange={(e) =>
                   handleInputChange(expIndex, 'location', e.target.value)
                 }
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -153,7 +146,6 @@ const ExperienceSection = () => {
                     onChange={(e) =>
                       handleInputChange(expIndex, 'startDate', e.target.value)
                     }
-                    onBlur={debouncedUpdatePreview}
                     className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
                   />
                   <Calendar
@@ -175,7 +167,6 @@ const ExperienceSection = () => {
                     onChange={(e) =>
                       handleInputChange(expIndex, 'endDate', e.target.value)
                     }
-                    onBlur={debouncedUpdatePreview}
                     className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
                   />
                   <Calendar
@@ -214,7 +205,6 @@ const ExperienceSection = () => {
                       e.target.value
                     )
                   }
-                  onBlur={debouncedUpdatePreview}
                   placeholder="Describe your responsibility..."
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
                 />

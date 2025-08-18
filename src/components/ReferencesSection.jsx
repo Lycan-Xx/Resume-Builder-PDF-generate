@@ -1,7 +1,8 @@
+import { UserCheck, Plus, Trash2, MoreHorizontal } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const ReferencesSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
 
   const handleAddReference = () => {
     dispatch({
@@ -22,7 +23,6 @@ const ReferencesSection = () => {
       type: 'REMOVE_REFERENCE',
       payload: index,
     });
-    debouncedUpdatePreview();
   };
 
   const handleInputChange = (index, field, value) => {
@@ -30,7 +30,6 @@ const ReferencesSection = () => {
       type: 'UPDATE_REFERENCE',
       payload: { index, field, value },
     });
-    debouncedUpdatePreview();
   };
 
   return (
@@ -83,7 +82,6 @@ const ReferencesSection = () => {
                   placeholder="Full Name"
                   value={reference.name}
                   onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                  onBlur={debouncedUpdatePreview}
                   className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
@@ -91,7 +89,6 @@ const ReferencesSection = () => {
                   placeholder="Job Title"
                   value={reference.title}
                   onChange={(e) => handleInputChange(index, 'title', e.target.value)}
-                  onBlur={debouncedUpdatePreview}
                   className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -101,7 +98,6 @@ const ReferencesSection = () => {
                 placeholder="Company"
                 value={reference.company}
                 onChange={(e) => handleInputChange(index, 'company', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
@@ -111,7 +107,6 @@ const ReferencesSection = () => {
                   placeholder="Email"
                   value={reference.email}
                   onChange={(e) => handleInputChange(index, 'email', e.target.value)}
-                  onBlur={debouncedUpdatePreview}
                   className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
@@ -119,7 +114,6 @@ const ReferencesSection = () => {
                   placeholder="Phone"
                   value={reference.phone}
                   onChange={(e) => handleInputChange(index, 'phone', e.target.value)}
-                  onBlur={debouncedUpdatePreview}
                   className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -129,7 +123,6 @@ const ReferencesSection = () => {
                 placeholder="Relationship (e.g., Former Manager, Colleague)"
                 value={reference.relationship}
                 onChange={(e) => handleInputChange(index, 'relationship', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

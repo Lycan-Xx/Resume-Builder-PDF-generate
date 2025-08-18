@@ -1,7 +1,8 @@
+import { BookOpen, Plus, Trash2, MoreHorizontal } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const PublicationsSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
 
   const handleAddPublication = () => {
     dispatch({
@@ -21,7 +22,6 @@ const PublicationsSection = () => {
       type: 'REMOVE_PUBLICATION',
       payload: index,
     });
-    debouncedUpdatePreview();
   };
 
   const handleInputChange = (index, field, value) => {
@@ -29,7 +29,6 @@ const PublicationsSection = () => {
       type: 'UPDATE_PUBLICATION',
       payload: { index, field, value },
     });
-    debouncedUpdatePreview();
   };
 
   return (
@@ -73,7 +72,6 @@ const PublicationsSection = () => {
                 placeholder="Publication Title"
                 value={publication.title}
                 onChange={(e) => handleInputChange(index, 'title', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               
@@ -82,7 +80,6 @@ const PublicationsSection = () => {
                 placeholder="Publisher"
                 value={publication.publisher}
                 onChange={(e) => handleInputChange(index, 'publisher', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
@@ -92,7 +89,6 @@ const PublicationsSection = () => {
                   placeholder="Publication Date"
                   value={publication.date}
                   onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                  onBlur={debouncedUpdatePreview}
                   className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
@@ -100,7 +96,6 @@ const PublicationsSection = () => {
                   placeholder="URL"
                   value={publication.url}
                   onChange={(e) => handleInputChange(index, 'url', e.target.value)}
-                  onBlur={debouncedUpdatePreview}
                   className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -109,7 +104,6 @@ const PublicationsSection = () => {
                 placeholder="Description"
                 value={publication.description}
                 onChange={(e) => handleInputChange(index, 'description', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 rows={3}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               />

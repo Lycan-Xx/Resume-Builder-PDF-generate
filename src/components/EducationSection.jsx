@@ -2,10 +2,10 @@ import React from 'react';
 import { Plus, Trash2, GraduationCap, Calendar } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useResume } from '../context/ResumeContext';
+import { useResume } from '../contexts/ResumeContext';
 
 const EducationSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
   
   const handleAddEducation = () => {
     dispatch({
@@ -18,7 +18,6 @@ const EducationSection = () => {
         gpa: '',
       },
     });
-    debouncedUpdatePreview();
   };
   
   const handleRemoveEducation = (index) => {
@@ -26,7 +25,6 @@ const EducationSection = () => {
       type: 'REMOVE_EDUCATION',
       payload: index,
     });
-    debouncedUpdatePreview();
   };
   
   const handleInputChange = (index, field, value) => {
@@ -81,7 +79,6 @@ const EducationSection = () => {
                 placeholder="University or School Name"
                 value={edu.institution}
                 onChange={(e) => handleInputChange(index, 'institution', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -93,7 +90,6 @@ const EducationSection = () => {
                 placeholder="Bachelor's, Master's, PhD, etc."
                 value={edu.degree}
                 onChange={(e) => handleInputChange(index, 'degree', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -105,7 +101,6 @@ const EducationSection = () => {
                 placeholder="Computer Science, Business, etc."
                 value={edu.major}
                 onChange={(e) => handleInputChange(index, 'major', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -116,7 +111,6 @@ const EducationSection = () => {
                 <DatePicker
                   selected={edu.graduationDate ? new Date(edu.graduationDate) : null}
                   onChange={(date) => handleInputChange(index, 'graduationDate', date.toISOString())}
-                  onBlur={debouncedUpdatePreview}
                   dateFormat="MMMM, yyyy" // Format as "January, 2058"
                   showMonthYearPicker
                   placeholderText="Select Month and Year"
@@ -133,7 +127,6 @@ const EducationSection = () => {
                 placeholder="e.g., 3.8/4.0"
                 value={edu.gpa}
                 onChange={(e) => handleInputChange(index, 'gpa', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>

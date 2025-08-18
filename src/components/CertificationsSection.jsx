@@ -3,7 +3,7 @@ import { Shield, Plus, Trash2, MoreHorizontal } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const CertificationsSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
 
   const handleAddCertification = () => {
     dispatch({
@@ -22,7 +22,6 @@ const CertificationsSection = () => {
       type: 'REMOVE_CERTIFICATION',
       payload: index,
     });
-    debouncedUpdatePreview();
   };
 
   const handleInputChange = (index, field, value) => {
@@ -30,7 +29,6 @@ const CertificationsSection = () => {
       type: 'UPDATE_CERTIFICATION',
       payload: { index, field, value },
     });
-    debouncedUpdatePreview();
   };
 
   // Mock certifications data for display
@@ -83,7 +81,6 @@ const CertificationsSection = () => {
                 placeholder="Certification Name"
                 value={cert.name || ''}
                 onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               
@@ -92,7 +89,6 @@ const CertificationsSection = () => {
                 placeholder="Issuing Organization"
                 value={cert.issuer || ''}
                 onChange={(e) => handleInputChange(index, 'issuer', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
@@ -101,7 +97,6 @@ const CertificationsSection = () => {
                 placeholder="Date Obtained"
                 value={cert.date || ''}
                 onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
@@ -109,7 +104,6 @@ const CertificationsSection = () => {
                 placeholder="Description"
                 value={cert.description || ''}
                 onChange={(e) => handleInputChange(index, 'description', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 rows={2}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               />

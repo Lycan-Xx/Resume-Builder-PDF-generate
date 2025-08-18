@@ -1,7 +1,8 @@
+import { User, Mail, Phone, MapPin, Info, Linkedin, Github } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const PersonalInfoSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +41,6 @@ const PersonalInfoSection = () => {
               name="name"
               value={state.personalInfo.name || ''}
               onChange={handleChange}
-              onBlur={debouncedUpdatePreview}
               placeholder="e.g. John Smith"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
             />
@@ -56,7 +56,6 @@ const PersonalInfoSection = () => {
               name="email"
               value={state.personalInfo.email || ''}
               onChange={handleChange}
-              onBlur={debouncedUpdatePreview}
               placeholder="e.g. johnsmith@example.com"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
             />
@@ -72,7 +71,6 @@ const PersonalInfoSection = () => {
               name="phone"
               value={state.personalInfo.phone || ''}
               onChange={handleChange}
-              onBlur={debouncedUpdatePreview}
               placeholder="e.g. (123) 456-7890"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
             />
@@ -88,7 +86,6 @@ const PersonalInfoSection = () => {
               name="location"
               value={state.personalInfo.location || ''}
               onChange={handleChange}
-              onBlur={debouncedUpdatePreview}
               placeholder="e.g. New York, NY"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
             />
@@ -112,7 +109,6 @@ const PersonalInfoSection = () => {
                 name="links.linkedin"
                 value={state.personalInfo.links?.linkedin || ''}
                 onChange={handleChange}
-                onBlur={debouncedUpdatePreview}
                 placeholder="e.g. linkedin.com/in/johnsmith"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent transition-all outline-none"
               />
@@ -128,7 +124,6 @@ const PersonalInfoSection = () => {
                 name="links.github"
                 value={state.personalInfo.links?.github || ''}
                 onChange={handleChange}
-                onBlur={debouncedUpdatePreview}
                 placeholder="e.g. github.com/johnsmith"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent transition-all outline-none"
               />

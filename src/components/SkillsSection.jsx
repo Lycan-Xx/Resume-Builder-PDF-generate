@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { Tag, Shield, Plus, X } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const SkillsSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
   const [newTechnicalSkill, setNewTechnicalSkill] = useState('');
   const [newSoftSkill, setNewSoftSkill] = useState('');
 
@@ -15,7 +16,6 @@ const SkillsSection = () => {
         payload: newTechnicalSkill.trim(),
       });
       setNewTechnicalSkill('');
-      debouncedUpdatePreview();
     }
   };
 
@@ -28,7 +28,6 @@ const SkillsSection = () => {
         payload: newSoftSkill.trim(),
       });
       setNewSoftSkill('');
-      debouncedUpdatePreview();
     }
   };
 
@@ -37,7 +36,6 @@ const SkillsSection = () => {
       type: 'REMOVE_TECHNICAL_SKILL',
       payload: skill,
     });
-    debouncedUpdatePreview();
   };
 
   const handleRemoveSoftSkill = (skill) => {
@@ -45,7 +43,6 @@ const SkillsSection = () => {
       type: 'REMOVE_SOFT_SKILL',
       payload: skill,
     });
-    debouncedUpdatePreview();
   };
 
   return (
@@ -67,7 +64,6 @@ const SkillsSection = () => {
               type="text"
               value={newTechnicalSkill}
               onChange={(e) => setNewTechnicalSkill(e.target.value)}
-              onBlur={debouncedUpdatePreview}
               placeholder="Add programming languages, tools, frameworks..."
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none pr-12"
             />
@@ -131,7 +127,6 @@ const SkillsSection = () => {
               type="text"
               value={newSoftSkill}
               onChange={(e) => setNewSoftSkill(e.target.value)}
-              onBlur={debouncedUpdatePreview}
               placeholder="Add communication, leadership, problem-solving skills..."
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent transition-all outline-none pr-12"
             />

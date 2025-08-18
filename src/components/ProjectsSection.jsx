@@ -1,7 +1,8 @@
+import { FileText, Plus, Trash2, ExternalLink, Code } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const ProjectsSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
 
   const handleAddProject = () => {
     dispatch({
@@ -13,7 +14,6 @@ const ProjectsSection = () => {
         link: '',
       },
     });
-    debouncedUpdatePreview();
   };
 
   const handleRemoveProject = (index) => {
@@ -21,7 +21,6 @@ const ProjectsSection = () => {
       type: 'REMOVE_PROJECT',
       payload: index,
     });
-    debouncedUpdatePreview();
   };
 
   const handleInputChange = (index, field, value) => {
@@ -81,7 +80,6 @@ const ProjectsSection = () => {
                 onChange={(e) =>
                   handleInputChange(index, 'name', e.target.value)
                 }
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -98,7 +96,6 @@ const ProjectsSection = () => {
                 onChange={(e) =>
                   handleInputChange(index, 'link', e.target.value)
                 }
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -115,7 +112,6 @@ const ProjectsSection = () => {
                 onChange={(e) =>
                   handleInputChange(index, 'technologies', e.target.value)
                 }
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               />
             </div>
@@ -131,7 +127,6 @@ const ProjectsSection = () => {
               onChange={(e) =>
                 handleInputChange(index, 'description', e.target.value)
               }
-              onBlur={debouncedUpdatePreview}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
               rows={4}
             />

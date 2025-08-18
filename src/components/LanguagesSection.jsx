@@ -1,9 +1,9 @@
 import React from 'react';
 import { Globe, Plus, Trash2, MoreHorizontal } from 'lucide-react';
-import { useResume } from '../context/ResumeContext';
+import { useResume } from '../contexts/ResumeContext';
 
 const LanguagesSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
 
   const handleAddLanguage = () => {
     dispatch({
@@ -20,7 +20,6 @@ const LanguagesSection = () => {
       type: 'REMOVE_LANGUAGE',
       payload: index,
     });
-    debouncedUpdatePreview();
   };
 
   const handleInputChange = (index, field, value) => {
@@ -28,7 +27,6 @@ const LanguagesSection = () => {
       type: 'UPDATE_LANGUAGE',
       payload: { index, field, value },
     });
-    debouncedUpdatePreview();
   };
 
   return (
@@ -72,7 +70,6 @@ const LanguagesSection = () => {
                 placeholder="Language"
                 value={language.name}
                 onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               

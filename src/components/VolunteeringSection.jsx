@@ -3,7 +3,7 @@ import { Handshake, Plus, Trash2, MoreHorizontal } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const VolunteeringSection = () => {
-  const { state, dispatch, debouncedUpdatePreview } = useResume();
+  const { state, dispatch } = useResume();
 
   const handleAddVolunteering = () => {
     dispatch({
@@ -23,7 +23,6 @@ const VolunteeringSection = () => {
       type: 'REMOVE_VOLUNTEERING',
       payload: index,
     });
-    debouncedUpdatePreview();
   };
 
   const handleInputChange = (index, field, value) => {
@@ -31,7 +30,6 @@ const VolunteeringSection = () => {
       type: 'UPDATE_VOLUNTEERING',
       payload: { index, field, value },
     });
-    debouncedUpdatePreview();
   };
 
   return (
@@ -75,7 +73,6 @@ const VolunteeringSection = () => {
                 placeholder="Organization"
                 value={volunteer.organization}
                 onChange={(e) => handleInputChange(index, 'organization', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               
@@ -84,7 +81,6 @@ const VolunteeringSection = () => {
                 placeholder="Role"
                 value={volunteer.role}
                 onChange={(e) => handleInputChange(index, 'role', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
@@ -94,7 +90,6 @@ const VolunteeringSection = () => {
                   placeholder="Start Date"
                   value={volunteer.startDate}
                   onChange={(e) => handleInputChange(index, 'startDate', e.target.value)}
-                  onBlur={debouncedUpdatePreview}
                   className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
@@ -102,7 +97,6 @@ const VolunteeringSection = () => {
                   placeholder="End Date"
                   value={volunteer.endDate}
                   onChange={(e) => handleInputChange(index, 'endDate', e.target.value)}
-                  onBlur={debouncedUpdatePreview}
                   className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -111,7 +105,6 @@ const VolunteeringSection = () => {
                 placeholder="Description"
                 value={volunteer.description}
                 onChange={(e) => handleInputChange(index, 'description', e.target.value)}
-                onBlur={debouncedUpdatePreview}
                 rows={3}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               />
