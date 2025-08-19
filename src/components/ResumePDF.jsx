@@ -269,6 +269,225 @@ const ResumePDF = ({ data, template = "modern" }) => {
     )
   }
 
+  const renderAwards = () => {
+    if (!state.awards?.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Awards</Text>
+        {state.awards.map((award, index) => (
+          <View key={index} style={styles.item}>
+            <View style={styles.itemHeader}>
+              <SafeText style={styles.itemTitle}>
+                {award.title || "Award Title"}
+              </SafeText>
+              <SafeText style={styles.itemDate}>
+                {award.date || "Date"}
+              </SafeText>
+            </View>
+            <SafeText style={styles.itemSubtitle}>
+              {award.issuer || "Issuer"}
+            </SafeText>
+            {award.description && (
+              <SafeText style={styles.description}>{award.description}</SafeText>
+            )}
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  const renderProfiles = () => {
+    if (!state.profiles?.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Profiles</Text>
+        {state.profiles.map((profile, index) => (
+          <View key={index} style={styles.item}>
+            <SafeText style={styles.itemTitle}>
+              {profile.network || "Network"}
+            </SafeText>
+            <SafeText style={styles.description}>
+              {profile.username || profile.url || "Profile"}
+            </SafeText>
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  const renderProjects = () => {
+    if (!state.projects?.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Projects</Text>
+        {state.projects.map((project, index) => (
+          <View key={index} style={styles.item}>
+            <View style={styles.itemHeader}>
+              <SafeText style={styles.itemTitle}>
+                {project.name || "Project Name"}
+              </SafeText>
+              <SafeText style={styles.itemDate}>
+                {project.startDate || "Start"} - {project.endDate || "End"}
+              </SafeText>
+            </View>
+            {project.url && (
+              <SafeText style={styles.itemSubtitle}>{project.url}</SafeText>
+            )}
+            {project.description && (
+              <SafeText style={styles.description}>{project.description}</SafeText>
+            )}
+            {project.highlights?.map((highlight, idx) => 
+              highlight && highlight.trim() ? (
+                <SafeText key={idx} style={styles.bulletPoint}>
+                  • {highlight}
+                </SafeText>
+              ) : null
+            )}
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  const renderInterests = () => {
+    if (!state.interests?.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Interests</Text>
+        <View style={styles.skillsContainer}>
+          {state.interests.map((interest, index) => 
+            interest?.name ? (
+              <SafeText key={index} style={styles.skill}>
+                {interest.name}
+              </SafeText>
+            ) : null
+          )}
+        </View>
+      </View>
+    )
+  }
+
+  const renderCertifications = () => {
+    if (!state.certifications?.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Certifications</Text>
+        {state.certifications.map((cert, index) => (
+          <View key={index} style={styles.item}>
+            <View style={styles.itemHeader}>
+              <SafeText style={styles.itemTitle}>
+                {cert.name || "Certification Name"}
+              </SafeText>
+              <SafeText style={styles.itemDate}>
+                {cert.date || "Date"}
+              </SafeText>
+            </View>
+            <SafeText style={styles.itemSubtitle}>
+              {cert.issuer || "Issuer"}
+            </SafeText>
+            {cert.description && (
+              <SafeText style={styles.description}>{cert.description}</SafeText>
+            )}
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  const renderPublications = () => {
+    if (!state.publications?.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Publications</Text>
+        {state.publications.map((pub, index) => (
+          <View key={index} style={styles.item}>
+            <View style={styles.itemHeader}>
+              <SafeText style={styles.itemTitle}>
+                {pub.title || "Publication Title"}
+              </SafeText>
+              <SafeText style={styles.itemDate}>
+                {pub.date || "Date"}
+              </SafeText>
+            </View>
+            <SafeText style={styles.itemSubtitle}>
+              {pub.publisher || "Publisher"}
+            </SafeText>
+            {pub.url && (
+              <SafeText style={styles.description}>{pub.url}</SafeText>
+            )}
+            {pub.description && (
+              <SafeText style={styles.description}>{pub.description}</SafeText>
+            )}
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  const renderVolunteering = () => {
+    if (!state.volunteering?.length) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Volunteering</Text>
+        {state.volunteering.map((vol, index) => (
+          <View key={index} style={styles.item}>
+            <View style={styles.itemHeader}>
+              <SafeText style={styles.itemTitle}>
+                {vol.role || "Role"}
+              </SafeText>
+              <SafeText style={styles.itemDate}>
+                {vol.startDate || "Start"} - {vol.endDate || "End"}
+              </SafeText>
+            </View>
+            <SafeText style={styles.itemSubtitle}>
+              {vol.organization || "Organization"}
+            </SafeText>
+            {vol.description && (
+              <SafeText style={styles.description}>{vol.description}</SafeText>
+            )}
+          </View>
+        ))}
+      </View>
+    )
+  }
+
+  const renderReferences = () => {
+    if (!state.references?.items?.length && !state.references?.availableUponRequest) return null
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>References</Text>
+        {state.references.availableUponRequest ? (
+          <SafeText style={styles.description}>Available upon request</SafeText>
+        ) : (
+          state.references.items.map((ref, index) => (
+            <View key={index} style={styles.item}>
+              <SafeText style={styles.itemTitle}>
+                {ref.name || "Reference Name"}
+              </SafeText>
+              <SafeText style={styles.itemSubtitle}>
+                {ref.title || "Title"} at {ref.company || "Company"}
+              </SafeText>
+              {ref.email && (
+                <SafeText style={styles.description}>{ref.email}</SafeText>
+              )}
+              {ref.phone && (
+                <SafeText style={styles.description}>{ref.phone}</SafeText>
+              )}
+            </View>
+          ))
+        )}
+      </View>
+    )
+  }
+
   if (template === "modern") {
     return (
       <Document>
@@ -279,10 +498,18 @@ const ResumePDF = ({ data, template = "modern" }) => {
             <View style={styles.column}>
               {renderExperience()}
               {renderEducation()}
+              {renderProjects()}
+              {renderVolunteering()}
+              {renderPublications()}
             </View>
             <View style={styles.column}>
               {renderSkills()}
               {renderLanguages()}
+              {renderAwards()}
+              {renderCertifications()}
+              {renderInterests()}
+              {renderProfiles()}
+              {renderReferences()}
             </View>
           </View>
         </Page>
@@ -300,6 +527,14 @@ const ResumePDF = ({ data, template = "modern" }) => {
         {renderEducation()}
         {renderSkills()}
         {renderLanguages()}
+        {renderAwards()}
+        {renderProjects()}
+        {renderCertifications()}
+        {renderPublications()}
+        {renderVolunteering()}
+        {renderInterests()}
+        {renderProfiles()}
+        {renderReferences()}
       </Page>
     </Document>
   )

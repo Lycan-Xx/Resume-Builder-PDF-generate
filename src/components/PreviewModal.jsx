@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Download, X, AlertCircle } from 'lucide-react';
 import ResumePDF from './ResumePDF';
-import { useResume } from '../context/ResumeContext';
+import { useResume } from '../contexts/ResumeContext';
 
 const MemoizedPDFViewer = memo(({ data }) => {
   const [error, setError] = useState(null);
@@ -60,7 +60,8 @@ const PreviewModal = ({ isOpen, onClose }) => {
                       <span>{loading ? 'Preparing...' : 'Download PDF'}</span>
                     </>
                   )}
-    <PDFDownloadLink document={<ResumePDF data={pdfData} />} />                <button
+                </PDFDownloadLink>
+                <button
                   onClick={onClose}
                   className="inline-flex items-center justify-center p-2 text-gray-400 hover:text-gray-500"
                 >

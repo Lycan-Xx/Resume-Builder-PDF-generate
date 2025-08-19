@@ -78,32 +78,45 @@ const initialState = {
 }
 
 const resumeReducer = (state, action) => {
+  const addToHistory = (newState) => ({
+    ...newState,
+    history: {
+      past: [...state.history.past, state].slice(-50),
+      present: newState,
+      future: [],
+    },
+  });
+
   switch (action.type) {
     case "UPDATE_SECTION":
-      return {
+      const updatedSection = {
         ...state,
         [action.section]: { ...state[action.section], ...action.data },
-      }
+      };
+      return addToHistory(updatedSection);
 
     case "ADD_ITEM":
-      return {
+      const addedItem = {
         ...state,
         [action.section]: [...state[action.section], action.item],
-      }
+      };
+      return addToHistory(addedItem);
 
     case "UPDATE_ITEM":
-      return {
+      const updatedItem = {
         ...state,
         [action.section]: state[action.section].map((item, index) =>
           index === action.index ? { ...item, ...action.data } : item,
         ),
-      }
+      };
+      return addToHistory(updatedItem);
 
     case "REMOVE_ITEM":
-      return {
+      const removedItem = {
         ...state,
         [action.section]: state[action.section].filter((_, index) => index !== action.index),
-      }
+      };
+      return addToHistory(removedItem);
 
     case "REORDER_ITEMS":
       return {

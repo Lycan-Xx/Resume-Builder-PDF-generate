@@ -72,11 +72,11 @@ const ResumeBuilder = () => {
       {/* Sections Navigation Bar */}
       <SectionsNavbar activeSection={activeSection} onSectionChange={setActiveSection} />
 
-      <div className="flex h-[calc(100vh-140px)]">
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-160px)] lg:h-[calc(100vh-140px)]">
         {/* Left Panel - Form */}
         <div className={`${showPreview ? "hidden lg:block" : "block"} w-full lg:w-1/2 overflow-y-auto`}>
-          <div className="p-6">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="p-4 sm:p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
               <ActiveSectionComponent />
             </div>
           </div>
@@ -84,9 +84,9 @@ const ResumeBuilder = () => {
 
         {/* Right Panel - PDF Preview */}
         <div
-          className={`${showPreview ? "block" : "hidden lg:block"} w-full lg:w-1/2 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700`}
+          className={`${showPreview ? "block" : "hidden lg:block"} w-full lg:w-1/2 bg-white dark:bg-gray-800 border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-gray-700`}
         >
-          <div className="h-full p-4">
+          <div className="h-full p-2 sm:p-4">
             <div className="h-full bg-white rounded-lg shadow-sm overflow-hidden">
               <PDFViewer width="100%" height="100%" className="border-0">
                 <ResumePDF data={{ state }} template={state.selectedTemplate} />
@@ -99,9 +99,10 @@ const ResumeBuilder = () => {
       {/* Mobile Preview Toggle */}
       <button
         onClick={() => setShowPreview(!showPreview)}
-        className="lg:hidden fixed bottom-6 right-6 bg-primary-500 hover:bg-primary-600 text-white p-4 rounded-full shadow-lg transition-colors z-50"
+        className="lg:hidden fixed bottom-4 right-4 bg-primary-500 hover:bg-primary-600 text-white p-3 rounded-full shadow-lg transition-colors z-50 min-h-[48px] min-w-[48px] flex items-center justify-center"
+        aria-label={showPreview ? "Switch to form view" : "Switch to preview"}
       >
-        {showPreview ? "📝" : "👁️"}
+        <span className="text-lg">{showPreview ? "📝" : "👁️"}</span>
       </button>
     </div>
   )
