@@ -1,5 +1,7 @@
 "use client"
 import { FileText, Moon, Sun, Undo, Redo, Download, Settings } from "lucide-react"
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import ResumePDF from "./ResumePDF"
 import { useTheme } from "../contexts/ThemeContext"
 import { useResume } from "../contexts/ResumeContext"
 
@@ -61,10 +63,18 @@ const Navbar = () => {
           </select>
 
           {/* Export Button */}
-          <button className="flex items-center space-x-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors btn-hover">
-            <Download className="w-4 h-4" />
-            <span>Export</span>
-          </button>
+          <PDFDownloadLink
+            document={<ResumePDF data={{ state }} />}
+            fileName={`${state.basics.fullName || 'resume'}.pdf`}
+            className="flex items-center space-x-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors btn-hover"
+          >
+            {({ loading }) => (
+              <>
+                <Download className="w-4 h-4" />
+                <span>{loading ? 'Preparing...' : 'Export'}</span>
+              </>
+            )}
+          </PDFDownloadLink>
 
           {/* Settings */}
           <button className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 transition-colors">
