@@ -6,8 +6,9 @@ const PublicationsSection = () => {
 
   const handleAddPublication = () => {
     dispatch({
-      type: 'ADD_PUBLICATION',
-      payload: {
+      type: 'ADD_ITEM',
+      section: 'publications',
+      item: {
         title: '',
         publisher: '',
         date: '',
@@ -19,15 +20,18 @@ const PublicationsSection = () => {
 
   const handleRemovePublication = (index) => {
     dispatch({
-      type: 'REMOVE_PUBLICATION',
-      payload: index,
+      type: 'REMOVE_ITEM',
+      section: 'publications',
+      index: index,
     });
   };
 
   const handleInputChange = (index, field, value) => {
     dispatch({
-      type: 'UPDATE_PUBLICATION',
-      payload: { index, field, value },
+      type: 'UPDATE_ITEM',
+      section: 'publications',
+      index: index,
+      data: { [field]: value },
     });
   };
 

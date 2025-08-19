@@ -7,8 +7,9 @@ const AwardsSection = () => {
 
   const handleAddAward = () => {
     dispatch({
-      type: 'ADD_AWARD',
-      payload: {
+      type: 'ADD_ITEM',
+      section: 'awards',
+      item: {
         title: '',
         issuer: '',
         date: '',
@@ -19,15 +20,18 @@ const AwardsSection = () => {
 
   const handleRemoveAward = (index) => {
     dispatch({
-      type: 'REMOVE_AWARD',
-      payload: index,
+      type: 'REMOVE_ITEM',
+      section: 'awards',
+      index: index,
     });
   };
 
   const handleInputChange = (index, field, value) => {
     dispatch({
-      type: 'UPDATE_AWARD',
-      payload: { index, field, value },
+      type: 'UPDATE_ITEM',
+      section: 'awards',
+      index: index,
+      data: { [field]: value },
     });
   };
 

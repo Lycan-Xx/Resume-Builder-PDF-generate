@@ -6,8 +6,9 @@ const ProjectsSection = () => {
 
   const handleAddProject = () => {
     dispatch({
-      type: 'ADD_PROJECT',
-      payload: {
+      type: 'ADD_ITEM',
+      section: 'projects',
+      item: {
         name: '',
         description: '',
         technologies: '',
@@ -18,18 +19,18 @@ const ProjectsSection = () => {
 
   const handleRemoveProject = (index) => {
     dispatch({
-      type: 'REMOVE_PROJECT',
-      payload: index,
+      type: 'REMOVE_ITEM',
+      section: 'projects',
+      index: index,
     });
   };
 
   const handleInputChange = (index, field, value) => {
     dispatch({
-      type: 'UPDATE_PROJECT',
-      payload: {
-        index,
-        data: { [field]: value },
-      },
+      type: 'UPDATE_ITEM',
+      section: 'projects',
+      index: index,
+      data: { [field]: value },
     });
   };
 

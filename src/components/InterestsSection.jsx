@@ -6,8 +6,9 @@ const InterestsSection = () => {
 
   const handleAddInterest = () => {
     dispatch({
-      type: 'ADD_INTEREST',
-      payload: {
+      type: 'ADD_ITEM',
+      section: 'interests',
+      item: {
         name: '',
         description: '',
       },
@@ -16,15 +17,18 @@ const InterestsSection = () => {
 
   const handleRemoveInterest = (index) => {
     dispatch({
-      type: 'REMOVE_INTEREST',
-      payload: index,
+      type: 'REMOVE_ITEM',
+      section: 'interests',
+      index: index,
     });
   };
 
   const handleInputChange = (index, field, value) => {
     dispatch({
-      type: 'UPDATE_INTEREST',
-      payload: { index, field, value },
+      type: 'UPDATE_ITEM',
+      section: 'interests',
+      index: index,
+      data: { [field]: value },
     });
   };
 

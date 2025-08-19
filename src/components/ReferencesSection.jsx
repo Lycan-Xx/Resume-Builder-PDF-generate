@@ -6,29 +6,42 @@ const ReferencesSection = () => {
 
   const handleAddReference = () => {
     dispatch({
-      type: 'ADD_REFERENCE',
-      payload: {
-        name: '',
-        title: '',
-        company: '',
-        email: '',
-        phone: '',
-        relationship: '',
+      type: 'UPDATE_SECTION',
+      section: 'references',
+      data: {
+        items: [
+          ...state.references.items,
+          {
+            name: '',
+            title: '',
+            company: '',
+            email: '',
+            phone: '',
+            relationship: '',
+          },
+        ],
       },
     });
   };
 
   const handleRemoveReference = (index) => {
     dispatch({
-      type: 'REMOVE_REFERENCE',
-      payload: index,
+      type: 'UPDATE_SECTION',
+      section: 'references',
+      data: {
+        items: state.references.items.filter((_, i) => i !== index),
+      },
     });
   };
 
   const handleInputChange = (index, field, value) => {
+    const updatedItems = state.references.items.map((item, i) =>
+      i === index ? { ...item, [field]: value } : item
+    );
     dispatch({
-      type: 'UPDATE_REFERENCE',
-      payload: { index, field, value },
+      type: 'UPDATE_SECTION',
+      section: 'references',
+      data: { items: updatedItems },
     });
   };
 
@@ -53,7 +66,7 @@ const ReferencesSection = () => {
       </div>
 
       <div className="space-y-4">
-        {state.references && state.references.map((reference, index) => (
+        {state.references.items.map((reference, index) => (
           <div key={index} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-3">

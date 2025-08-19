@@ -7,8 +7,9 @@ const VolunteeringSection = () => {
 
   const handleAddVolunteering = () => {
     dispatch({
-      type: 'ADD_VOLUNTEERING',
-      payload: {
+      type: 'ADD_ITEM',
+      section: 'volunteering',
+      item: {
         organization: '',
         role: '',
         startDate: '',
@@ -20,15 +21,18 @@ const VolunteeringSection = () => {
 
   const handleRemoveVolunteering = (index) => {
     dispatch({
-      type: 'REMOVE_VOLUNTEERING',
-      payload: index,
+      type: 'REMOVE_ITEM',
+      section: 'volunteering',
+      index: index,
     });
   };
 
   const handleInputChange = (index, field, value) => {
     dispatch({
-      type: 'UPDATE_VOLUNTEERING',
-      payload: { index, field, value },
+      type: 'UPDATE_ITEM',
+      section: 'volunteering',
+      index: index,
+      data: { [field]: value },
     });
   };
 

@@ -6,8 +6,9 @@ const ProfilesSection = () => {
 
   const handleAddProfile = () => {
     dispatch({
-      type: 'ADD_PROFILE',
-      payload: {
+      type: 'ADD_ITEM',
+      section: 'profiles',
+      item: {
         platform: 'LinkedIn',
         username: '',
         url: '',
@@ -17,15 +18,18 @@ const ProfilesSection = () => {
 
   const handleRemoveProfile = (index) => {
     dispatch({
-      type: 'REMOVE_PROFILE',
-      payload: index,
+      type: 'REMOVE_ITEM',
+      section: 'profiles',
+      index: index,
     });
   };
 
   const handleInputChange = (index, field, value) => {
     dispatch({
-      type: 'UPDATE_PROFILE',
-      payload: { index, field, value },
+      type: 'UPDATE_ITEM',
+      section: 'profiles',
+      index: index,
+      data: { [field]: value },
     });
   };
 

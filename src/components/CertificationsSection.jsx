@@ -7,8 +7,9 @@ const CertificationsSection = () => {
 
   const handleAddCertification = () => {
     dispatch({
-      type: 'ADD_CERTIFICATION',
-      payload: {
+      type: 'ADD_ITEM',
+      section: 'certifications',
+      item: {
         name: '',
         issuer: '',
         date: '',
@@ -19,26 +20,20 @@ const CertificationsSection = () => {
 
   const handleRemoveCertification = (index) => {
     dispatch({
-      type: 'REMOVE_CERTIFICATION',
-      payload: index,
+      type: 'REMOVE_ITEM',
+      section: 'certifications',
+      index: index,
     });
   };
 
   const handleInputChange = (index, field, value) => {
     dispatch({
-      type: 'UPDATE_CERTIFICATION',
-      payload: { index, field, value },
+      type: 'UPDATE_ITEM',
+      section: 'certifications',
+      index: index,
+      data: { [field]: value },
     });
   };
-
-  // Mock certifications data for display
-  const mockCertifications = [
-    { name: 'Full-Stack Web Development', issuer: 'CodeAcademy' },
-    { name: 'AWS Certified Developer', issuer: 'Amazon Web Services' },
-  ];
-
-  const displayCertifications = state.certifications && state.certifications.length > 0 ? 
-    state.certifications : mockCertifications;
 
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6">
@@ -53,7 +48,7 @@ const CertificationsSection = () => {
       </div>
 
       <div className="space-y-4">
-        {displayCertifications.map((cert, index) => (
+        {state.certifications.map((cert, index) => (
           <div key={index} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-3">
