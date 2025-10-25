@@ -1,13 +1,13 @@
 "use client"
-import { FileText, Moon, Sun, Download } from "lucide-react"
-import { PDFDownloadLink } from "@react-pdf/renderer"
-import ResumePDF from "../pdf/ResumePDF"
+import { FileText, Moon, Sun, Sparkles } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 import { useTheme } from "../../contexts/ThemeContext"
 import { useResume } from "../../contexts/ResumeContext"
 
 const Navbar = () => {
   const { isDark, toggleTheme } = useTheme()
-  const { state, dispatch } = useResume()
+  const { state } = useResume()
+  const navigate = useNavigate()
 
   return (
     <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
@@ -26,19 +26,14 @@ const Navbar = () => {
         {/* Actions */}
         <div className="flex items-center space-x-2">
 
-          {/* Export Button */}
-          <PDFDownloadLink
-            document={<ResumePDF data={{ state }} />}
-            fileName={`${state.basics.fullName || 'resume'}.pdf`}
-            className="flex items-center space-x-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors btn-hover"
+          {/* Finish & Export Button */}
+          <button
+            onClick={() => navigate("/export")}
+            className="flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all transform hover:scale-105 active:scale-95 shadow-lg font-medium"
           >
-            {({ loading }) => (
-              <>
-                <Download className="w-4 h-4" />
-                <span>{loading ? 'Preparing...' : 'Export'}</span>
-              </>
-            )}
-          </PDFDownloadLink>
+            <Sparkles className="w-4 h-4" />
+            <span>Finish & Export</span>
+          </button>
 
           {/* Settings */}
           <button className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 transition-colors">

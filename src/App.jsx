@@ -3,6 +3,7 @@ import { ThemeProvider } from "./contexts/ThemeContext"
 import { ResumeProvider } from "./contexts/ResumeContext"
 import HomePage from "./pages/HomePage"
 import ResumeBuilder from "./pages/ResumeBuilder"
+import ExportPage from "./pages/ExportPage"
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,14 @@ const router = createBrowserRouter([
     element: (
       <ResumeProvider>
         <ResumeBuilder />
+      </ResumeProvider>
+    ),
+  },
+  {
+    path: "/export",
+    element: (
+      <ResumeProvider>
+        <ExportPage />
       </ResumeProvider>
     ),
   },
