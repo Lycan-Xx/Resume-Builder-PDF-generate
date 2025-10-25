@@ -15,8 +15,8 @@ export const modernBlueTemplate = {
   },
   
   fonts: {
-    header: 'Roboto',
-    body: 'Roboto',
+    header: 'Roboto Mono',
+    body: 'Roboto Mono',
     sizes: {
       name: 36,
       headline: 16,

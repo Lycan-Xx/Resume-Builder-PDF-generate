@@ -5,17 +5,14 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['lucide-react', '@react-pdf/renderer'],
+    include: ['lucide-react', 'react', 'react-dom', 'react-router-dom'],
     esbuildOptions: {
-      target: 'es2020'
+      target: 'esnext'
     }
   },
   build: {
     sourcemap: true,
-    target: 'es2020',
-    commonjsOptions: {
-      include: [/@react-pdf\/renderer/, /node_modules/],
-    },
+    target: 'esnext'
   },
   resolve: {
     alias: {

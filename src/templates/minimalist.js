@@ -15,8 +15,8 @@ export const minimalistTemplate = {
   },
   
   fonts: {
-    header: 'Roboto',
-    body: 'Roboto',
+    header: 'Roboto Mono',
+    body: 'Roboto Mono',
     sizes: {
       name: 28,
       headline: 13,
