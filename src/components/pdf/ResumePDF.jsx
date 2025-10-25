@@ -158,7 +158,6 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
       backgroundColor: template.colors.sectionBg,
       padding: "4 10",
       color: template.colors.text,
-      borderRadius: 0,
       borderLeft:
         (template.layout.skillBorderWidth || 0) > 0
           ? `${template.layout.skillBorderWidth} solid ${template.colors.primary}`
