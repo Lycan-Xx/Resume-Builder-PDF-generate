@@ -176,7 +176,6 @@ const ExperienceSection = () => {
                   {' '}({calculateDuration(exp.startDate, exp.endDate, exp.current)})
                 </div>
               )}
-              </div>
 
               <div className="mb-4">
                 <label className="flex items-center space-x-2">
