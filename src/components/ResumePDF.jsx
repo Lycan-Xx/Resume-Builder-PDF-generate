@@ -1,15 +1,26 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
-import { getTemplate } from "../templates"
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { getTemplate } from "../templates";
 
 // Helper function to safely render text
 const SafeText = ({ children, style, ...props }) => {
-  if (!children || children === '') return null;
-  return <Text style={style} {...props}>{children}</Text>;
-}
+  // Check if children is null, undefined, or empty string
+  if (children === null || children === undefined || children === "")
+    return null;
+
+  // Convert to string and trim to check for whitespace-only content
+  const content = String(children).trim();
+  if (!content) return null;
+
+  return (
+    <Text style={style} {...props}>
+      {children}
+    </Text>
+  );
+};
 
 export default function ResumePDF({ data, templateId = "professional-red" }) {
-  const { state } = data
-  const template = getTemplate(templateId)
+  const { state } = data;
+  const template = getTemplate(templateId);
 
   // Validate that state exists
   if (!state) {
@@ -21,7 +32,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         </Page>
       </Document>
-    )
+    );
   }
 
   // Generate dynamic styles from template
@@ -33,99 +44,101 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
       padding: `${template.spacing.page.top} ${template.spacing.page.right} ${template.spacing.page.bottom} ${template.spacing.page.left}`,
       backgroundColor: template.colors.background,
     },
-    
+
     header: {
       marginBottom: template.spacing.headerMargin,
-      borderBottom: template.layout.headerBorderWidth > 0 
-        ? `${template.layout.headerBorderWidth} solid ${template.colors.border}` 
-        : 'none',
+      borderBottom:
+        template.layout.headerBorderWidth > 0
+          ? `${template.layout.headerBorderWidth} solid ${template.colors.border}`
+          : "none",
       paddingBottom: template.layout.headerBorderWidth > 0 ? 20 : 0,
     },
-    
+
     name: {
-      fontSize: template.fonts.sizes.name,
+      fontSize: 18,
       fontFamily: template.fonts.header,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       color: template.colors.primary,
       marginBottom: 8,
-      textAlign: 'center',
+      textAlign: "left",
     },
-    
+
     headline: {
-      fontSize: template.fonts.sizes.headline,
+      fontSize: 12,
       color: template.colors.lightText,
       marginBottom: 15,
-      textAlign: 'center',
+      textAlign: "left",
     },
-    
+
     contactInfo: {
       flexDirection: "row",
-      justifyContent: "center",
+      justifyContent: "flex-start",
       flexWrap: "wrap",
       gap: 15,
       fontSize: template.fonts.sizes.contactInfo,
       color: template.colors.text,
     },
-    
+
     contactLink: {
       color: template.colors.secondary,
-      textDecoration: 'none',
+      textDecoration: "none",
     },
-    
+
     section: {
       marginBottom: template.spacing.sectionMargin,
     },
-    
+
     sectionTitle: {
       fontSize: template.fonts.sizes.sectionTitle,
       fontFamily: template.fonts.header,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       color: template.colors.primary,
       marginBottom: 18,
       paddingBottom: 8,
-      borderBottom: template.layout.sectionBorderWidth > 0
-        ? `${template.layout.sectionBorderWidth} solid ${template.colors.primary}`
-        : 'none',
-      textTransform: 'uppercase',
-      letterSpacing: 1.5,
+      borderBottom:
+        template.layout.sectionBorderWidth > 0
+          ? `${template.layout.sectionBorderWidth} solid ${template.colors.primary}`
+          : "none",
+      textTransform: "capitalize",
+      letterSpacing: 0.5,
     },
-    
+
     item: {
       marginBottom: template.spacing.itemMargin,
     },
-    
+
     itemHeader: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "baseline",
       marginBottom: 8,
     },
-    
+
     itemTitle: {
       fontSize: template.fonts.sizes.jobTitle,
       fontFamily: template.fonts.header,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       color: template.colors.text,
     },
-    
+
     itemSubtitle: {
       fontSize: template.fonts.sizes.body,
       color: template.colors.lightText,
       marginBottom: 10,
     },
-    
+
     itemDate: {
       fontSize: template.fonts.sizes.small,
       color: template.colors.lightText,
       fontWeight: 600,
     },
-    
+
     description: {
       fontSize: template.fonts.sizes.body,
       color: template.colors.text,
       lineHeight: template.spacing.lineHeight,
     },
-    
+
     bulletPoint: {
       fontSize: template.fonts.sizes.body,
       color: template.colors.text,
@@ -133,73 +146,79 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
       marginBottom: 8,
       lineHeight: template.spacing.lineHeight,
     },
-    
+
     skillsContainer: {
       flexDirection: "row",
       flexWrap: "wrap",
       gap: 12,
     },
-    
+
     skill: {
       fontSize: template.fonts.sizes.small,
       backgroundColor: template.colors.sectionBg,
       padding: "4 10",
       borderRadius: 0,
       color: template.colors.text,
-      borderLeft: template.layout.skillBorderWidth > 0 
-        ? `${template.layout.skillBorderWidth} solid ${template.colors.primary}` 
-        : 'none',
+      borderLeft:
+        template.layout.skillBorderWidth > 0
+          ? `${template.layout.skillBorderWidth} solid ${template.colors.primary}`
+          : "none",
     },
-    
+
     twoColumn: {
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: 20,
     },
-    
+
     column: {
       flex: 1,
     },
-  })
+  });
 
-  const renderBasics = () => (
-    <View style={styles.header}>
-      <SafeText style={styles.name}>
-        {state.basics?.fullName || "Your Name"}
-      </SafeText>
-      {state.basics?.headline && (
-        <SafeText style={styles.headline}>
-          {state.basics.headline}
+  const renderBasics = () => {
+    const email = state.basics?.email || "";
+    const phone = state.basics?.phone || "";
+    const location = state.basics?.location || "";
+    const website = state.basics?.website || "";
+
+    return (
+      <View style={styles.header}>
+        <SafeText style={styles.name}>
+          {state.basics?.fullName || "Your Name"}
         </SafeText>
-      )}
-      <View style={styles.contactInfo}>
-        {state.basics?.email && state.basics.email.trim() && (
-          <SafeText style={styles.contactLink}>{state.basics.email}</SafeText>
+        {state.basics?.headline && (
+          <SafeText style={styles.headline}>{state.basics.headline}</SafeText>
         )}
-        {state.basics?.phone && state.basics.phone.trim() && <SafeText>{state.basics.phone}</SafeText>}
-        {state.basics?.location && state.basics.location.trim() && <SafeText>{state.basics.location}</SafeText>}
-        {state.basics?.website && state.basics.website.trim() && (
-          <SafeText style={styles.contactLink}>{state.basics.website}</SafeText>
-        )}
+        <View style={styles.contactInfo}>
+          {email.trim() && <Text style={styles.contactLink}>{email}</Text>}
+          {phone.trim() && (
+            <Text style={{ color: template.colors.text }}>{phone}</Text>
+          )}
+          {location.trim() && (
+            <Text style={{ color: template.colors.text }}>{location}</Text>
+          )}
+          {website.trim() && <Text style={styles.contactLink}>{website}</Text>}
+        </View>
       </View>
-    </View>
-  )
+    );
+  };
 
   const renderSummary = () => {
-    if (!state.summary?.content) return null
+    if (!state.summary?.content) return null;
 
-    const cleanContent = state.summary.content.replace(/<[^>]*>/g, "").trim()
-    if (!cleanContent) return null
+    const cleanContent = state.summary.content.replace(/<[^>]*>/g, "").trim();
+    if (!cleanContent) return null;
 
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Professional Summary</Text>
         <SafeText style={styles.description}>{cleanContent}</SafeText>
       </View>
-    )
-  }
+    );
+  };
 
   const renderExperience = () => {
-    if (!state.experience?.length) return null
+    if (!state.experience?.length) return null;
 
     return (
       <View style={styles.section}>
@@ -211,11 +230,13 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
                 {exp.position || "Position"}
               </SafeText>
               <SafeText style={styles.itemDate}>
-                {exp.startDate || "Start"} - {exp.current ? "Present" : (exp.endDate || "End")}
+                {exp.startDate || "Start"} -{" "}
+                {exp.current ? "Present" : exp.endDate || "End"}
               </SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
-              {exp.company || "Company"}{exp.location && exp.location.trim() ? ` • ${exp.location}` : ""}
+              {exp.company || "Company"}
+              {exp.location && exp.location.trim() ? ` • ${exp.location}` : ""}
             </SafeText>
             {exp.description && (
               <SafeText style={styles.description}>{exp.description}</SafeText>
@@ -230,11 +251,11 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   const renderEducation = () => {
-    if (!state.education?.length) return null
+    if (!state.education?.length) return null;
 
     return (
       <View style={styles.section}>
@@ -250,7 +271,8 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               </SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
-              {edu.institution || "Institution"}{edu.location && edu.location.trim() ? ` • ${edu.location}` : ""}
+              {edu.institution || "Institution"}
+              {edu.location && edu.location.trim() ? ` • ${edu.location}` : ""}
             </SafeText>
             {edu.fieldOfStudy && (
               <SafeText style={styles.description}>
@@ -258,9 +280,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               </SafeText>
             )}
             {edu.gpa && (
-              <SafeText style={styles.description}>
-                GPA: {edu.gpa}
-              </SafeText>
+              <SafeText style={styles.description}>GPA: {edu.gpa}</SafeText>
             )}
             {edu.honors && (
               <SafeText style={styles.description}>
@@ -270,17 +290,17 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   const renderSkills = () => {
-    if (!state.skills?.length) return null
+    if (!state.skills?.length) return null;
 
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Skills</Text>
         <View style={styles.skillsContainer}>
-          {state.skills.map((skill, index) => 
+          {state.skills.map((skill, index) =>
             skill?.name ? (
               <SafeText key={index} style={styles.skill}>
                 {skill.name}
@@ -289,30 +309,33 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           )}
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   const renderLanguages = () => {
-    if (!state.languages?.length) return null
+    if (!state.languages?.length) return null;
 
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Languages</Text>
-        {state.languages.map((lang, index) => 
+        {state.languages.map((lang, index) =>
           lang?.name ? (
             <View key={index} style={styles.item}>
               <SafeText style={styles.itemTitle}>
-                {lang.name}{lang.proficiency && lang.proficiency.trim() ? ` - ${lang.proficiency}` : ""}
+                {lang.name}
+                {lang.proficiency && lang.proficiency.trim()
+                  ? ` - ${lang.proficiency}`
+                  : ""}
               </SafeText>
             </View>
           ) : null
         )}
       </View>
-    )
-  }
+    );
+  };
 
   const renderAwards = () => {
-    if (!state.awards?.length) return null
+    if (!state.awards?.length) return null;
 
     return (
       <View style={styles.section}>
@@ -331,16 +354,18 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               {award.issuer || "Issuer"}
             </SafeText>
             {award.description && (
-              <SafeText style={styles.description}>{award.description}</SafeText>
+              <SafeText style={styles.description}>
+                {award.description}
+              </SafeText>
             )}
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   const renderProfiles = () => {
-    if (!state.profiles?.length) return null
+    if (!state.profiles?.length) return null;
 
     return (
       <View style={styles.section}>
@@ -356,11 +381,11 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   const renderProjects = () => {
-    if (!state.projects?.length) return null
+    if (!state.projects?.length) return null;
 
     return (
       <View style={styles.section}>
@@ -379,7 +404,9 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               <SafeText style={styles.itemSubtitle}>{project.url}</SafeText>
             )}
             {project.description && (
-              <SafeText style={styles.description}>{project.description}</SafeText>
+              <SafeText style={styles.description}>
+                {project.description}
+              </SafeText>
             )}
             {project.highlights?.map((highlight, idx) =>
               highlight && highlight.trim() ? (
@@ -391,17 +418,17 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   const renderInterests = () => {
-    if (!state.interests?.length) return null
+    if (!state.interests?.length) return null;
 
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Interests</Text>
         <View style={styles.skillsContainer}>
-          {state.interests.map((interest, index) => 
+          {state.interests.map((interest, index) =>
             interest?.name ? (
               <SafeText key={index} style={styles.skill}>
                 {interest.name}
@@ -410,11 +437,11 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           )}
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   const renderCertifications = () => {
-    if (!state.certifications?.length) return null
+    if (!state.certifications?.length) return null;
 
     return (
       <View style={styles.section}>
@@ -425,9 +452,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               <SafeText style={styles.itemTitle}>
                 {cert.name || "Certification Name"}
               </SafeText>
-              <SafeText style={styles.itemDate}>
-                {cert.date || "Date"}
-              </SafeText>
+              <SafeText style={styles.itemDate}>{cert.date || "Date"}</SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
               {cert.issuer || "Issuer"}
@@ -438,11 +463,11 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   const renderPublications = () => {
-    if (!state.publications?.length) return null
+    if (!state.publications?.length) return null;
 
     return (
       <View style={styles.section}>
@@ -453,9 +478,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               <SafeText style={styles.itemTitle}>
                 {pub.title || "Publication Title"}
               </SafeText>
-              <SafeText style={styles.itemDate}>
-                {pub.date || "Date"}
-              </SafeText>
+              <SafeText style={styles.itemDate}>{pub.date || "Date"}</SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
               {pub.publisher || "Publisher"}
@@ -469,11 +492,11 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   const renderVolunteering = () => {
-    if (!state.volunteering?.length) return null
+    if (!state.volunteering?.length) return null;
 
     return (
       <View style={styles.section}>
@@ -481,9 +504,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
         {state.volunteering.map((vol, index) => (
           <View key={index} style={styles.item}>
             <View style={styles.itemHeader}>
-              <SafeText style={styles.itemTitle}>
-                {vol.role || "Role"}
-              </SafeText>
+              <SafeText style={styles.itemTitle}>{vol.role || "Role"}</SafeText>
               <SafeText style={styles.itemDate}>
                 {vol.startDate || "Start"} - {vol.endDate || "End"}
               </SafeText>
@@ -497,11 +518,15 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         ))}
       </View>
-    )
-  }
+    );
+  };
 
   const renderReferences = () => {
-    if (!state.references?.items?.length && !state.references?.availableUponRequest) return null
+    if (
+      !state.references?.items?.length &&
+      !state.references?.availableUponRequest
+    )
+      return null;
 
     return (
       <View style={styles.section}>
@@ -515,7 +540,8 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
                 {ref.name || "Reference Name"}
               </SafeText>
               <SafeText style={styles.itemSubtitle}>
-                {(ref.title && ref.title.trim()) || "Title"} at {(ref.company && ref.company.trim()) || "Company"}
+                {(ref.title && ref.title.trim()) || "Title"} at{" "}
+                {(ref.company && ref.company.trim()) || "Company"}
               </SafeText>
               {ref.email && (
                 <SafeText style={styles.description}>{ref.email}</SafeText>
@@ -527,11 +553,11 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           ))
         )}
       </View>
-    )
-  }
+    );
+  };
 
   // Render based on template layout type
-  if (template.layout.type === 'two-column') {
+  if (template.layout.type === "two-column") {
     return (
       <Document>
         <Page size="A4" style={styles.page}>
@@ -557,7 +583,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           </View>
         </Page>
       </Document>
-    )
+    );
   }
 
   // Single column layout (default)
@@ -580,5 +606,5 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
         {renderReferences()}
       </Page>
     </Document>
-  )
+  );
 }
