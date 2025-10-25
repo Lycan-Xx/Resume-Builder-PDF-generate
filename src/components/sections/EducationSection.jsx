@@ -1,6 +1,8 @@
 "use client"
 import { GraduationCap, Plus, Trash2, Calendar, MapPin, Award } from "lucide-react"
 import { useResume } from "../../contexts/ResumeContext"
+import MonthYearPicker from "../ui/MonthYearPicker"
+import { formatMonthYear, calculateDuration } from "../../utils/dateUtils"
 
 const EducationSection = () => {
   const { state, dispatch } = useResume()
@@ -141,23 +143,30 @@ const EducationSection = () => {
                       <Calendar className="w-4 h-4 inline mr-1" />
                       Start Date
                     </label>
-                    <input
-                      type="month"
+                    <MonthYearPicker
                       value={edu.startDate}
-                      onChange={(e) => updateEducation(index, "startDate", e.target.value)}
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+                      onChange={(date) => updateEducation(index, "startDate", date)}
+                      placeholder="Select start date"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End Date</label>
-                    <input
-                      type="month"
+                    <MonthYearPicker
                       value={edu.endDate}
-                      onChange={(e) => updateEducation(index, "endDate", e.target.value)}
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+                      onChange={(date) => updateEducation(index, "endDate", date)}
+                      placeholder="Select end date"
                     />
                   </div>
                 </div>
+
+                {/* Duration display */}
+                {edu.startDate && edu.endDate && (
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="font-medium">Duration: </span>
+                    {formatMonthYear(edu.startDate)} - {formatMonthYear(edu.endDate)}
+                    {' '}({calculateDuration(edu.startDate, edu.endDate)})
+                  </div>
+                )}
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
