@@ -115,7 +115,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     },
 
     itemTitle: {
-      fontSize: template.fonts.sizes.jobTitle,
+      fontSize: 12,
       fontFamily: template.fonts.header,
       fontWeight: "bold",
       color: template.colors.text,
@@ -128,7 +128,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     },
 
     itemDate: {
-      fontSize: template.fonts.sizes.small,
+      fontSize: 11,
       color: template.colors.lightText,
       fontWeight: 600,
     },
@@ -157,10 +157,10 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
       fontSize: template.fonts.sizes.small,
       backgroundColor: template.colors.sectionBg,
       padding: "4 10",
-      borderRadius: 0,
       color: template.colors.text,
+      borderRadius: 0,
       borderLeft:
-        template.layout.skillBorderWidth > 0
+        (template.layout.skillBorderWidth || 0) > 0
           ? `${template.layout.skillBorderWidth} solid ${template.colors.primary}`
           : "none",
     },
@@ -294,19 +294,41 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
   };
 
   const renderSkills = () => {
-    if (!state.skills?.length) return null;
+    // Handle both old structure (array) and new structure (object with technical/soft)
+    const hasSkills =
+      state.skills?.technical?.length ||
+      state.skills?.soft?.length ||
+      state.skills?.length;
+    if (!hasSkills) return null;
+
+    // Combine technical and soft skills, or use the array directly
+    let allSkills = [];
+    if (state.skills?.technical || state.skills?.soft) {
+      // New structure: object with technical and soft arrays
+      allSkills = [
+        ...(state.skills.technical || []),
+        ...(state.skills.soft || []),
+      ];
+    } else if (Array.isArray(state.skills)) {
+      // Old structure: array of objects with name property
+      allSkills = state.skills;
+    }
+
+    if (allSkills.length === 0) return null;
 
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Skills</Text>
         <View style={styles.skillsContainer}>
-          {state.skills.map((skill, index) =>
-            skill?.name ? (
+          {allSkills.map((skill, index) => {
+            // Handle both string and object formats
+            const skillName = typeof skill === "string" ? skill : skill?.name;
+            return skillName ? (
               <SafeText key={index} style={styles.skill}>
-                {skill.name}
+                {skillName}
               </SafeText>
-            ) : null
-          )}
+            ) : null;
+          })}
         </View>
       </View>
     );

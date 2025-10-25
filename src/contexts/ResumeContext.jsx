@@ -174,6 +174,19 @@ export const ResumeProvider = ({ children }) => {
     if (saved) {
       try {
         const parsedState = JSON.parse(saved)
+        
+        // Migrate old skills format to new format if needed
+        if (parsedState.skills) {
+          // If skills is an array, keep it as is (for sections/SkillsSection.jsx)
+          // If skills is not an array and not an object with technical/soft, convert it
+          if (!Array.isArray(parsedState.skills) && 
+              !parsedState.skills.technical && 
+              !parsedState.skills.soft) {
+            // Invalid format, reset to empty array
+            parsedState.skills = []
+          }
+        }
+        
         dispatch({ type: "LOAD_STATE", state: parsedState })
       } catch (error) {
         console.error("Failed to load saved resume data:", error)
