@@ -35,115 +35,116 @@ const ProjectsSection = () => {
   };
 
   return (
-    <div className="space-y-8 p-1">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800 relative before:content-[''] before:absolute before:w-12 before:h-1 before:bg-gradient-to-r before:from-[#0A9396] before:to-[#544cd7] before:-bottom-2">
-          Projects
-        </h2>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <FileText className="w-6 h-6 text-primary-500" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h2>
+        </div>
         <button
           onClick={handleAddProject}
-          className="flex items-center space-x-2 px-4 py-2 bg-[#0A9396] text-white rounded-lg hover:bg-[#088586] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+          className="flex items-center space-x-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors btn-hover"
         >
-          <Plus size={20} strokeWidth={2.5} />
-          <span className="font-medium">Add Project</span>
+          <Plus className="w-4 h-4" />
+          <span>Add Project</span>
         </button>
       </div>
 
-      {state.projects.length === 0 && (
-        <div className="bg-gray-50/70 p-8 rounded-lg border border-dashed border-gray-300 flex flex-col items-center justify-center text-center">
-          <FileText size={36} className="text-gray-400 mb-2" />
-          <div className="text-gray-500 mb-2">No projects added yet</div>
+      {state.projects.length === 0 ? (
+        <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
+          <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No projects added</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">
+            Showcase your best work and technical projects
+          </p>
           <button
             onClick={handleAddProject}
-            className="flex items-center space-x-2 px-4 py-2 text-[#0A9396] hover:bg-[#0A9396]/10 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors mx-auto"
           >
-            <Plus size={20} />
-            <span>Add your first project</span>
+            <Plus className="w-4 h-4" />
+            <span>Add Your First Project</span>
           </button>
         </div>
-      )}
-
-      {state.projects.map((project, index) => (
-        <div
-          key={index}
-          className="bg-white p-6 rounded-lg space-y-5 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-600 flex items-center">
-                <FileText size={16} className="mr-1 text-[#0A9396]" />
-                Project Name
-              </label>
-              <input
-                type="text"
-                placeholder="e.g. Portfolio Website"
-                value={project.name || ''}
-                onChange={(e) =>
-                  handleInputChange(index, 'name', e.target.value)
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-600 flex items-center">
-                <ExternalLink size={16} className="mr-1 text-[#0A9396]" />
-                Project Link
-              </label>
-              <input
-                type="url"
-                placeholder="e.g. https://myproject.com"
-                value={project.link || ''}
-                onChange={(e) =>
-                  handleInputChange(index, 'link', e.target.value)
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-600 flex items-center">
-                <Code size={16} className="mr-1 text-[#0A9396]" />
-                Technologies Used
-              </label>
-              <input
-                type="text"
-                placeholder="e.g. React, Node.js, MongoDB"
-                value={project.technologies || ''}
-                onChange={(e) =>
-                  handleInputChange(index, 'technologies', e.target.value)
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-600">
-              Project Description
-            </label>
-            <textarea
-              placeholder="Describe your project, its purpose, and your role..."
-              value={project.description || ''}
-              onChange={(e) =>
-                handleInputChange(index, 'description', e.target.value)
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
-              rows={4}
-            />
-          </div>
-
-          <div className="pt-3">
-            <button
-              onClick={() => handleRemoveProject(index)}
-              className="flex items-center space-x-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors border border-red-200"
+      ) : (
+        <div className="space-y-6">
+          {state.projects.map((project, index) => (
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
             >
-              <Trash2 size={18} />
-              <span>Remove Project</span>
-            </button>
-          </div>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Project {index + 1}</span>
+                </div>
+                <button
+                  onClick={() => handleRemoveProject(index)}
+                  className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <FileText className="w-4 h-4 inline mr-1" />
+                    Project Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Portfolio Website"
+                    value={project.name || ''}
+                    onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <ExternalLink className="w-4 h-4 inline mr-1" />
+                    Project Link
+                  </label>
+                  <input
+                    type="url"
+                    placeholder="e.g. https://myproject.com"
+                    value={project.link || ''}
+                    onChange={(e) => handleInputChange(index, 'link', e.target.value)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <Code className="w-4 h-4 inline mr-1" />
+                    Technologies Used
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. React, Node.js, MongoDB"
+                    value={project.technologies || ''}
+                    onChange={(e) => handleInputChange(index, 'technologies', e.target.value)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Project Description
+                </label>
+                <textarea
+                  placeholder="Describe your project, its purpose, and your role..."
+                  value={project.description || ''}
+                  onChange={(e) => handleInputChange(index, 'description', e.target.value)}
+                  rows={4}
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 };

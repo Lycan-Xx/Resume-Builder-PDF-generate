@@ -1,6 +1,8 @@
 "use client"
 import { Briefcase, Plus, Trash2, Calendar, MapPin, Building } from "lucide-react"
 import { useResume } from "../../contexts/ResumeContext"
+import MonthYearPicker from "../ui/MonthYearPicker"
+import { formatMonthYear, calculateDuration } from "../../utils/dateUtils"
 
 const ExperienceSection = () => {
   const { state, dispatch } = useResume()
@@ -148,24 +150,32 @@ const ExperienceSection = () => {
                       <Calendar className="w-4 h-4 inline mr-1" />
                       Start Date
                     </label>
-                    <input
-                      type="month"
+                    <MonthYearPicker
                       value={exp.startDate}
-                      onChange={(e) => updateExperience(index, "startDate", e.target.value)}
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+                      onChange={(date) => updateExperience(index, "startDate", date)}
+                      placeholder="Select start date"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End Date</label>
-                    <input
-                      type="month"
+                    <MonthYearPicker
                       value={exp.endDate}
-                      onChange={(e) => updateExperience(index, "endDate", e.target.value)}
+                      onChange={(date) => updateExperience(index, "endDate", date)}
+                      placeholder="Select end date"
                       disabled={exp.current}
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white disabled:opacity-50"
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Duration display */}
+              {exp.startDate && (exp.endDate || exp.current) && (
+                <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                  <span className="font-medium">Duration: </span>
+                  {formatMonthYear(exp.startDate)} - {exp.current ? 'Present' : formatMonthYear(exp.endDate)}
+                  {' '}({calculateDuration(exp.startDate, exp.endDate, exp.current)})
+                </div>
+              )}
               </div>
 
               <div className="mb-4">

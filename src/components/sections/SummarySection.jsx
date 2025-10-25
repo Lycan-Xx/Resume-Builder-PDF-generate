@@ -1,26 +1,28 @@
 "use client"
 import { FileText } from "lucide-react"
-import ReactQuill from "react-quill"
-import "react-quill/dist/quill.snow.css"
 import { useResume } from "../../contexts/ResumeContext"
+import { useState, useEffect } from "react"
 
 const SummarySection = () => {
   const { state, dispatch } = useResume()
   const summary = state.summary
+  const [charCount, setCharCount] = useState(0)
+  const maxChars = 600
 
-  const handleContentChange = (content) => {
-    dispatch({
-      type: "UPDATE_SECTION",
-      section: "summary",
-      data: { content },
-    })
+  useEffect(() => {
+    setCharCount(summary.content?.length || 0)
+  }, [summary.content])
+
+  const handleContentChange = (e) => {
+    const newContent = e.target.value
+    if (newContent.length <= maxChars) {
+      dispatch({
+        type: "UPDATE_SECTION",
+        section: "summary",
+        data: { content: newContent },
+      })
+    }
   }
-
-  const modules = {
-    toolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["clean"]],
-  }
-
-  const formats = ["bold", "italic", "underline", "list", "bullet"]
 
   return (
     <div className="space-y-6">
@@ -34,17 +36,17 @@ const SummarySection = () => {
           Write a compelling summary that highlights your key achievements, skills, and career objectives.
         </p>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600">
-          <ReactQuill
-            theme="snow"
+        <div className="relative">
+          <textarea
             value={summary.content}
             onChange={handleContentChange}
-            modules={modules}
-            formats={formats}
             placeholder="Write your professional summary here..."
-            className="text-gray-900 dark:text-white"
-            style={{ minHeight: "200px" }}
+            rows={8}
+            className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 resize-none"
           />
+          <div className="absolute bottom-3 right-3 text-xs text-gray-500 dark:text-gray-400">
+            {charCount}/{maxChars}
+          </div>
         </div>
 
         <div className="text-sm text-gray-500 dark:text-gray-400">
