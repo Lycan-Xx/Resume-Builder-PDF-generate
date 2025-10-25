@@ -1,4 +1,4 @@
-import { Heart, Plus, Trash2, MoreHorizontal } from 'lucide-react';
+import { Heart, Plus, Trash2 } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const InterestsSection = () => {
@@ -40,7 +40,7 @@ const InterestsSection = () => {
           <h2 className="text-2xl font-bold">Interests</h2>
         </div>
         <button className="p-2 hover:bg-gray-800 rounded transition-colors">
-          <MoreHorizontal size={20} />
+          {/* More options button */}
         </button>
       </div>
 

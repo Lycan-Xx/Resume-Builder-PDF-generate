@@ -1,4 +1,3 @@
-import React from 'react';
 import { Plus, Trash2, Calendar } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 

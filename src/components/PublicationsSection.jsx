@@ -1,4 +1,4 @@
-import { BookOpen, Plus, Trash2, MoreHorizontal } from 'lucide-react';
+import { BookOpen, Plus, Trash2 } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const PublicationsSection = () => {
@@ -43,7 +43,7 @@ const PublicationsSection = () => {
           <h2 className="text-2xl font-bold">Publications</h2>
         </div>
         <button className="p-2 hover:bg-gray-800 rounded transition-colors">
-          <MoreHorizontal size={20} />
+          {/* More options button */}
         </button>
       </div>
 

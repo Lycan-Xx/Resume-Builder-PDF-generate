@@ -1,11 +1,10 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Download, X, AlertCircle } from 'lucide-react';
 import ResumePDF from './ResumePDF';
 import { useResume } from '../contexts/ResumeContext';
 
 const MemoizedPDFViewer = memo(({ data }) => {
-  const [error, setError] = useState(null);
   
   try {
     return (
@@ -13,7 +12,6 @@ const MemoizedPDFViewer = memo(({ data }) => {
         width="100%" 
         height="100%" 
         className="w-full h-full"
-        onError={(err) => setError(err)}
       >
         <ResumePDF data={data} />
       </PDFViewer>

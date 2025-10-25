@@ -1,5 +1,5 @@
 "use client"
-import { X, Eye, EyeOff, GripVertical } from "lucide-react"
+import { X, Eye, EyeOff } from "lucide-react"
 import { useResume } from "../contexts/ResumeContext"
 
 const sectionLabels = {
@@ -48,7 +48,6 @@ const ManageSectionsModal = ({ isOpen, onClose }) => {
               className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
             >
               <div className="flex items-center space-x-3">
-                <GripVertical className="w-4 h-4 text-gray-400 cursor-move" />
                 <span className="text-sm font-medium text-gray-900 dark:text-white">{sectionLabels[sectionId]}</span>
               </div>
 

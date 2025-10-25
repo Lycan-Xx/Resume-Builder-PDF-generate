@@ -1,6 +1,6 @@
 // ProgressNavbar.jsx
 import React, { useState } from 'react';
-import { ArrowLeft, RotateCcw, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, RotateCcw } from 'lucide-react';
 
 const ProgressNavbar = ({ 
   sections, 
@@ -123,7 +123,6 @@ const ProgressNavbar = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4"> {/* Removed h-4 */}
             <div className="flex items-center text-red-500 mb-4">
-              <AlertTriangle className="mr-2" size={24} />
               <h3 className="text-xl font-semibold">Reset Form</h3>
             </div>
             <p className="text-gray-700 mb-6">

@@ -1,4 +1,4 @@
-import { UserCheck, Plus, Trash2, MoreHorizontal } from 'lucide-react';
+import { UserCheck, Plus, Trash2 } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 
 const ReferencesSection = () => {
@@ -53,7 +53,7 @@ const ReferencesSection = () => {
           <h2 className="text-2xl font-bold">References</h2>
         </div>
         <button className="p-2 hover:bg-gray-800 rounded transition-colors">
-          <MoreHorizontal size={20} />
+          {/* More options button */}
         </button>
       </div>
 

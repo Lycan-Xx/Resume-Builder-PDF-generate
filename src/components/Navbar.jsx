@@ -1,5 +1,5 @@
 "use client"
-import { FileText, Moon, Sun, Undo, Redo, Download, Settings } from "lucide-react"
+import { FileText, Moon, Sun, Download } from "lucide-react"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import ResumePDF from "./ResumePDF"
 import { useTheme } from "../contexts/ThemeContext"
@@ -8,12 +8,6 @@ import { useResume } from "../contexts/ResumeContext"
 const Navbar = () => {
   const { isDark, toggleTheme } = useTheme()
   const { state, dispatch } = useResume()
-
-  const handleUndo = () => dispatch({ type: "UNDO" })
-  const handleRedo = () => dispatch({ type: "REDO" })
-
-  const canUndo = state.history.past.length > 0
-  const canRedo = state.history.future.length > 0
 
   return (
     <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
@@ -31,26 +25,6 @@ const Navbar = () => {
 
         {/* Actions */}
         <div className="flex items-center space-x-2">
-          {/* Undo/Redo */}
-          <div className="flex items-center space-x-1 mr-4">
-            <button
-              onClick={handleUndo}
-              disabled={!canUndo}
-              className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              title="Undo"
-            >
-              <Undo className="w-5 h-5" />
-            </button>
-            <button
-              onClick={handleRedo}
-              disabled={!canRedo}
-              className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              title="Redo"
-            >
-              <Redo className="w-5 h-5" />
-            </button>
-          </div>
-
           {/* Template Selector */}
           <select
             value={state.selectedTemplate}
@@ -78,7 +52,7 @@ const Navbar = () => {
 
           {/* Settings */}
           <button className="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 transition-colors">
-            <Settings className="w-5 h-5" />
+            {/* Settings icon */}
           </button>
 
           {/* Theme Toggle */}

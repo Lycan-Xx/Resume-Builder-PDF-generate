@@ -1,104 +1,5 @@
-import { Document, Page, Text, View, StyleSheet, Font } from "@react-pdf/renderer"
-
-// Use standard PDF fonts instead of web fonts
-const styles = StyleSheet.create({
-  page: {
-    fontFamily: "Helvetica",
-    fontSize: 10,
-    lineHeight: 1.4,
-    padding: 40,
-    backgroundColor: "#ffffff",
-  },
-  header: {
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#1f2937",
-    marginBottom: 5,
-    fontFamily: "Helvetica-Bold",
-  },
-  headline: {
-    fontSize: 12,
-    color: "#6b7280",
-    marginBottom: 10,
-  },
-  contactInfo: {
-    flexDirection: "row",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: 15,
-    fontSize: 9,
-    color: "#4b5563",
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#1f2937",
-    marginBottom: 10,
-    paddingBottom: 3,
-    borderBottom: "1 solid #e5e7eb",
-    fontFamily: "Helvetica-Bold",
-  },
-  item: {
-    marginBottom: 12,
-  },
-  itemHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 3,
-  },
-  itemTitle: {
-    fontSize: 11,
-    fontWeight: "bold",
-    color: "#1f2937",
-    fontFamily: "Helvetica-Bold",
-  },
-  itemSubtitle: {
-    fontSize: 10,
-    color: "#6b7280",
-    marginBottom: 3,
-  },
-  itemDate: {
-    fontSize: 9,
-    color: "#9ca3af",
-  },
-  description: {
-    fontSize: 9,
-    color: "#4b5563",
-    lineHeight: 1.3,
-  },
-  bulletPoint: {
-    fontSize: 9,
-    color: "#4b5563",
-    marginLeft: 10,
-    marginBottom: 2,
-  },
-  skillsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-  },
-  skill: {
-    fontSize: 9,
-    backgroundColor: "#f3f4f6",
-    padding: "3 8",
-    borderRadius: 3,
-    color: "#374151",
-  },
-  twoColumn: {
-    flexDirection: "row",
-    gap: 20,
-  },
-  column: {
-    flex: 1,
-  },
-})
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
+import { getTemplate } from "../templates"
 
 // Helper function to safely render text
 const SafeText = ({ children, style, ...props }) => {
@@ -106,21 +7,156 @@ const SafeText = ({ children, style, ...props }) => {
   return <Text style={style} {...props}>{children}</Text>;
 }
 
-const ResumePDF = ({ data, template = "modern" }) => {
+export default function ResumePDF({ data, templateId = "professional-red" }) {
   const { state } = data
+  const template = getTemplate(templateId)
 
   // Validate that state exists
   if (!state) {
     return (
       <Document>
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header}>
-            <Text style={styles.name}>No Data Available</Text>
+        <Page size="A4" style={{ padding: 40 }}>
+          <View>
+            <Text>No Data Available</Text>
           </View>
         </Page>
       </Document>
     )
   }
+
+  // Generate dynamic styles from template
+  const styles = StyleSheet.create({
+    page: {
+      fontFamily: template.fonts.body,
+      fontSize: template.fonts.sizes.body,
+      lineHeight: template.spacing.lineHeight,
+      padding: `${template.spacing.page.top} ${template.spacing.page.right} ${template.spacing.page.bottom} ${template.spacing.page.left}`,
+      backgroundColor: template.colors.background,
+    },
+    
+    header: {
+      marginBottom: template.spacing.headerMargin,
+      borderBottom: template.layout.headerBorderWidth > 0 
+        ? `${template.layout.headerBorderWidth} solid ${template.colors.border}` 
+        : 'none',
+      paddingBottom: template.layout.headerBorderWidth > 0 ? 20 : 0,
+    },
+    
+    name: {
+      fontSize: template.fonts.sizes.name,
+      fontFamily: template.fonts.header,
+      color: template.colors.primary,
+      marginBottom: 8,
+      textAlign: 'center',
+    },
+    
+    headline: {
+      fontSize: template.fonts.sizes.headline,
+      color: template.colors.lightText,
+      marginBottom: 15,
+      textAlign: 'center',
+    },
+    
+    contactInfo: {
+      flexDirection: "row",
+      justifyContent: "center",
+      flexWrap: "wrap",
+      gap: 15,
+      fontSize: template.fonts.sizes.contactInfo,
+      color: template.colors.text,
+    },
+    
+    contactLink: {
+      color: template.colors.secondary,
+      textDecoration: 'none',
+    },
+    
+    section: {
+      marginBottom: template.spacing.sectionMargin,
+    },
+    
+    sectionTitle: {
+      fontSize: template.fonts.sizes.sectionTitle,
+      fontFamily: template.fonts.header,
+      color: template.colors.primary,
+      marginBottom: 18,
+      paddingBottom: 8,
+      borderBottom: template.layout.sectionBorderWidth > 0 
+        ? `${template.layout.sectionBorderWidth} solid ${template.colors.primary}` 
+        : 'none',
+      textTransform: 'uppercase',
+      letterSpacing: 1.5,
+    },
+    
+    item: {
+      marginBottom: template.spacing.itemMargin,
+    },
+    
+    itemHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "baseline",
+      marginBottom: 8,
+    },
+    
+    itemTitle: {
+      fontSize: template.fonts.sizes.jobTitle,
+      fontFamily: template.fonts.header,
+      color: template.colors.text,
+    },
+    
+    itemSubtitle: {
+      fontSize: template.fonts.sizes.body,
+      color: template.colors.lightText,
+      marginBottom: 10,
+    },
+    
+    itemDate: {
+      fontSize: template.fonts.sizes.small,
+      color: template.colors.lightText,
+      fontWeight: 600,
+    },
+    
+    description: {
+      fontSize: template.fonts.sizes.body,
+      color: template.colors.text,
+      lineHeight: template.spacing.lineHeight,
+    },
+    
+    bulletPoint: {
+      fontSize: template.fonts.sizes.body,
+      color: template.colors.text,
+      marginLeft: 10,
+      marginBottom: 8,
+      lineHeight: template.spacing.lineHeight,
+    },
+    
+    skillsContainer: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 12,
+    },
+    
+    skill: {
+      fontSize: template.fonts.sizes.small,
+      backgroundColor: template.colors.sectionBg,
+      padding: "4 10",
+      borderRadius: 0,
+      color: template.colors.text,
+      borderLeft: template.layout.skillBorderWidth > 0 
+        ? `${template.layout.skillBorderWidth} solid ${template.colors.primary}` 
+        : 'none',
+    },
+    
+    twoColumn: {
+      flexDirection: 'row',
+      gap: 20,
+    },
+    
+    column: {
+      flex: 1,
+    },
+  })
 
   const renderBasics = () => (
     <View style={styles.header}>
@@ -133,10 +169,14 @@ const ResumePDF = ({ data, template = "modern" }) => {
         </SafeText>
       )}
       <View style={styles.contactInfo}>
-        {state.basics?.email && <SafeText>{state.basics.email}</SafeText>}
+        {state.basics?.email && (
+          <Text style={styles.contactLink}>{state.basics.email}</Text>
+        )}
         {state.basics?.phone && <SafeText>{state.basics.phone}</SafeText>}
         {state.basics?.location && <SafeText>{state.basics.location}</SafeText>}
-        {state.basics?.website && <SafeText>{state.basics.website}</SafeText>}
+        {state.basics?.website && (
+          <Text style={styles.contactLink}>{state.basics.website}</Text>
+        )}
       </View>
     </View>
   )
@@ -144,7 +184,6 @@ const ResumePDF = ({ data, template = "modern" }) => {
   const renderSummary = () => {
     if (!state.summary?.content) return null
 
-    // Strip HTML tags and ensure non-empty content
     const cleanContent = state.summary.content.replace(/<[^>]*>/g, "").trim()
     if (!cleanContent) return null
 
@@ -488,7 +527,8 @@ const ResumePDF = ({ data, template = "modern" }) => {
     )
   }
 
-  if (template === "modern") {
+  // Render based on template layout type
+  if (template.layout.type === 'two-column') {
     return (
       <Document>
         <Page size="A4" style={styles.page}>
@@ -517,7 +557,7 @@ const ResumePDF = ({ data, template = "modern" }) => {
     )
   }
 
-  // Classic template (single column)
+  // Single column layout (default)
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -526,9 +566,9 @@ const ResumePDF = ({ data, template = "modern" }) => {
         {renderExperience()}
         {renderEducation()}
         {renderSkills()}
+        {renderProjects()}
         {renderLanguages()}
         {renderAwards()}
-        {renderProjects()}
         {renderCertifications()}
         {renderPublications()}
         {renderVolunteering()}
@@ -539,5 +579,3 @@ const ResumePDF = ({ data, template = "modern" }) => {
     </Document>
   )
 }
-
-export default ResumePDF

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Plus, Trash2, GraduationCap, Calendar } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';

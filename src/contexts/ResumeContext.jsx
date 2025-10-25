@@ -78,45 +78,32 @@ const initialState = {
 }
 
 const resumeReducer = (state, action) => {
-  const addToHistory = (newState) => ({
-    ...newState,
-    history: {
-      past: [...state.history.past, state].slice(-50),
-      present: newState,
-      future: [],
-    },
-  });
-
   switch (action.type) {
     case "UPDATE_SECTION":
-      const updatedSection = {
+      return {
         ...state,
         [action.section]: { ...state[action.section], ...action.data },
-      };
-      return addToHistory(updatedSection);
+      }
 
     case "ADD_ITEM":
-      const addedItem = {
+      return {
         ...state,
         [action.section]: [...state[action.section], action.item],
-      };
-      return addToHistory(addedItem);
+      }
 
     case "UPDATE_ITEM":
-      const updatedItem = {
+      return {
         ...state,
         [action.section]: state[action.section].map((item, index) =>
           index === action.index ? { ...item, ...action.data } : item,
         ),
-      };
-      return addToHistory(updatedItem);
+      }
 
     case "REMOVE_ITEM":
-      const removedItem = {
+      return {
         ...state,
         [action.section]: state[action.section].filter((_, index) => index !== action.index),
-      };
-      return addToHistory(removedItem);
+      }
 
     case "REORDER_ITEMS":
       return {
@@ -150,32 +137,6 @@ const resumeReducer = (state, action) => {
 
     case "RESET_RESUME":
       return initialState
-
-    case "UNDO":
-      if (state.history.past.length === 0) return state
-      const previous = state.history.past[state.history.past.length - 1]
-      const newPast = state.history.past.slice(0, state.history.past.length - 1)
-      return {
-        ...previous,
-        history: {
-          past: newPast,
-          present: previous,
-          future: [state, ...state.history.future],
-        },
-      }
-
-    case "REDO":
-      if (state.history.future.length === 0) return state
-      const next = state.history.future[0]
-      const newFuture = state.history.future.slice(1)
-      return {
-        ...next,
-        history: {
-          past: [...state.history.past, state],
-          present: next,
-          future: newFuture,
-        },
-      }
 
     default:
       return state
@@ -248,27 +209,12 @@ export const ResumeProvider = ({ children }) => {
     [state],
   )
 
-  const addHistoryState = useCallback(
-    (newState) => {
-      return {
-        ...newState,
-        history: {
-          past: [...state.history.past, state].slice(-50), // Keep last 50 states
-          present: newState,
-          future: [],
-        },
-      }
-    },
-    [state],
-  )
-
   return (
     <ResumeContext.Provider
       value={{
         state,
         dispatch,
         hasDataInSection,
-        addHistoryState,
       }}
     >
       {children}
