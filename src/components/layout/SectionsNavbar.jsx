@@ -20,8 +20,8 @@ import {
   Undo,
   Redo,
 } from "lucide-react"
-import { useResume } from "../contexts/ResumeContext"
-import ManageSectionsModal from "./ManageSectionsModal"
+import { useResume } from "../../contexts/ResumeContext"
+import ManageSectionsModal from "../modals/ManageSectionsModal"
 
 const sectionIcons = {
   basics: User,

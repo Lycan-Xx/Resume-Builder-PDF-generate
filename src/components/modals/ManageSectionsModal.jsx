@@ -1,6 +1,6 @@
 "use client"
 import { X, Eye, EyeOff } from "lucide-react"
-import { useResume } from "../contexts/ResumeContext"
+import { useResume } from "../../contexts/ResumeContext"
 
 const sectionLabels = {
   basics: "Basics",

@@ -1,5 +1,5 @@
 import { User, Mail, Phone, MapPin, Info, Linkedin, Github } from 'lucide-react';
-import { useResume } from '../contexts/ResumeContext';
+import { useResume } from '../../contexts/ResumeContext';
 
 const PersonalInfoSection = () => {
   const { state, dispatch } = useResume();

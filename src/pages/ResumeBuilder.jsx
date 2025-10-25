@@ -2,35 +2,31 @@
 
 import { useState, memo, useMemo } from "react"
 import { PDFViewer } from "@react-pdf/renderer"
-import Navbar from "../components/Navbar"
-import SectionsNavbar from "../components/SectionsNavbar"
-import ResumePDF from "../components/ResumePDF"
 import { useResume } from "../contexts/ResumeContext"
-import TemplateSelector from "../components/TemplateSelector"
 
-// Personal Info Sections
+// Layout Components
+import Navbar from "../components/layout/Navbar"
+import SectionsNavbar from "../components/layout/SectionsNavbar"
+
+// PDF Components
+import ResumePDF from "../components/pdf/ResumePDF"
+import TemplateSelector from "../components/pdf/TemplateSelector"
+
+// Section Components
 import BasicsSection from "../components/sections/BasicsSection"
 import SummarySection from "../components/sections/SummarySection"
-import ProfilesSection from "../components/ProfilesSection"
-
-// Work Experience Sections
+import ProfilesSection from "../components/sections/ProfilesSection"
 import ExperienceSection from "../components/sections/ExperienceSection"
-import ProjectsSection from "../components/ProjectsSection"
-import VolunteeringSection from "../components/VolunteeringSection"
-
-// Education Sections
+import ProjectsSection from "../components/sections/ProjectsSection"
+import VolunteeringSection from "../components/sections/VolunteeringSection"
 import EducationSection from "../components/sections/EducationSection"
-import CertificationsSection from "../components/CertificationsSection"
-import AwardsSection from "../components/AwardsSection"
-import PublicationsSection from "../components/PublicationsSection"
-
-// Skills Sections
+import CertificationsSection from "../components/sections/CertificationsSection"
+import AwardsSection from "../components/sections/AwardsSection"
+import PublicationsSection from "../components/sections/PublicationsSection"
 import SkillsSection from "../components/sections/SkillsSection"
 import LanguagesSection from "../components/sections/LanguagesSection"
-import InterestsSection from "../components/InterestsSection"
-
-// References
-import ReferencesSection from "../components/ReferencesSection"
+import InterestsSection from "../components/sections/InterestsSection"
+import ReferencesSection from "../components/sections/ReferencesSection"
 
 const sectionComponents = {
   basics: BasicsSection,

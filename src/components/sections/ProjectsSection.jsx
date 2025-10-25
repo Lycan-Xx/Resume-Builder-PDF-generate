@@ -1,5 +1,5 @@
 import { FileText, Plus, Trash2, ExternalLink, Code } from 'lucide-react';
-import { useResume } from '../contexts/ResumeContext';
+import { useResume } from '../../contexts/ResumeContext';
 
 const ProjectsSection = () => {
   const { state, dispatch } = useResume();
