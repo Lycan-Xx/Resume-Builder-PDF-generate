@@ -1,5 +1,5 @@
-import { templatesList } from "../templates"
-import { useResume } from "../contexts/ResumeContext"
+import { templatesList } from "../../templates"
+import { useResume } from "../../contexts/ResumeContext"
 
 const TemplateSelector = () => {
   const { state, dispatch } = useResume()

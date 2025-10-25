@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { Download, X, AlertCircle } from 'lucide-react';
-import ResumePDF from './ResumePDF';
-import { useResume } from '../contexts/ResumeContext';
+import ResumePDF from '../pdf/ResumePDF';
+import { useResume } from '../../contexts/ResumeContext';
 
 const MemoizedPDFViewer = memo(({ data }) => {
   

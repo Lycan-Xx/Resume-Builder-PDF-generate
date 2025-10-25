@@ -1,5 +1,5 @@
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
-import { getTemplate } from "../templates";
+import { getTemplate } from "../../templates";
 
 // Helper function to safely render text
 const SafeText = ({ children, style, ...props }) => {

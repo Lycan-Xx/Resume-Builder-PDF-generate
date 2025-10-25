@@ -1,9 +1,9 @@
 "use client"
 import { FileText, Moon, Sun, Download } from "lucide-react"
 import { PDFDownloadLink } from "@react-pdf/renderer"
-import ResumePDF from "./ResumePDF"
-import { useTheme } from "../contexts/ThemeContext"
-import { useResume } from "../contexts/ResumeContext"
+import ResumePDF from "../pdf/ResumePDF"
+import { useTheme } from "../../contexts/ThemeContext"
+import { useResume } from "../../contexts/ResumeContext"
 
 const Navbar = () => {
   const { isDark, toggleTheme } = useTheme()

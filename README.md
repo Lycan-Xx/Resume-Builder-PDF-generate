@@ -31,30 +31,33 @@ A modern, React-based resume builder application that allows users to create pro
 │   │   └── arimo-*.woff
 │   └── favicon.svg
 ├── src/
-│   ├── components/               # UI Components
-│   │   ├── sections/            # Form sections for resume data input
-│   │   │   ├── BasicsSection.jsx
-│   │   │   ├── EducationSection.jsx
-│   │   │   ├── ExperienceSection.jsx
-│   │   │   ├── LanguagesSection.jsx
-│   │   │   ├── SkillsSection.jsx
-│   │   │   └── SummarySection.jsx
-│   │   ├── AwardsSection.jsx
-│   │   ├── CertificationsSection.jsx
-│   │   ├── InterestsSection.jsx
-│   │   ├── ManageSectionsModal.jsx
-│   │   ├── Navbar.jsx
-│   │   ├── PersonalInfoSection.jsx
-│   │   ├── PreviewModal.jsx
-│   │   ├── ProfilesSection.jsx
-│   │   ├── ProgressNavbar.jsx
-│   │   ├── ProjectsSection.jsx
-│   │   ├── PublicationsSection.jsx
-│   │   ├── ReferencesSection.jsx
-│   │   ├── ResumePDF.jsx          # PDF generation component
-│   │   ├── SectionsNavbar.jsx
-│   │   ├── TemplateSelector.jsx
-│   │   └── VolunteeringSection.jsx
+│   ├── components/               # UI Components (organized by function)
+│   │   ├── layout/              # Navigation and layout components
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── ProgressNavbar.jsx
+│   │   │   └── SectionsNavbar.jsx
+│   │   ├── modals/              # Modal dialogs
+│   │   │   ├── ManageSectionsModal.jsx
+│   │   │   └── PreviewModal.jsx
+│   │   ├── pdf/                 # PDF generation and templates
+│   │   │   ├── ResumePDF.jsx
+│   │   │   └── TemplateSelector.jsx
+│   │   └── sections/            # Resume section form components
+│   │       ├── AwardsSection.jsx
+│   │       ├── BasicsSection.jsx
+│   │       ├── CertificationsSection.jsx
+│   │       ├── EducationSection.jsx
+│   │       ├── ExperienceSection.jsx
+│   │       ├── InterestsSection.jsx
+│   │       ├── LanguagesSection.jsx
+│   │       ├── PersonalInfoSection.jsx
+│   │       ├── ProfilesSection.jsx
+│   │       ├── ProjectsSection.jsx
+│   │       ├── PublicationsSection.jsx
+│   │       ├── ReferencesSection.jsx
+│   │       ├── SkillsSection.jsx
+│   │       ├── SummarySection.jsx
+│   │       └── VolunteeringSection.jsx
 │   ├── contexts/                 # React Context providers
 │   │   ├── ResumeContext.jsx     # Resume data state management
 │   │   └── ThemeContext.jsx      # Theme state management
@@ -84,27 +87,43 @@ A modern, React-based resume builder application that allows users to create pro
 ### Core Components
 
 #### 1. **App.jsx**
+
 - Sets up React Router with two main routes: home and builder
 - Wraps the application with ThemeProvider
 - Provides ResumeProvider to the builder route
 
 #### 2. **ResumeBuilder.jsx**
+
 - Main page where users build their resume
 - Contains two panels: form inputs (left) and PDF preview (right)
 - Manages active section state and tab switching (Content/Template)
 - Responsive design with mobile preview toggle
 
 #### 3. **ResumePDF.jsx**
+
 - Generates PDF using `@react-pdf/renderer`
 - Receives resume data and template ID as props
 - Dynamically applies template styles
 - Renders all resume sections based on available data
 - Supports both single-column and two-column layouts
 
-### Section Components
+### Component Categories
 
-Located in `src/components/` and `src/components/sections/`:
+#### Layout Components (`src/components/layout/`)
+- **Navbar**: Top navigation with theme toggle and PDF download
+- **SectionsNavbar**: Horizontal navigation for switching between resume sections
+- **ProgressNavbar**: Shows completion progress (if implemented)
 
+#### Modal Components (`src/components/modals/`)
+- **ManageSectionsModal**: Dialog for showing/hiding resume sections
+- **PreviewModal**: Full-screen PDF preview modal
+
+#### PDF Components (`src/components/pdf/`)
+- **ResumePDF**: Main PDF generation component using @react-pdf/renderer
+- **TemplateSelector**: UI for selecting and previewing resume templates
+
+#### Section Components (`src/components/sections/`)
+All form components for editing resume data:
 - **BasicsSection**: Personal information (name, email, phone, location, website)
 - **SummarySection**: Professional summary/objective
 - **ExperienceSection**: Work experience with achievements
@@ -123,12 +142,14 @@ Located in `src/components/` and `src/components/sections/`:
 ### Context Providers
 
 #### ResumeContext
+
 - Manages all resume data using useReducer
 - Provides actions for CRUD operations on resume sections
 - Auto-saves to localStorage with debouncing
 - Loads saved data on mount
 
 #### ThemeContext
+
 - Manages dark/light theme state
 - Persists theme preference to localStorage
 
@@ -141,6 +162,7 @@ Templates define the visual styling of the PDF output:
 - **minimalist**: Simple and elegant with subtle accents
 
 Each template includes:
+
 - Color scheme (primary, secondary, text, background)
 - Font configuration (family, sizes)
 - Spacing (margins, padding, line height)

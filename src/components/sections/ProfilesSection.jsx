@@ -1,5 +1,5 @@
 import { Users, Plus, Trash2 } from 'lucide-react';
-import { useResume } from '../contexts/ResumeContext';
+import { useResume } from '../../contexts/ResumeContext';
 
 const ProfilesSection = () => {
   const { state, dispatch } = useResume();
