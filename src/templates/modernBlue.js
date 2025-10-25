@@ -15,15 +15,16 @@ export const modernBlueTemplate = {
   },
   
   fonts: {
-    header: 'Helvetica-Bold',
-    body: 'Helvetica',
+    header: 'Roboto',
+    body: 'Roboto',
     sizes: {
       name: 36,
       headline: 16,
-      sectionTitle: 18,
+      sectionTitle: 15,
       jobTitle: 17,
-      body: 14,
-      small: 12
+      body: 10,
+      small: 12,
+      contactInfo: 10
     }
   },
   

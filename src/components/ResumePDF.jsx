@@ -45,6 +45,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     name: {
       fontSize: template.fonts.sizes.name,
       fontFamily: template.fonts.header,
+      fontWeight: 'bold',
       color: template.colors.primary,
       marginBottom: 8,
       textAlign: 'center',
@@ -78,11 +79,12 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     sectionTitle: {
       fontSize: template.fonts.sizes.sectionTitle,
       fontFamily: template.fonts.header,
+      fontWeight: 'bold',
       color: template.colors.primary,
       marginBottom: 18,
       paddingBottom: 8,
-      borderBottom: template.layout.sectionBorderWidth > 0 
-        ? `${template.layout.sectionBorderWidth} solid ${template.colors.primary}` 
+      borderBottom: template.layout.sectionBorderWidth > 0
+        ? `${template.layout.sectionBorderWidth} solid ${template.colors.primary}`
         : 'none',
       textTransform: 'uppercase',
       letterSpacing: 1.5,
@@ -102,6 +104,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     itemTitle: {
       fontSize: template.fonts.sizes.jobTitle,
       fontFamily: template.fonts.header,
+      fontWeight: 'bold',
       color: template.colors.text,
     },
     
@@ -169,13 +172,13 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
         </SafeText>
       )}
       <View style={styles.contactInfo}>
-        {state.basics?.email && (
-          <Text style={styles.contactLink}>{state.basics.email}</Text>
+        {state.basics?.email && state.basics.email.trim() && (
+          <SafeText style={styles.contactLink}>{state.basics.email}</SafeText>
         )}
-        {state.basics?.phone && <SafeText>{state.basics.phone}</SafeText>}
-        {state.basics?.location && <SafeText>{state.basics.location}</SafeText>}
-        {state.basics?.website && (
-          <Text style={styles.contactLink}>{state.basics.website}</Text>
+        {state.basics?.phone && state.basics.phone.trim() && <SafeText>{state.basics.phone}</SafeText>}
+        {state.basics?.location && state.basics.location.trim() && <SafeText>{state.basics.location}</SafeText>}
+        {state.basics?.website && state.basics.website.trim() && (
+          <SafeText style={styles.contactLink}>{state.basics.website}</SafeText>
         )}
       </View>
     </View>
@@ -212,12 +215,12 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               </SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
-              {exp.company || "Company"}{exp.location ? ` • ${exp.location}` : ""}
+              {exp.company || "Company"}{exp.location && exp.location.trim() ? ` • ${exp.location}` : ""}
             </SafeText>
             {exp.description && (
               <SafeText style={styles.description}>{exp.description}</SafeText>
             )}
-            {exp.achievements?.map((achievement, idx) => 
+            {exp.achievements?.map((achievement, idx) =>
               achievement && achievement.trim() ? (
                 <SafeText key={idx} style={styles.bulletPoint}>
                   • {achievement}
@@ -247,7 +250,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               </SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
-              {edu.institution || "Institution"}{edu.location ? ` • ${edu.location}` : ""}
+              {edu.institution || "Institution"}{edu.location && edu.location.trim() ? ` • ${edu.location}` : ""}
             </SafeText>
             {edu.fieldOfStudy && (
               <SafeText style={styles.description}>
@@ -299,7 +302,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           lang?.name ? (
             <View key={index} style={styles.item}>
               <SafeText style={styles.itemTitle}>
-                {lang.name}{lang.proficiency ? ` - ${lang.proficiency}` : ""}
+                {lang.name}{lang.proficiency && lang.proficiency.trim() ? ` - ${lang.proficiency}` : ""}
               </SafeText>
             </View>
           ) : null
@@ -378,7 +381,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
             {project.description && (
               <SafeText style={styles.description}>{project.description}</SafeText>
             )}
-            {project.highlights?.map((highlight, idx) => 
+            {project.highlights?.map((highlight, idx) =>
               highlight && highlight.trim() ? (
                 <SafeText key={idx} style={styles.bulletPoint}>
                   • {highlight}
@@ -512,7 +515,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
                 {ref.name || "Reference Name"}
               </SafeText>
               <SafeText style={styles.itemSubtitle}>
-                {ref.title || "Title"} at {ref.company || "Company"}
+                {(ref.title && ref.title.trim()) || "Title"} at {(ref.company && ref.company.trim()) || "Company"}
               </SafeText>
               {ref.email && (
                 <SafeText style={styles.description}>{ref.email}</SafeText>

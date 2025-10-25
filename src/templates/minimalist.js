@@ -15,16 +15,16 @@ export const minimalistTemplate = {
   },
   
   fonts: {
-    header: 'Helvetica-Bold',
-    body: 'Helvetica',
+    header: 'Roboto',
+    body: 'Roboto',
     sizes: {
       name: 28,
       headline: 13,
-      sectionTitle: 14,
+      sectionTitle: 15,
       jobTitle: 13,
-      body: 11,
+      body: 10,
       small: 10,
-      contactInfo: 11
+      contactInfo: 10
     }
   },
   

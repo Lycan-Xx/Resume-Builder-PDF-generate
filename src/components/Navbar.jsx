@@ -25,16 +25,6 @@ const Navbar = () => {
 
         {/* Actions */}
         <div className="flex items-center space-x-2">
-          {/* Template Selector */}
-          <select
-            value={state.selectedTemplate}
-            onChange={(e) => dispatch({ type: "SET_TEMPLATE", template: e.target.value })}
-            className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          >
-            <option value="modern">Modern Template</option>
-            <option value="classic">Classic Template</option>
-            <option value="minimal">Minimal Template</option>
-          </select>
 
           {/* Export Button */}
           <PDFDownloadLink

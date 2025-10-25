@@ -61,8 +61,8 @@ const SectionsNavbar = ({ activeSection, onSectionChange }) => {
   const { state, hasDataInSection, dispatch } = useResume()
   const [showManageModal, setShowManageModal] = useState(false)
 
-  const canUndo = state.history.past.length > 0
-  const canRedo = state.history.future.length > 0
+  const canUndo = state.history && state.history.past && state.history.past.length > 0
+  const canRedo = state.history && state.history.future && state.history.future.length > 0
 
   const handleUndo = () => {
     if (canUndo) {
@@ -84,33 +84,7 @@ const SectionsNavbar = ({ activeSection, onSectionChange }) => {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Resume Sections</h2>
           <div className="flex items-center space-x-2">
-            {/* Undo/Redo buttons */}
-            <div className="flex items-center space-x-1 mr-2">
-              <button
-                onClick={handleUndo}
-                disabled={!canUndo}
-                className={`p-2 rounded-lg transition-colors ${
-                  canUndo
-                    ? "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                    : "text-gray-300 dark:text-gray-600 cursor-not-allowed"
-                }`}
-                title="Undo"
-              >
-                <Undo className="w-4 h-4" />
-              </button>
-              <button
-                onClick={handleRedo}
-                disabled={!canRedo}
-                className={`p-2 rounded-lg transition-colors ${
-                  canRedo
-                    ? "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                    : "text-gray-300 dark:text-gray-600 cursor-not-allowed"
-                }`}
-                title="Redo"
-              >
-                <Redo className="w-4 h-4" />
-              </button>
-            </div>
+
             <button
               onClick={() => setShowManageModal(true)}
               className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
