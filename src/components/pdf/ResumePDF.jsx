@@ -154,9 +154,9 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     },
 
     skill: {
-      fontSize: template.fonts.sizes.small,
       backgroundColor: template.colors.sectionBg,
-      padding: "4 10",
+      padding: "6 12",
+      marginBottom: 8,
       color: template.colors.text,
       borderLeft:
         (template.layout.skillBorderWidth || 0) > 0
@@ -315,6 +315,8 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
 
     if (allSkills.length === 0) return null;
 
+    const skillLevels = ["Beginner", "Novice", "Intermediate", "Advanced", "Expert"];
+
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Skills</Text>
@@ -322,10 +324,18 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
           {allSkills.map((skill, index) => {
             // Handle both string and object formats
             const skillName = typeof skill === "string" ? skill : skill?.name;
+            const skillLevel = typeof skill === "object" && skill?.level ? skillLevels[skill.level - 1] : null;
             return skillName ? (
-              <SafeText key={index} style={styles.skill}>
-                {skillName}
-              </SafeText>
+              <View key={index} style={styles.skill}>
+                <SafeText style={{ fontSize: template.fonts.sizes.small, fontWeight: "bold" }}>
+                  {skillName}
+                </SafeText>
+                {skillLevel && (
+                  <SafeText style={{ fontSize: template.fonts.sizes.small - 1, color: template.colors.lightText }}>
+                    {skillLevel}
+                  </SafeText>
+                )}
+              </View>
             ) : null;
           })}
         </View>
@@ -448,15 +458,20 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Interests</Text>
-        <View style={styles.skillsContainer}>
-          {state.interests.map((interest, index) =>
-            interest?.name ? (
-              <SafeText key={index} style={styles.skill}>
+        {state.interests.map((interest, index) =>
+          interest?.name ? (
+            <View key={index} style={styles.item}>
+              <SafeText style={styles.itemTitle}>
                 {interest.name}
               </SafeText>
-            ) : null
-          )}
-        </View>
+              {interest.description && interest.description.trim() && (
+                <SafeText style={styles.description}>
+                  {interest.description}
+                </SafeText>
+              )}
+            </View>
+          ) : null
+        )}
       </View>
     );
   };
