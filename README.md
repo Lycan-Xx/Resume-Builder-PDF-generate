@@ -1,154 +1,225 @@
-README
+# ResumeForge - Professional Resume Builder
 
+A modern, React-based resume builder application that allows users to create professional, ATS-friendly resumes with real-time PDF preview and multiple template options.
 
-Open your terminal, navigate to the directory where you saved generate_resume.py, and run:
+## Features
 
-python generate_resume.py
+- **Real-time PDF Preview**: See your resume as you build it
+- **Multiple Templates**: Choose from professional, modern, and minimalist designs
+- **Comprehensive Sections**: Support for all resume sections including experience, education, skills, projects, certifications, and more
+- **Template Customization**: Dynamic styling with customizable colors, fonts, and layouts
+- **Dark Mode Support**: Built-in theme switching
+- **Local Storage**: Auto-save your progress
+- **Export to PDF**: Download your resume as a PDF file
 
-This will generate a PDF file named Updated-Developer-Resume.pdf in the same directory.
+## Tech Stack
 
+- **React** - UI library
+- **React Router** - Navigation
+- **@react-pdf/renderer** - PDF generation
+- **Tailwind CSS** - Styling
+- **Lucide React** - Icons
+- **Vite** - Build tool
 
-## Project Context (Version 2)
+## Project Structure
 
-### Project Overview
-
-This project is a React-based resume builder application. It allows users to input their personal information, education, experience, skills, and projects, and then generates a PDF resume based on that data. It uses React Router for navigation and `@react-pdf/renderer` to generate the PDF. It also uses Tailwind CSS for styling.
-
-### File Structure
-
-\`\`\`
+```
 .
-├── .gitignore              # Specifies intentionally untracked files that Git should ignore.
-├── eslint.config.js        # Configuration file for ESLint, a JavaScript linter.
-├── generate.py             # A Python script to generate a sample resume PDF (likely for testing or demonstration purposes, not part of the React app).
-├── index.html              # The main HTML file that loads the React application.
-├── package.json            # Contains metadata about the project, including dependencies and scripts.
-├── postcss.config.js       # Configuration file for PostCSS, a tool for transforming CSS.
-├── README.md               # A file containing information about the project.
-├── tailwind.config.js      # Configuration file for Tailwind CSS.
-├── vite.config.js          # Configuration files for Vite, a build tool.
-├── vite.config.ts          # Configuration files for Vite, a build tool.
-└── src                     # Contains the source code for the React application.
-\`\`\`
+├── public/
+│   ├── fonts/                    # Custom fonts for PDF rendering
+│   │   ├── roboto-mono-*.woff
+│   │   └── arimo-*.woff
+│   └── favicon.svg
+├── src/
+│   ├── components/               # UI Components
+│   │   ├── sections/            # Form sections for resume data input
+│   │   │   ├── BasicsSection.jsx
+│   │   │   ├── EducationSection.jsx
+│   │   │   ├── ExperienceSection.jsx
+│   │   │   ├── LanguagesSection.jsx
+│   │   │   ├── SkillsSection.jsx
+│   │   │   └── SummarySection.jsx
+│   │   ├── AwardsSection.jsx
+│   │   ├── CertificationsSection.jsx
+│   │   ├── InterestsSection.jsx
+│   │   ├── ManageSectionsModal.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── PersonalInfoSection.jsx
+│   │   ├── PreviewModal.jsx
+│   │   ├── ProfilesSection.jsx
+│   │   ├── ProgressNavbar.jsx
+│   │   ├── ProjectsSection.jsx
+│   │   ├── PublicationsSection.jsx
+│   │   ├── ReferencesSection.jsx
+│   │   ├── ResumePDF.jsx          # PDF generation component
+│   │   ├── SectionsNavbar.jsx
+│   │   ├── TemplateSelector.jsx
+│   │   └── VolunteeringSection.jsx
+│   ├── contexts/                 # React Context providers
+│   │   ├── ResumeContext.jsx     # Resume data state management
+│   │   └── ThemeContext.jsx      # Theme state management
+│   ├── lib/
+│   │   └── utils.ts              # Utility functions
+│   ├── pages/                    # Page components
+│   │   ├── HomePage.jsx
+│   │   └── ResumeBuilder.jsx     # Main resume builder page
+│   ├── templates/                # PDF template configurations
+│   │   ├── index.js
+│   │   ├── minimalist.js
+│   │   ├── modernBlue.js
+│   │   └── professionalRed.js
+│   ├── App.jsx                   # Main app component with routing
+│   ├── fonts.js                  # Font registration for PDF
+│   ├── index.css                 # Global styles
+│   └── main.jsx                  # App entry point
+├── index.html
+├── package.json
+├── tailwind.config.js
+├── vite.config.js
+└── README.md
+```
 
-### `src` Directory Breakdown
+## Component Architecture
 
-\`\`\`
-src/
-├── App.jsx                 # The main application component. It sets up the React Router and the ResumeProvider.
-├── components/           # Contains reusable UI components.
-│   ├── EducationSection.jsx   # Component for inputting and displaying education information.
-│   ├── ExperienceSection.jsx  # Component for inputting and displaying work experience information.
-│   ├── PersonalInfoSection.jsx# Component for inputting and displaying personal information (name, contact details, etc.).
-│   ├── ProjectsSection.jsx    # Component for inputting and displaying project information.
-│   ├── ResumePDF.jsx          # Component that uses `@react-pdf/renderer` to generate the PDF document.
-│   └── SkillsSection.jsx      # Component for inputting and displaying skills (technical and soft).
-├── context/              # Contains the ResumeContext for managing the resume data.
-│   └── ResumeContext.jsx    # Defines the ResumeContext, ResumeProvider, and useResume hook for accessing and updating the resume data.
-├── index.css               # Global CSS file.
-├── main.jsx                # Entry point for the React application. It renders the App component into the root element in index.html.
-└── pages/                # Contains components that represent different pages in the application.
-	├── HomePage.jsx         # The home page of the application.
-	└── ResumeBuilder.jsx    # The main page where users build their resume.
-\`\`\`
+### Core Components
 
-### Component Logic and Nesting
+#### 1. **App.jsx**
+- Sets up React Router with two main routes: home and builder
+- Wraps the application with ThemeProvider
+- Provides ResumeProvider to the builder route
 
-1.  **`App.jsx`**:
-	*   **Purpose**: Sets up the React Router and provides the `ResumeContext` to the entire application.
-	*   **Logic**:
-		*   Uses `createBrowserRouter` from `react-router-dom` to define the application's routes.
-		*   The main route renders a `RootLayout` component wrapped with `ResumeProvider`.
-		*   `RouterProvider` makes the router available to the application.
-	*   **Nesting**:
-		*   `RouterProvider` wraps the entire application.
-		*   `ResumeProvider` wraps the `RootLayout` and its children.
-		*   `RootLayout` renders the navigation and an `<Outlet />` for the current page.
-	*   **Highlight**: The `ResumeProvider` makes the resume data and update functions available to all components within the application.
+#### 2. **ResumeBuilder.jsx**
+- Main page where users build their resume
+- Contains two panels: form inputs (left) and PDF preview (right)
+- Manages active section state and tab switching (Content/Template)
+- Responsive design with mobile preview toggle
 
-2.  **`RootLayout`**:
-	*   **Purpose**: Provides the basic layout for all pages, including the navigation bar.
-	*   **Logic**:
-		*   Renders a navigation bar with a link to the home page.
-		*   Uses `<Outlet />` from `react-router-dom` to render the content of the current route.
-	*   **Nesting**:
-		*   Wraps the navigation and the page content.
-	*   **Highlight**: Provides a consistent look and feel across all pages.
+#### 3. **ResumePDF.jsx**
+- Generates PDF using `@react-pdf/renderer`
+- Receives resume data and template ID as props
+- Dynamically applies template styles
+- Renders all resume sections based on available data
+- Supports both single-column and two-column layouts
 
-3.  **`pages/HomePage.jsx`**:
-	*   **Purpose**: Displays the home page content.
-	*   **Logic**:
-		*   Contains the main content for the home page.
-	*   **Nesting**:
-		*   Rendered within the `<Outlet />` of the `RootLayout`.
+### Section Components
 
-4.  **`pages/ResumeBuilder.jsx`**:
-	*   **Purpose**: The main resume building page.
-	*   **Logic**:
-		*   Uses the `useResume` hook to access the resume data and update functions from the `ResumeContext`.
-		*   Renders the `PersonalInfoSection`, `EducationSection`, `ExperienceSection`, `SkillsSection`, and `ProjectsSection` components.
-		*   Includes a `PDFDownloadLink` component to generate and download the resume as a PDF.
-	*   **Nesting**:
-		*   Rendered within the `<Outlet />` of the `RootLayout`.
-		*   Contains the input sections for the resume data.
-	*   **Highlight**: This is where the user interacts with the application to build their resume.
+Located in `src/components/` and `src/components/sections/`:
 
-5.  **`components/*Section.jsx` (e.g., `PersonalInfoSection.jsx`, `EducationSection.jsx`)**:
-	*   **Purpose**: Provide input fields for specific sections of the resume.
-	*   **Logic**:
-		*   Use the `useResume` hook to access the resume data and update functions.
-		*   Render input fields for the corresponding data.
-		*   Dispatch actions to update the resume data in the `ResumeContext` when the input fields change.
-	*   **Nesting**:
-		*   Rendered within the `ResumeBuilder` component.
-	*   **Highlight**: These components handle the user input and update the resume data.
+- **BasicsSection**: Personal information (name, email, phone, location, website)
+- **SummarySection**: Professional summary/objective
+- **ExperienceSection**: Work experience with achievements
+- **EducationSection**: Educational background
+- **SkillsSection**: Technical and soft skills with proficiency levels
+- **ProjectsSection**: Personal/professional projects
+- **LanguagesSection**: Language proficiency
+- **CertificationsSection**: Professional certifications
+- **AwardsSection**: Awards and recognitions
+- **PublicationsSection**: Published works
+- **VolunteeringSection**: Volunteer experience
+- **InterestsSection**: Personal interests and hobbies
+- **ReferencesSection**: Professional references
+- **ProfilesSection**: Social media and professional profiles
 
-6.  **`components/ResumePDF.jsx`**:
-	*   **Purpose**: Generates the PDF document using `@react-pdf/renderer`.
-	*   **Logic**:
-		*   Receives the resume data as props.
-		*   Uses the `Document`, `Page`, `View`, and `Text` components from `@react-pdf/renderer` to define the structure and content of the PDF document.
-		*   Styles the PDF document using `StyleSheet`.
-	*   **Nesting**:
-		*   Rendered within the `PDFDownloadLink` component in `ResumeBuilder.jsx`.
-	*   **Highlight**: This component is responsible for generating the final PDF output.
+### Context Providers
 
-7.  **`context/ResumeContext.jsx`**:
-	*   **Purpose**: Manages the resume data using React Context and a reducer.
-	*   **Logic**:
-		*   Defines the `initialState` for the resume data.
-		*   Creates a `resumeReducer` function to handle actions and update the state.
-		*   Creates a `ResumeContext` using `createContext`.
-		*   Provides the `ResumeContext` to the application using `ResumeProvider`.
-		*   Creates a `useResume` hook to access the context value.
-	*   **Nesting**:
-		*   The `ResumeProvider` wraps the `RootLayout` in `App.jsx`.
-	*   **Highlight**: This context provides a centralized way to manage the resume data and make it available to all components in the application.
+#### ResumeContext
+- Manages all resume data using useReducer
+- Provides actions for CRUD operations on resume sections
+- Auto-saves to localStorage with debouncing
+- Loads saved data on mount
 
-### Data Flow
+#### ThemeContext
+- Manages dark/light theme state
+- Persists theme preference to localStorage
 
-1.  The user interacts with the input fields in the `*Section.jsx` components.
-2.  The `onChange` event handlers in the input fields dispatch actions to the `resumeReducer` in `ResumeContext.jsx`.
-3.  The `resumeReducer` updates the resume data in the `ResumeContext`.
-4.  The `ResumeBuilder.jsx` component uses the `useResume` hook to access the updated resume data.
-5.  When the user clicks the "Download PDF" button, the `PDFDownloadLink` component renders the `ResumePDF.jsx` component with the current resume data as props.
-6.  The `ResumePDF.jsx` component generates the PDF document using `@react-pdf/renderer`.
-7.  The `PDFDownloadLink` component downloads the PDF document.
+### Templates
 
-### Key Technologies
+Templates define the visual styling of the PDF output:
 
-*   **React:** A JavaScript library for building user interfaces.
-*   **React Router:** A library for handling navigation in React applications.
-*   **@react-pdf/renderer:** A library for generating PDF documents in React.
-*   **Tailwind CSS:** A utility-first CSS framework for styling the application.
-*   **Vite:** A build tool that provides a fast and efficient development experience.
-*   **ESLint:** A JavaScript linter for identifying and fixing code quality issues.
+- **professionalRed**: Clean design with red accents
+- **modernBlue**: Contemporary design with blue gradients
+- **minimalist**: Simple and elegant with subtle accents
 
-This overview should provide a solid foundation for understanding the project structure and component logic. Good luck!
+Each template includes:
+- Color scheme (primary, secondary, text, background)
+- Font configuration (family, sizes)
+- Spacing (margins, padding, line height)
+- Layout type (single-column or two-column)
 
+## Data Flow
 
+1. User inputs data in section components
+2. Components dispatch actions to ResumeContext
+3. ResumeContext updates state and saves to localStorage
+4. ResumePDF component receives updated state
+5. PDF is re-rendered with new data and selected template
 
-## Features to add
+## Getting Started
 
-- Sign up and sign in with google - also implement a firebase backend
--
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+
+# Navigate to project directory
+cd pdf-generate
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Development
+
+### Adding a New Section
+
+1. Create a new component in `src/components/`
+2. Add the section to `ResumeContext` initial state
+3. Create a render function in `ResumePDF.jsx`
+4. Add the section to `sectionComponents` in `ResumeBuilder.jsx`
+5. Update the sections navbar
+
+### Creating a New Template
+
+1. Create a new file in `src/templates/`
+2. Define colors, fonts, spacing, and layout
+3. Export the template object
+4. Import and add to `templates` object in `src/templates/index.js`
+
+## Known Issues & Fixes
+
+- **Skills Section**: Uses array of objects `[{name, level}]` format
+- **Interests Section**: Uses array of objects `[{name, description}]` format
+- **Border Radius Error**: Fixed by adding `borderRadius: 0` and fallback checks for template properties
+- **Font Sizes**: Standardized to 15px for section titles, 11px for dates
+
+## Future Enhancements
+
+- User authentication with Firebase
+- Cloud storage for resumes
+- More template options
+- Export to Word format
+- Resume analytics and ATS scoring
+- Collaborative editing
+
+## License
+
+MIT
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
