@@ -64,8 +64,9 @@ A modern, React-based resume builder application that allows users to create pro
 │   ├── lib/
 │   │   └── utils.ts              # Utility functions
 │   ├── pages/                    # Page components
-│   │   ├── HomePage.jsx
-│   │   └── ResumeBuilder.jsx     # Main resume builder page
+│   │   ├── HomePage.jsx          # Landing page
+│   │   ├── ResumeBuilder.jsx     # Main resume builder page
+│   │   └── ExportPage.jsx        # Final export & download page
 │   ├── templates/                # PDF template configurations
 │   │   ├── index.js
 │   │   ├── minimalist.js
@@ -168,13 +169,24 @@ Each template includes:
 - Spacing (margins, padding, line height)
 - Layout type (single-column or two-column)
 
-## Data Flow
+## User Flow
 
-1. User inputs data in section components
-2. Components dispatch actions to ResumeContext
-3. ResumeContext updates state and saves to localStorage
-4. ResumePDF component receives updated state
-5. PDF is re-rendered with new data and selected template
+1. **Landing Page** (`/`) - Introduction and getting started
+2. **Resume Builder** (`/builder`) - Main editing interface
+   - User inputs data in section components
+   - Components dispatch actions to ResumeContext
+   - ResumeContext updates state and saves to localStorage
+   - Real-time PDF preview on the right panel
+3. **Export Page** (`/export`) - Final download page
+   - Celebration animation with confetti
+   - PDF preview and download button
+   - Social media links to support developer
+   - Resume statistics display
+
+## Navigation
+
+- **"Finish & Export"** button in Navbar → Redirects to Export Page
+- **"Back to Editor"** button on Export Page → Returns to Builder
 
 ## Getting Started
 
