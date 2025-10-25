@@ -39,6 +39,7 @@ export const modernBlueTemplate = {
     type: 'single-column', // or 'two-column'
     headerBorderWidth: 3,
     sectionBorderWidth: 2,
+    skillBorderWidth: 3,
     maxWidth: 850
   }
 }
