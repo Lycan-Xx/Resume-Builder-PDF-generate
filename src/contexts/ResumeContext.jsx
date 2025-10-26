@@ -67,7 +67,7 @@ const initialState = {
     "volunteering",
     "references",
   ],
-  selectedTemplate: "modern",
+  selectedTemplate: "professional-red",
 
   // History for undo/redo
   history: {
