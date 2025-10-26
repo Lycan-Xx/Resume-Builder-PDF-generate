@@ -1,5 +1,7 @@
-import { HiDocumentText, HiPlus, HiTrash, HiLink, HiCodeBracket } from 'react-icons/hi2';
+import { HiDocumentText, HiPlus, HiTrash, HiLink, HiCodeBracket, HiCalendar } from 'react-icons/hi2';
 import { useResume } from '../../contexts/ResumeContext';
+import MonthYearPicker from '../ui/MonthYearPicker';
+import { formatMonthYear, calculateDuration } from '../../utils/dateUtils';
 
 const ProjectsSection = () => {
   const { state, dispatch } = useResume();
@@ -13,6 +15,9 @@ const ProjectsSection = () => {
         description: '',
         technologies: '',
         link: '',
+        startDate: '',
+        endDate: '',
+        current: false,
       },
     });
   };
@@ -146,6 +151,59 @@ const ProjectsSection = () => {
                     rows={4}
                     className="w-full px-3 py-2 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 resize-none transition-all"
                   />
+                </div>
+
+                {/* Date Range */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                    <HiCalendar className="w-3.5 h-3.5 text-gray-500" />
+                    Project Duration (Optional)
+                  </label>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400">Start Date</label>
+                      <MonthYearPicker
+                        value={project.startDate || ''}
+                        onChange={(value) => handleInputChange(index, 'startDate', value)}
+                        placeholder="Start Date"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400">End Date</label>
+                      <MonthYearPicker
+                        value={project.endDate || ''}
+                        onChange={(value) => handleInputChange(index, 'endDate', value)}
+                        placeholder="End Date"
+                        disabled={project.current}
+                      />
+                    </div>
+                  </div>
+
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={project.current || false}
+                      onChange={(e) => {
+                        handleInputChange(index, 'current', e.target.checked);
+                        if (e.target.checked) {
+                          handleInputChange(index, 'endDate', '');
+                        }
+                      }}
+                      className="w-4 h-4 rounded border-gray-700 bg-[#111111] text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
+                    />
+                    <span className="text-sm text-gray-400">Currently working on this project</span>
+                  </label>
+
+                  {/* Duration display */}
+                  {project.startDate && (project.endDate || project.current) && (
+                    <div className="text-xs text-gray-500 bg-[#111111] px-3 py-2 rounded-md border border-gray-800">
+                      <span className="font-medium text-gray-400">Duration: </span>
+                      {formatMonthYear(project.startDate)} - {project.current ? 'Present' : formatMonthYear(project.endDate)}
+                      {' '}({calculateDuration(project.startDate, project.endDate, project.current)})
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
