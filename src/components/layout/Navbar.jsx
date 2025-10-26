@@ -11,8 +11,11 @@ const Navbar = () => {
   return (
     <nav className="bg-[#0a0a0a] border-b border-gray-800 px-6 py-4">
       <div className="flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-3">
+        {/* Logo - Clickable to Homepage */}
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200"
+        >
           <img
             src={logo}
             alt="ResumeForge Logo"
@@ -21,7 +24,7 @@ const Navbar = () => {
           <div className="hidden md:block">
             <h1 className="text-2xl font-bold text-white">ResumeForge</h1>
           </div>
-        </div>
+        </button>
 
         {/* Actions */}
         <div className="flex items-center gap-3">
