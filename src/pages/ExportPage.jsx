@@ -10,7 +10,7 @@ import ThankYouModal from "../components/modals/ThankYouModal";
 const MinimalExportPage = () => {
   const navigate = useNavigate();
   const { state } = useResume();
-  const { user } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [downloadReady, setDownloadReady] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -155,7 +155,17 @@ const MinimalExportPage = () => {
       {/* Sign In/Welcome Button - Top Right */}
       <nav className="absolute top-8 right-8 z-50 hidden md:block">
         <button
-          onClick={() => user ? navigate("/profile") : console.log('Sign in clicked')}
+          onClick={async () => {
+            if (user) {
+              navigate("/profile");
+            } else {
+              try {
+                await signInWithGoogle();
+              } catch (error) {
+                console.error("Sign-in error:", error);
+              }
+            }
+          }}
           className="backdrop-blur-md bg-white/10 border border-white/20 px-6 py-3 rounded-full text-white font-medium hover:bg-white/20 transition-all duration-300 shadow-lg flex items-center gap-2"
         >
           {user ? (
