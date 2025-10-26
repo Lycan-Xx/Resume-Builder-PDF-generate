@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { HiCalendar, HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
 import { formatMonthYear, getMonths, getYearRange } from '../../utils/dateUtils';
 
 /**
@@ -51,12 +51,12 @@ const MonthYearPicker = ({ value, onChange, placeholder = 'Select date', disable
         type="button"
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
-        className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white text-left flex items-center justify-between disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white text-left flex items-center justify-between disabled:opacity-50 disabled:cursor-not-allowed transition-all"
       >
-        <span className={!displayValue ? 'text-gray-400' : ''}>
+        <span className={!displayValue ? 'text-gray-600' : ''}>
           {displayValue || placeholder}
         </span>
-        <Calendar className="w-4 h-4 text-gray-400" />
+        <HiCalendar className="w-4 h-4 text-gray-500" />
       </button>
 
       {isOpen && (
@@ -68,25 +68,25 @@ const MonthYearPicker = ({ value, onChange, placeholder = 'Select date', disable
           />
           
           {/* Dropdown */}
-          <div className="absolute z-20 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 w-72">
+          <div className="absolute z-20 mt-2 bg-[#0a0a0a] border border-gray-800 rounded-lg shadow-xl p-4 w-72">
             {/* Year selector */}
             <div className="flex items-center justify-between mb-4">
               <button
                 type="button"
                 onClick={() => handleYearChange(-1)}
-                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                className="p-1.5 hover:bg-gray-800 rounded-md transition-all"
               >
-                <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                <HiChevronLeft className="w-5 h-5 text-gray-400" />
               </button>
-              <span className="font-semibold text-gray-900 dark:text-white">
+              <span className="font-semibold text-white">
                 {selectedYear}
               </span>
               <button
                 type="button"
                 onClick={() => handleYearChange(1)}
-                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                className="p-1.5 hover:bg-gray-800 rounded-md transition-all"
               >
-                <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                <HiChevronRight className="w-5 h-5 text-gray-400" />
               </button>
             </div>
 
@@ -100,10 +100,10 @@ const MonthYearPicker = ({ value, onChange, placeholder = 'Select date', disable
                     type="button"
                     onClick={() => handleMonthSelect(month.value)}
                     className={`
-                      px-3 py-2 rounded-md text-sm font-medium transition-colors
+                      px-3 py-2 rounded-md text-sm font-medium transition-all
                       ${isSelected 
-                        ? 'bg-primary-500 text-white' 
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white' 
+                        : 'text-gray-300 hover:bg-gray-800'
                       }
                     `}
                   >
@@ -114,11 +114,11 @@ const MonthYearPicker = ({ value, onChange, placeholder = 'Select date', disable
             </div>
 
             {/* Quick year selection */}
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="mt-4 pt-4 border-t border-gray-800">
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white text-sm"
+                className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white transition-all"
               >
                 {years.map(year => (
                   <option key={year} value={year}>

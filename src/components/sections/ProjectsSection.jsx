@@ -1,4 +1,4 @@
-import { FileText, Plus, Trash2, ExternalLink, Code } from 'lucide-react';
+import { HiDocumentText, HiPlus, HiTrash, HiLink, HiCodeBracket } from 'react-icons/hi2';
 import { useResume } from '../../contexts/ResumeContext';
 
 const ProjectsSection = () => {
@@ -36,87 +36,94 @@ const ProjectsSection = () => {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <FileText className="w-6 h-6 text-primary-500" />
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h2>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center">
+            <HiDocumentText className="w-5 h-5 text-orange-400" />
+          </div>
+          <h2 className="text-xl font-semibold text-white">Projects</h2>
         </div>
         <button
           onClick={handleAddProject}
-          className="flex items-center space-x-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors btn-hover"
+          className="flex items-center gap-2 h-9 px-3 text-sm bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-md transition-all duration-200 font-medium"
         >
-          <Plus className="w-4 h-4" />
-          <span>Add Project</span>
+          <HiPlus className="w-4 h-4" />
+          Add Project
         </button>
       </div>
 
       {state.projects.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-          <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No projects added</h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+        <div className="text-center py-12 bg-[#0a0a0a] rounded-lg border border-dashed border-gray-800">
+          <div className="w-12 h-12 rounded-full bg-gray-800/50 flex items-center justify-center mx-auto mb-3">
+            <HiDocumentText className="w-6 h-6 text-gray-600" />
+          </div>
+          <h3 className="text-sm font-medium text-white mb-1">No projects added</h3>
+          <p className="text-xs text-gray-500 mb-4">
             Showcase your best work and technical projects
           </p>
           <button
             onClick={handleAddProject}
-            className="flex items-center space-x-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors mx-auto"
+            className="inline-flex items-center gap-2 h-9 px-4 text-sm bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-md transition-all duration-200 font-medium"
           >
-            <Plus className="w-4 h-4" />
-            <span>Add Your First Project</span>
+            <HiPlus className="w-4 h-4" />
+            Add Your First Project
           </button>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {state.projects.map((project, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
+              className="bg-[#0a0a0a] p-4 rounded-lg border border-gray-800"
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">Project {index + 1}</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                  <span className="text-xs text-gray-500 font-medium">Project {index + 1}</span>
                 </div>
                 <button
                   onClick={() => handleRemoveProject(index)}
-                  className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                  className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-all"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <HiTrash className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <FileText className="w-4 h-4 inline mr-1" />
-                    Project Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Portfolio Website"
-                    value={project.name || ''}
-                    onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
-                  />
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                      <HiDocumentText className="w-3.5 h-3.5 text-gray-500" />
+                      Project Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Portfolio Website"
+                      value={project.name || ''}
+                      onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                      className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                      <HiLink className="w-3.5 h-3.5 text-gray-500" />
+                      Project Link
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="e.g. https://myproject.com"
+                      value={project.link || ''}
+                      onChange={(e) => handleInputChange(index, 'link', e.target.value)}
+                      className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <ExternalLink className="w-4 h-4 inline mr-1" />
-                    Project Link
-                  </label>
-                  <input
-                    type="url"
-                    placeholder="e.g. https://myproject.com"
-                    value={project.link || ''}
-                    onChange={(e) => handleInputChange(index, 'link', e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <Code className="w-4 h-4 inline mr-1" />
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                    <HiCodeBracket className="w-3.5 h-3.5 text-gray-500" />
                     Technologies Used
                   </label>
                   <input
@@ -124,22 +131,22 @@ const ProjectsSection = () => {
                     placeholder="e.g. React, Node.js, MongoDB"
                     value={project.technologies || ''}
                     onChange={(e) => handleInputChange(index, 'technologies', e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+                    className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
                   />
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Project Description
-                </label>
-                <textarea
-                  placeholder="Describe your project, its purpose, and your role..."
-                  value={project.description || ''}
-                  onChange={(e) => handleInputChange(index, 'description', e.target.value)}
-                  rows={4}
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
-                />
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-gray-300">
+                    Project Description
+                  </label>
+                  <textarea
+                    placeholder="Describe your project, its purpose, and your role..."
+                    value={project.description || ''}
+                    onChange={(e) => handleInputChange(index, 'description', e.target.value)}
+                    rows={4}
+                    className="w-full px-3 py-2 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 resize-none transition-all"
+                  />
+                </div>
               </div>
             </div>
           ))}

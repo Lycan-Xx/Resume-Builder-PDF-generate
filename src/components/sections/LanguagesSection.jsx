@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Globe, Plus, X } from "lucide-react"
+import { HiGlobeAlt, HiPlus, HiXMark } from "react-icons/hi2"
 import { useResume } from "../../contexts/ResumeContext"
 
 const LanguagesSection = () => {
@@ -50,32 +50,35 @@ const LanguagesSection = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center space-x-3">
-        <Globe className="w-6 h-6 text-primary-500" />
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Languages</h2>
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center">
+          <HiGlobeAlt className="w-5 h-5 text-orange-400" />
+        </div>
+        <h2 className="text-xl font-semibold text-white">Languages</h2>
       </div>
 
       {/* Add New Language */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Add New Language</h3>
-        <div className="flex items-end space-x-4">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Language</label>
+      <div className="bg-[#0a0a0a] p-4 rounded-lg border border-gray-800">
+        <h3 className="text-sm font-medium text-gray-300 mb-3">Add New Language</h3>
+        <div className="flex items-end gap-3">
+          <div className="flex-1 space-y-1.5">
+            <label className="text-xs font-medium text-gray-400">Language</label>
             <input
               type="text"
               value={newLanguage.name}
               onChange={(e) => setNewLanguage({ ...newLanguage, name: e.target.value })}
               placeholder="e.g., Spanish, Mandarin"
-              className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+              className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
               onKeyPress={(e) => e.key === "Enter" && addLanguage()}
             />
           </div>
-          <div className="w-48">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Proficiency</label>
+          <div className="w-44 space-y-1.5">
+            <label className="text-xs font-medium text-gray-400">Proficiency</label>
             <select
               value={newLanguage.proficiency}
               onChange={(e) => setNewLanguage({ ...newLanguage, proficiency: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white"
+              className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white transition-all"
             >
               {proficiencyLevels.map((level) => (
                 <option key={level.value} value={level.value}>
@@ -86,41 +89,43 @@ const LanguagesSection = () => {
           </div>
           <button
             onClick={addLanguage}
-            className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors btn-hover"
+            className="h-9 w-9 flex items-center justify-center bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-md transition-all duration-200"
           >
-            <Plus className="w-4 h-4" />
+            <HiPlus className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* Languages List */}
       {languages.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-          <Globe className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No languages added</h3>
-          <p className="text-gray-500 dark:text-gray-400">
+        <div className="text-center py-12 bg-[#0a0a0a] rounded-lg border border-dashed border-gray-800">
+          <div className="w-12 h-12 rounded-full bg-gray-800/50 flex items-center justify-center mx-auto mb-3">
+            <HiGlobeAlt className="w-6 h-6 text-gray-600" />
+          </div>
+          <h3 className="text-sm font-medium text-white mb-1">No languages added</h3>
+          <p className="text-xs text-gray-500">
             Add languages you speak to showcase your communication abilities
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {languages.map((language, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
+              className="bg-[#0a0a0a] p-4 rounded-lg border border-gray-800"
             >
               <div className="flex items-start justify-between mb-3">
                 <input
                   type="text"
                   value={language.name}
                   onChange={(e) => updateLanguage(index, "name", e.target.value)}
-                  className="font-medium text-gray-900 dark:text-white bg-transparent border-none p-0 focus:ring-0 flex-1"
+                  className="font-medium text-white bg-transparent border-none p-0 focus:ring-0 flex-1 text-sm"
                 />
                 <button
                   onClick={() => removeLanguage(index)}
-                  className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                  className="p-1 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-all"
                 >
-                  <X className="w-4 h-4" />
+                  <HiXMark className="w-4 h-4" />
                 </button>
               </div>
 
@@ -128,7 +133,7 @@ const LanguagesSection = () => {
                 <select
                   value={language.proficiency}
                   onChange={(e) => updateLanguage(index, "proficiency", e.target.value)}
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white text-sm"
+                  className="w-full h-8 px-3 text-xs bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white transition-all"
                 >
                   {proficiencyLevels.map((level) => (
                     <option key={level.value} value={level.value}>
@@ -137,9 +142,9 @@ const LanguagesSection = () => {
                   ))}
                 </select>
 
-                <div className="flex items-center space-x-2">
-                  <div className={`w-3 h-3 rounded-full ${getProficiencyColor(language.proficiency)}`} />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${getProficiencyColor(language.proficiency)}`} />
+                  <span className="text-xs text-gray-500">
                     {proficiencyLevels.find((l) => l.value === language.proficiency)?.label}
                   </span>
                 </div>
