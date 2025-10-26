@@ -176,6 +176,12 @@ export const ResumeProvider = ({ children }) => {
             if (resumeIndex !== -1) {
               resumesList[resumeIndex].data = state
               resumesList[resumeIndex].updatedAt = new Date().toISOString()
+              
+              // Update sync status
+              if (user) {
+                resumesList[resumeIndex].syncStatus = "pending"
+              }
+              
               localStorage.setItem("resumes", JSON.stringify(resumesList))
 
               // Sync to Firestore if user is logged in

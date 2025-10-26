@@ -5,6 +5,7 @@ import logo from "../assets/logo.png";
 import { useAuth } from "../contexts/AuthContext";
 import StashPanel from "./new_resume/StashPanel";
 import ResumeNameDialog from "./new_resume/ResumeNameDialouge";
+import ConfirmDialog from "../components/modals/ConfirmDialog";
 import { firestoreService, MAX_FREE_RESUMES } from "../services/firestore.service";
 import { syncService } from "../services/sync.service";
 
@@ -13,6 +14,7 @@ const MinimalResumeLanding = () => {
   const { user, signingIn, signInWithGoogle } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [limitDialogOpen, setLimitDialogOpen] = useState(false);
   const [resumes, setResumes] = useState([]);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncError, setSyncError] = useState(null);
@@ -74,6 +76,18 @@ const MinimalResumeLanding = () => {
     }
   }, [user]);
 
+  // Listen for sync updates to refresh resume list
+  useEffect(() => {
+    const unsubscribe = syncService.addListener((event) => {
+      if (event.type === "resume_updated" || event.type === "sync_complete") {
+        // Reload resumes from localStorage to get updated status
+        loadResumes();
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   const syncLocalResumesWithFirestore = async () => {
     if (!user) return;
 
@@ -86,11 +100,18 @@ const MinimalResumeLanding = () => {
       console.log("🔄 Syncing local resumes with Firestore...");
       const syncedResumes = await firestoreService.syncLocalResumes(user.uid, localResumes);
       
-      // Update local storage with synced resumes
-      localStorage.setItem("resumes", JSON.stringify(syncedResumes));
-      setResumes(syncedResumes);
+      // Ensure all synced resumes have proper timestamps and status
+      const resumesWithStatus = syncedResumes.map(resume => ({
+        ...resume,
+        lastSyncedAt: resume.lastSyncedAt || new Date().toISOString(),
+        syncStatus: resume.syncStatus || "synced",
+      }));
       
-      console.log("✅ Sync complete:", syncedResumes.length, "resumes");
+      // Update local storage with synced resumes
+      localStorage.setItem("resumes", JSON.stringify(resumesWithStatus));
+      setResumes(resumesWithStatus);
+      
+      console.log("✅ Sync complete:", resumesWithStatus.length, "resumes");
     } catch (error) {
       console.error("❌ Sync error:", error);
       setSyncError(error.message);
@@ -143,8 +164,16 @@ const MinimalResumeLanding = () => {
 
   const saveResumes = (updatedResumes) => {
     try {
-      localStorage.setItem("resumes", JSON.stringify(updatedResumes));
-      setResumes(updatedResumes);
+      // Ensure all resumes have proper timestamps
+      const resumesWithTimestamps = updatedResumes.map(resume => ({
+        ...resume,
+        updatedAt: resume.updatedAt || new Date().toISOString(),
+        lastSyncedAt: resume.lastSyncedAt || null,
+        syncStatus: resume.syncStatus || (user ? "pending" : null),
+      }));
+      
+      localStorage.setItem("resumes", JSON.stringify(resumesWithTimestamps));
+      setResumes(resumesWithTimestamps);
     } catch (error) {
       console.error("Error saving resumes:", error);
     }
@@ -168,14 +197,14 @@ const MinimalResumeLanding = () => {
       try {
         const canCreate = await firestoreService.canCreateResume(user.uid);
         if (!canCreate) {
-          alert(`You've reached the maximum of ${MAX_FREE_RESUMES} free resumes. Please delete one to create a new resume.`);
+          setLimitDialogOpen(true);
           return;
         }
       } catch (error) {
         console.error("Error checking resume limit:", error);
       }
     } else if (resumes.length >= MAX_FREE_RESUMES) {
-      alert(`You've reached the maximum of ${MAX_FREE_RESUMES} free resumes. Please delete one or sign in to sync your resumes.`);
+      setLimitDialogOpen(true);
       return;
     }
 
@@ -183,21 +212,102 @@ const MinimalResumeLanding = () => {
   };
 
   const handleConfirmResumeName = async (name) => {
+    // Create empty initial state for new resume
+    const emptyResumeData = {
+      basics: {
+        fullName: "",
+        headline: "",
+        email: "",
+        phone: "",
+        location: "",
+        website: "",
+        profilePicture: null,
+      },
+      summary: {
+        content: "",
+      },
+      experience: [],
+      education: [],
+      skills: [],
+      languages: [],
+      awards: [],
+      profiles: [],
+      projects: [],
+      interests: [],
+      certifications: [],
+      publications: [],
+      volunteering: [],
+      references: {
+        items: [],
+        availableUponRequest: true,
+      },
+      customSections: [],
+      includedSections: {
+        basics: true,
+        summary: true,
+        experience: true,
+        education: true,
+        skills: true,
+        languages: false,
+        awards: false,
+        profiles: false,
+        projects: false,
+        interests: false,
+        certifications: false,
+        publications: false,
+        volunteering: false,
+        references: false,
+      },
+      sectionsOrder: [
+        "basics",
+        "summary",
+        "experience",
+        "education",
+        "skills",
+        "languages",
+        "awards",
+        "profiles",
+        "projects",
+        "interests",
+        "certifications",
+        "publications",
+        "volunteering",
+        "references",
+      ],
+      selectedTemplate: "professional-red",
+      history: {
+        past: [],
+        present: null,
+        future: [],
+      },
+    };
+
     const newResume = {
       id: Date.now().toString(),
       name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      data: null, // Will be populated in the builder
+      lastSyncedAt: user ? new Date().toISOString() : null,
+      syncStatus: user ? "pending" : null,
+      data: emptyResumeData,
     };
 
     const updatedResumes = [...resumes, newResume];
     saveResumes(updatedResumes);
 
+    // Clear the resumeData cache and set new empty data
+    localStorage.setItem("resumeData", JSON.stringify(emptyResumeData));
+
     // Sync to Firestore if user is logged in
     if (user) {
       try {
-        await firestoreService.saveResume(user.uid, newResume);
+        const synced = await firestoreService.saveResume(user.uid, newResume);
+        // Update with synced data
+        const resumeIndex = updatedResumes.findIndex(r => r.id === newResume.id);
+        if (resumeIndex !== -1) {
+          updatedResumes[resumeIndex] = synced;
+          saveResumes(updatedResumes);
+        }
       } catch (error) {
         console.error("Error saving resume to Firestore:", error);
         // Continue anyway - will sync later
@@ -222,25 +332,23 @@ const MinimalResumeLanding = () => {
   };
 
   const handleDeleteResume = async (resumeId) => {
-    if (window.confirm("Are you sure you want to delete this resume?")) {
-      const updatedResumes = resumes.filter((r) => r.id !== resumeId);
-      saveResumes(updatedResumes);
+    const updatedResumes = resumes.filter((r) => r.id !== resumeId);
+    saveResumes(updatedResumes);
 
-      // Delete from Firestore if user is logged in
-      if (user) {
-        try {
-          await firestoreService.deleteResume(resumeId);
-        } catch (error) {
-          console.error("Error deleting resume from Firestore:", error);
-          // Continue anyway - local delete succeeded
-        }
+    // Delete from Firestore if user is logged in
+    if (user) {
+      try {
+        await firestoreService.deleteResume(resumeId);
+      } catch (error) {
+        console.error("Error deleting resume from Firestore:", error);
+        // Continue anyway - local delete succeeded
       }
+    }
 
-      // Clear active resume if it was deleted
-      const activeResumeId = localStorage.getItem("activeResumeId");
-      if (activeResumeId === resumeId) {
-        localStorage.removeItem("activeResumeId");
-      }
+    // Clear active resume if it was deleted
+    const activeResumeId = localStorage.getItem("activeResumeId");
+    if (activeResumeId === resumeId) {
+      localStorage.removeItem("activeResumeId");
     }
   };
 
@@ -281,6 +389,18 @@ const MinimalResumeLanding = () => {
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onConfirm={handleConfirmResumeName}
+      />
+
+      {/* Resume Limit Dialog */}
+      <ConfirmDialog
+        isOpen={limitDialogOpen}
+        onClose={() => setLimitDialogOpen(false)}
+        onConfirm={() => setLimitDialogOpen(false)}
+        title="Resume Limit Reached"
+        message={`You've reached the maximum of ${MAX_FREE_RESUMES} free resumes. Please delete an existing resume to create a new one${!user ? ', or sign in to sync your resumes across devices' : ''}.`}
+        confirmText="Got it"
+        cancelText=""
+        type="warning"
       />
 
       {/* Glassy Navbar - Positioned top right on desktop, normal on mobile */}

@@ -118,12 +118,25 @@ class SyncService {
 
     for (const operation of queue) {
       try {
-        await this.executeOperation(operation);
+        const result = await this.executeOperation(operation);
         console.log("✅ Synced:", operation.type, operation.resumeId);
+        
+        // Update local storage with synced status
+        if (operation.type === "save" && result) {
+          this.updateLocalResumeStatus(operation.resumeId, {
+            lastSyncedAt: new Date().toISOString(),
+            syncStatus: "synced",
+          });
+        }
       } catch (error) {
         console.error("❌ Sync failed:", operation.type, error);
         // Keep failed operations in queue
         remainingQueue.push(operation);
+        
+        // Update local storage with error status
+        this.updateLocalResumeStatus(operation.resumeId, {
+          syncStatus: "error",
+        });
       }
     }
 
@@ -153,6 +166,36 @@ class SyncService {
         return await firestoreService.deleteResume(resumeId);
       default:
         throw new Error(`Unknown operation type: ${type}`);
+    }
+  }
+
+  /**
+   * Update local resume status in localStorage
+   */
+  updateLocalResumeStatus(resumeId, updates) {
+    try {
+      const savedResumes = localStorage.getItem("resumes");
+      if (savedResumes) {
+        const resumesList = JSON.parse(savedResumes);
+        const resumeIndex = resumesList.findIndex((r) => r.id === resumeId);
+
+        if (resumeIndex !== -1) {
+          resumesList[resumeIndex] = {
+            ...resumesList[resumeIndex],
+            ...updates,
+          };
+          localStorage.setItem("resumes", JSON.stringify(resumesList));
+          
+          // Notify listeners of the update
+          this.notifyListeners({
+            type: "resume_updated",
+            resumeId,
+            updates,
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error updating local resume status:", error);
     }
   }
 

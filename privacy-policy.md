@@ -121,7 +121,7 @@ We may update this policy occasionally. When we do:
 
 Questions about privacy? Contact us:
 
-- **Email:** privacy@resumeforge.com
+- **Email:** msbello@cc.cc
 - **Twitter:** @LycanXx0
 
 ## Your Data, Your Control

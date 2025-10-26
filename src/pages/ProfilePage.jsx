@@ -165,7 +165,12 @@ const ProfilePage = () => {
           <h2 className="text-xl font-semibold text-white mb-6">Privacy & Data</h2>
 
           <div className="space-y-4">
-            <button className="w-full flex items-center justify-between p-4 bg-black border border-gray-800 rounded-lg hover:border-gray-700 transition-all group">
+            <a 
+              href="https://github.com/Lycan-Xx/Resume-Builder-PDF-generate/blob/1c28fb728cd6372e9db9aa11a542c2107a2ae586/privacy-policy.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-between p-4 bg-black border border-gray-800 rounded-lg hover:border-gray-700 transition-all group"
+            >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
                   <Shield className="w-5 h-5 text-blue-400" />
@@ -176,7 +181,7 @@ const ProfilePage = () => {
                 </div>
               </div>
               <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:text-gray-400 rotate-180 transition-colors" />
-            </button>
+            </a>
 
             <button className="w-full flex items-center justify-between p-4 bg-black border border-red-900/50 rounded-lg hover:border-red-800 transition-all group">
               <div className="flex items-center gap-3">
