@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { ThemeProvider } from "./contexts/ThemeContext"
 import { ResumeProvider } from "./contexts/ResumeContext"
+import { AuthProvider } from "./contexts/AuthContext"
 import HomePage from "./pages/HomePage"
 import ResumeBuilder from "./pages/ResumeBuilder"
 import ExportPage from "./pages/ExportPage"
@@ -35,11 +36,13 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <ThemeProvider>
-      <div className="min-h-screen bg-[#000000] transition-colors">
-        <RouterProvider router={router} />
-      </div>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <div className="min-h-screen bg-[#000000] transition-colors">
+          <RouterProvider router={router} />
+        </div>
+      </ThemeProvider>
+    </AuthProvider>
   )
 }
 

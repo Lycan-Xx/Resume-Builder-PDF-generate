@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume Migration Tool</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #0a0a0a;
+        color: #fff;
+      }
+      .container {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 30px;
+      }
+      h1 {
+        color: #f97316;
+        margin-top: 0;
+      }
+      button {
+        background: linear-gradient(to right, #f97316, #ea580c);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 20px;
+      }
+      button:hover {
+        background: linear-gradient(to right, #ea580c, #c2410c);
+      }
+      .info {
+        background: #2a2a2a;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 3px solid #f97316;
+      }
+      .success {
+        color: #22c55e;
+        font-weight: 500;
+      }
+      .error {
+        color: #ef4444;
+        font-weight: 500;
+      }
+      pre {
+        background: #0a0a0a;
+        padding: 15px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📦 Resume Migration Tool</h1>
+      <p>
+        This tool will migrate your old resume data into the new stash system.
+      </p>
+
+      <div class="info">
+        <strong>What it does:</strong>
+        <ul>
+          <li>Checks for existing resume data in localStorage</li>
+          <li>Creates a new stash entry with your resume</li>
+          <li>Names it based on your full name or "My Resume"</li>
+          <li>Sets it as the active resume</li>
+        </ul>
+      </div>
+
+      <button onclick="migrateResume()">🚀 Migrate My Resume</button>
+
+      <div id="result" style="margin-top: 20px"></div>
+    </div>
+
+    <script>
+      function migrateResume() {
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = "<p>Processing...</p>";
+
+        try {
+          const resumeData = localStorage.getItem("resumeData");
+          const existingResumes = localStorage.getItem("resumes");
+          const migrationDone = localStorage.getItem("resumeMigrationDone");
+
+          if (!resumeData) {
+            resultDiv.innerHTML =
+              '<p class="error">❌ No resume data found in cache.</p>';
+            return;
+          }
+
+          const parsedData = JSON.parse(resumeData);
+          const resumesList = existingResumes
+            ? JSON.parse(existingResumes)
+            : [];
+
+          // Check if already migrated
+          if (migrationDone) {
+            resultDiv.innerHTML = `
+                        <p class="error">⚠️ Migration already completed.</p>
+                        <p>Found ${resumesList.length} resume(s) in your stash.</p>
+                        <button onclick="location.reload()">Reset Migration Flag</button>
+                    `;
+            return;
+          }
+
+          // Get resume name
+          const dataName = parsedData.basics?.fullName || "Untitled Resume";
+
+          // Check if already exists
+          const alreadyExists = resumesList.some(
+            (r) => r.data?.basics?.fullName === dataName
+          );
+
+          if (alreadyExists) {
+            resultDiv.innerHTML = `
+                        <p class="error">⚠️ A resume with this name already exists in your stash.</p>
+                        <p><strong>Name:</strong> ${dataName}</p>
+                    `;
+            localStorage.setItem("resumeMigrationDone", "true");
+            return;
+          }
+
+          // Create new resume entry
+          const migratedResume = {
+            id: Date.now().toString(),
+            name: dataName || "My Resume",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            data: parsedData,
+          };
+
+          resumesList.unshift(migratedResume);
+          localStorage.setItem("resumes", JSON.stringify(resumesList));
+          localStorage.setItem("activeResumeId", migratedResume.id);
+          localStorage.setItem("resumeMigrationDone", "true");
+
+          resultDiv.innerHTML = `
+                    <p class="success">✅ Successfully migrated your resume!</p>
+                    <div class="info">
+                        <strong>Resume Details:</strong>
+                        <ul>
+                            <li><strong>Name:</strong> ${
+                              migratedResume.name
+                            }</li>
+                            <li><strong>ID:</strong> ${migratedResume.id}</li>
+                            <li><strong>Created:</strong> ${new Date(
+                              migratedResume.createdAt
+                            ).toLocaleString()}</li>
+                        </ul>
+                    </div>
+                    <p>You can now view it in your stash panel on the homepage!</p>
+                    <button onclick="window.location.href='/'">Go to Homepage</button>
+                `;
+        } catch (error) {
+          resultDiv.innerHTML = `
+                    <p class="error">❌ Error during migration:</p>
+                    <pre>${error.message}</pre>
+                `;
+          console.error("Migration error:", error);
+        }
+      }
+
+      // Show current status on load
+      window.addEventListener("load", () => {
+        const resumeData = localStorage.getItem("resumeData");
+        const resumes = localStorage.getItem("resumes");
+        const migrationDone = localStorage.getItem("resumeMigrationDone");
+
+        const resultDiv = document.getElementById("result");
+
+        let status = '<div class="info"><strong>Current Status:</strong><ul>';
+        status += `<li>Resume data in cache: ${
+          resumeData ? "✅ Yes" : "❌ No"
+        }</li>`;
+        status += `<li>Resumes in stash: ${
+          resumes ? JSON.parse(resumes).length : 0
+        }</li>`;
+        status += `<li>Migration completed: ${
+          migrationDone ? "✅ Yes" : "❌ No"
+        }</li>`;
+        status += "</ul></div>";
+
+        resultDiv.innerHTML = status;
+      });
+    </script>
+  </body>
+</html>

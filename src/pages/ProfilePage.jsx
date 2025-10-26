@@ -1,26 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, User, Mail, Shield, Trash2, MessageSquare, Camera } from "lucide-react";
+import { ArrowLeft, User, Mail, Shield, Trash2, MessageSquare } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
+  const { user, loading, signOut } = useAuth();
   const [profileData, setProfileData] = useState({
     avatar: "",
-    fullName: "John Doe",
-    username: "johndoe",
-    email: "john.doe@example.com",
+    fullName: "",
+    username: "",
+    email: "",
   });
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfileData({ ...profileData, avatar: e.target.result });
-      };
-      reader.readAsDataURL(file);
+  // Populate profile data from authenticated user
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        avatar: user.photoURL || "",
+        fullName: user.displayName || "",
+        username: user.username || user.email?.split('@')[0] || "",
+        email: user.email || "",
+      });
+    }
+  }, [user]);
+
+  // Redirect to home if not logged in
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/");
+    }
+  }, [user, loading, navigate]);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate("/");
+    } catch (error) {
+      console.error("Sign out error:", error);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-orange-500/30 border-t-orange-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -60,9 +94,9 @@ const ProfilePage = () => {
         <div className="bg-[#0a0a0a] border border-gray-800 rounded-2xl p-6 sm:p-8 mb-6">
           <h2 className="text-xl font-semibold text-white mb-6">Profile Information</h2>
 
-          {/* Avatar */}
+          {/* Avatar - Read Only */}
           <div className="flex items-center gap-6 mb-6 pb-6 border-b border-gray-800">
-            <div className="relative group">
+            <div className="relative">
               <div className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden border-2 border-gray-800 bg-gray-900">
                 {profileData.avatar ? (
                   <img
@@ -74,71 +108,54 @@ const ProfilePage = () => {
                   <User className="w-10 h-10 text-gray-600" />
                 )}
               </div>
-              <label className="absolute -bottom-1 -right-1 p-2 bg-orange-500 hover:bg-orange-600 text-white rounded-full shadow-lg transition-all cursor-pointer">
-                <Camera className="w-4 h-4" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  className="hidden"
-                />
-              </label>
             </div>
             <div>
               <h3 className="font-medium text-white mb-1">Profile Picture</h3>
-              <p className="text-sm text-gray-400">Upload a profile photo</p>
+              <p className="text-sm text-gray-400">Synced from your Google account</p>
             </div>
           </div>
 
-          {/* Form Fields */}
+          {/* Form Fields - Read Only */}
           <div className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Full Name
               </label>
-              <input
-                type="text"
-                value={profileData.fullName}
-                onChange={(e) =>
-                  setProfileData({ ...profileData, fullName: e.target.value })
-                }
-                className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 text-white transition-all"
-              />
+              <div className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-gray-400 cursor-not-allowed">
+                {profileData.fullName || "Not provided"}
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Synced from Google account</p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Username
               </label>
-              <input
-                type="text"
-                value={profileData.username}
-                onChange={(e) =>
-                  setProfileData({ ...profileData, username: e.target.value })
-                }
-                className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 text-white transition-all"
-              />
+              <div className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-gray-400 cursor-not-allowed">
+                {profileData.username || "Not provided"}
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Generated from email</p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Email Address
               </label>
-              <input
-                type="email"
-                value={profileData.email}
-                onChange={(e) =>
-                  setProfileData({ ...profileData, email: e.target.value })
-                }
-                className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 text-white transition-all"
-              />
+              <div className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-gray-400 cursor-not-allowed flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                {profileData.email || "Not provided"}
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Synced from Google account</p>
             </div>
           </div>
 
-          {/* Save Button */}
+          {/* Sign Out Button */}
           <div className="mt-6 pt-6 border-t border-gray-800">
-            <button className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/20">
-              Save Changes
+            <button 
+              onClick={handleSignOut}
+              className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-lg transition-all duration-200 border border-gray-700"
+            >
+              Sign Out
             </button>
           </div>
         </div>

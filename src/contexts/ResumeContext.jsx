@@ -160,6 +160,26 @@ export const ResumeProvider = ({ children }) => {
   const saveToStorage = useCallback(
     debounce((state) => {
       localStorage.setItem("resumeData", JSON.stringify(state))
+      
+      // Also update the active resume in the resumes list
+      const activeResumeId = localStorage.getItem("activeResumeId")
+      if (activeResumeId) {
+        const savedResumes = localStorage.getItem("resumes")
+        if (savedResumes) {
+          try {
+            const resumesList = JSON.parse(savedResumes)
+            const resumeIndex = resumesList.findIndex(r => r.id === activeResumeId)
+            
+            if (resumeIndex !== -1) {
+              resumesList[resumeIndex].data = state
+              resumesList[resumeIndex].updatedAt = new Date().toISOString()
+              localStorage.setItem("resumes", JSON.stringify(resumesList))
+            }
+          } catch (error) {
+            console.error("Failed to update resume in list:", error)
+          }
+        }
+      }
     }, 1000),
     [],
   )

@@ -3,17 +3,15 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// TODO: Add your own Firebase configuration here
+// Firebase configuration from environment variables
 const firebaseConfig = {
-
-  apiKey: "AIzaSyCe06vF_DLRp7lkX1YZUSB5sG0adqT70h0",
-  authDomain: "resumeforge-a941c.firebaseapp.com",
-  projectId: "resumeforge-a941c",
-  storageBucket: "resumeforge-a941c.firebasestorage.app",
-  messagingSenderId: "728271331853",
-  appId: "1:728271331853:web:21306710dbe44eb994eb44",
-  measurementId: "G-899KX3NP54"
-
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 
