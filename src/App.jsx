@@ -4,6 +4,7 @@ import { ResumeProvider } from "./contexts/ResumeContext"
 import HomePage from "./pages/HomePage"
 import ResumeBuilder from "./pages/ResumeBuilder"
 import ExportPage from "./pages/ExportPage"
+import ProfilePage from "./pages/ProfilePage"
 
 const router = createBrowserRouter([
   {
@@ -26,12 +27,16 @@ const router = createBrowserRouter([
       </ResumeProvider>
     ),
   },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
+  },
 ])
 
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <div className="min-h-screen bg-[#000000] transition-colors">
         <RouterProvider router={router} />
       </div>
     </ThemeProvider>

@@ -1,84 +1,160 @@
-import { Link } from "react-router-dom"
-import { FileText, Zap, Download, Palette, ArrowRight } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import logo from "../assets/logo.png";
 
-const HomePage = () => {
+const MinimalResumeLanding = () => {
+  const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-16">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="flex justify-center mb-6">
-            <div className="p-4 bg-primary-500 rounded-2xl shadow-lg">
-              <FileText className="w-12 h-12 text-white" />
-            </div>
-          </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-            Build Your Perfect
-            <span className="text-primary-500 block">Resume</span>
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-            Create professional, ATS-friendly resumes in minutes with our intuitive builder. Choose from multiple
-            templates and export in various formats.
-          </p>
-          <Link
-            to="/builder"
-            className="inline-flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-          >
-            <span>Start Building</span>
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+    <div className="min-h-screen bg-black text-white flex items-center justify-center relative overflow-hidden">
+      {/* Background image from Unsplash */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80)",
+        }}
+      />
+
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black opacity-75" />
+
+      {/* Mesh/Grid overlay */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+
+      {/* Glassy Navbar - Positioned top right on desktop, normal on mobile */}
+      <nav className="absolute top-8 right-8 z-50 hidden md:block">
+        <button 
+          onClick={() => navigate("/builder")}
+          className="backdrop-blur-md bg-white/10 border border-white/20 px-6 py-3 rounded-full text-white font-medium hover:bg-white/20 transition-all duration-300 shadow-lg"
+        >
+          Get Started
+        </button>
+      </nav>
+
+      {/* Regular navbar for mobile */}
+      <nav className="absolute top-6 left-0 right-0 z-50 md:hidden px-4">
+        <button 
+          onClick={() => navigate("/builder")}
+          className="w-full backdrop-blur-md bg-white/10 border border-white/20 px-6 py-3 rounded-full text-white font-medium hover:bg-white/20 transition-all duration-300 shadow-lg"
+        >
+          Get Started
+        </button>
+      </nav>
+
+      {/* Main content */}
+      <div
+        className={`relative z-10 text-center px-4 transition-all duration-1000 ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
+      >
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <img
+            src={logo}
+            alt="ResumeForge Logo"
+            className="w-56 h-56 object-contain rounded-sm"
+          />
         </div>
 
-        {/* Features */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg text-center">
-            <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Zap className="w-8 h-8 text-primary-500" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Lightning Fast</h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              Build your resume in minutes with our streamlined interface and real-time preview.
-            </p>
-          </div>
+        {/* Main headline */}
+        <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-6 pb-2 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
+          ResumeForge
+        </h1>
 
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg text-center">
-            <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Palette className="w-8 h-8 text-primary-500" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Multiple Templates</h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              Choose from professionally designed templates that work for any industry.
-            </p>
-          </div>
+        {/* Subheadline */}
+        <p className="text-xl md:text-2xl text-zinc-400 font-light mb-12 max-w-md mx-auto">
+          Build your resume.
+        </p>
 
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg text-center">
-            <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Download className="w-8 h-8 text-primary-500" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Export Anywhere</h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              Download your resume as PDF, Word document, or HTML for maximum compatibility.
-            </p>
-          </div>
-        </div>
+        {/* CTA Button */}
+        <button 
+          onClick={() => navigate("/builder")}
+          className="group inline-flex items-center space-x-3 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/20"
+        >
+          <span>Start Building</span>
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+        </button>
 
-        {/* CTA */}
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Ready to land your dream job?</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-8">
-            Join thousands of professionals who've built their resumes with ResumeForge.
-          </p>
-          <Link
-            to="/builder"
-            className="inline-flex items-center space-x-2 bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-gray-900 px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            <span>Get Started Free</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+        {/* Subtle feature hint */}
+        <div className="mt-16 flex justify-center space-x-8 text-sm text-zinc-600">
+          <span>PDF Export</span>
+          <span className="text-zinc-800">•</span>
+          <span>Multiple Templates</span>
+          <span className="text-zinc-800">•</span>
+          <span>ATS-Friendly</span>
         </div>
       </div>
-    </div>
-  )
-}
 
-export default HomePage
+      {/* Floating resume preview mockup */}
+      <div
+        className={`absolute right-10 top-1/2 -translate-y-1/2 hidden xl:block transition-all duration-1500 delay-300 ${
+          isVisible ? "opacity-30 translate-x-0" : "opacity-0 translate-x-20"
+        }`}
+      >
+        <div className="w-64 h-80 bg-zinc-900/50 backdrop-blur-sm rounded-lg border border-zinc-700/50 p-6 shadow-2xl transform rotate-6 hover:rotate-3 transition-transform duration-500">
+          <div className="space-y-4">
+            <div className="h-3 w-3/4 bg-orange-500/30 rounded" />
+            <div className="h-2 w-1/2 bg-zinc-700/50 rounded" />
+            <div className="space-y-2 pt-4">
+              <div className="h-2 w-full bg-zinc-700/50 rounded" />
+              <div className="h-2 w-5/6 bg-zinc-700/50 rounded" />
+              <div className="h-2 w-4/6 bg-zinc-700/50 rounded" />
+            </div>
+            <div className="space-y-2 pt-4">
+              <div className="h-2 w-full bg-zinc-700/50 rounded" />
+              <div className="h-2 w-3/4 bg-zinc-700/50 rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={`absolute left-10 top-1/2 -translate-y-1/2 hidden xl:block transition-all duration-1500 delay-500 ${
+          isVisible ? "opacity-20 translate-x-0" : "opacity-0 -translate-x-20"
+        }`}
+      >
+        <div className="w-64 h-80 bg-zinc-900/50 backdrop-blur-sm rounded-lg border border-zinc-700/50 p-6 shadow-2xl transform -rotate-6 hover:-rotate-3 transition-transform duration-500">
+          <div className="space-y-4">
+            <div className="h-3 w-2/3 bg-orange-500/30 rounded" />
+            <div className="h-2 w-1/3 bg-zinc-700/50 rounded" />
+            <div className="space-y-2 pt-4">
+              <div className="h-2 w-full bg-zinc-700/50 rounded" />
+              <div className="h-2 w-4/5 bg-zinc-700/50 rounded" />
+              <div className="h-2 w-3/5 bg-zinc-700/50 rounded" />
+            </div>
+            <div className="space-y-2 pt-4">
+              <div className="h-2 w-full bg-zinc-700/50 rounded" />
+              <div className="h-2 w-2/3 bg-zinc-700/50 rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Privacy Policy - Bottom Left */}
+      <div className="absolute bottom-8 left-8 z-10">
+        <a
+          href="/privacy"
+          className="text-zinc-600 hover:text-zinc-400 text-sm transition-colors duration-300"
+        >
+          Privacy Policy
+        </a>
+      </div>
+    </div>
+  );
+};
+
+export default MinimalResumeLanding;

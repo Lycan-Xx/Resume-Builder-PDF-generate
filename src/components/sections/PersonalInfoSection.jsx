@@ -1,4 +1,5 @@
-import { User, Mail, Phone, MapPin, Info, Linkedin, Github } from 'lucide-react';
+import { HiUser, HiEnvelope, HiPhone, HiMapPin, HiInformationCircle } from 'react-icons/hi2';
+import { FaLinkedin, FaGithub } from 'react-icons/fa';
 import { useResume } from '../../contexts/ResumeContext';
 
 const PersonalInfoSection = () => {
@@ -24,16 +25,21 @@ const PersonalInfoSection = () => {
   };
 
   return (
-    <div className="space-y-8 p-1">
-      <h2 className="text-2xl font-semibold text-gray-800 relative before:content-[''] before:absolute before:w-12 before:h-1 before:bg-gradient-to-r before:from-[#0A9396] before:to-[#544cd7] before:-bottom-2">
-        Personal Information
-      </h2>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center">
+          <HiUser className="w-5 h-5 text-orange-400" />
+        </div>
+        <h2 className="text-xl font-semibold text-white">Personal Information</h2>
+      </div>
 
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-600 flex items-center">
-              <User size={16} className="mr-1 text-[#0A9396]" />
+      {/* Personal Details */}
+      <div className="bg-[#0a0a0a] p-4 rounded-lg border border-gray-800">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <HiUser className="w-3.5 h-3.5 text-gray-500" />
               Full Name
             </label>
             <input
@@ -42,13 +48,13 @@ const PersonalInfoSection = () => {
               value={state.personalInfo.name || ''}
               onChange={handleChange}
               placeholder="e.g. John Smith"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
+              className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-600 flex items-center">
-              <Mail size={16} className="mr-1 text-[#0A9396]" />
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <HiEnvelope className="w-3.5 h-3.5 text-gray-500" />
               Email Address
             </label>
             <input
@@ -57,13 +63,13 @@ const PersonalInfoSection = () => {
               value={state.personalInfo.email || ''}
               onChange={handleChange}
               placeholder="e.g. johnsmith@example.com"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
+              className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-600 flex items-center">
-              <Phone size={16} className="mr-1 text-[#0A9396]" />
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <HiPhone className="w-3.5 h-3.5 text-gray-500" />
               Phone Number
             </label>
             <input
@@ -72,13 +78,13 @@ const PersonalInfoSection = () => {
               value={state.personalInfo.phone || ''}
               onChange={handleChange}
               placeholder="e.g. (123) 456-7890"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
+              className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-600 flex items-center">
-              <MapPin size={16} className="mr-1 text-[#0A9396]" />
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <HiMapPin className="w-3.5 h-3.5 text-gray-500" />
               Location
             </label>
             <input
@@ -87,47 +93,48 @@ const PersonalInfoSection = () => {
               value={state.personalInfo.location || ''}
               onChange={handleChange}
               placeholder="e.g. New York, NY"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A9396] focus:border-transparent transition-all outline-none"
+              className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
             />
           </div>
         </div>
+      </div>
 
-        <div className="mt-6 pt-6 border-t border-gray-100">
-          <h3 className="text-lg font-medium text-gray-700 flex items-center mb-4">
-            <Info size={18} className="mr-2 text-[#544cd7]" />
-            Professional Links
-          </h3>
+      {/* Professional Links */}
+      <div className="bg-[#0a0a0a] p-4 rounded-lg border border-gray-800">
+        <div className="flex items-center gap-2 mb-4">
+          <HiInformationCircle className="w-4 h-4 text-orange-400" />
+          <h3 className="text-sm font-medium text-gray-300">Professional Links</h3>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-600 flex items-center">
-                <Linkedin size={16} className="mr-1 text-[#544cd7]" />
-                LinkedIn URL
-              </label>
-              <input
-                type="url"
-                name="links.linkedin"
-                value={state.personalInfo.links?.linkedin || ''}
-                onChange={handleChange}
-                placeholder="e.g. linkedin.com/in/johnsmith"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent transition-all outline-none"
-              />
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <FaLinkedin className="w-3.5 h-3.5 text-gray-500" />
+              LinkedIn URL
+            </label>
+            <input
+              type="url"
+              name="links.linkedin"
+              value={state.personalInfo.links?.linkedin || ''}
+              onChange={handleChange}
+              placeholder="e.g. linkedin.com/in/johnsmith"
+              className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
+            />
+          </div>
 
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-600 flex items-center">
-                <Github size={16} className="mr-1 text-[#544cd7]" />
-                GitHub URL
-              </label>
-              <input
-                type="url"
-                name="links.github"
-                value={state.personalInfo.links?.github || ''}
-                onChange={handleChange}
-                placeholder="e.g. github.com/johnsmith"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#544cd7] focus:border-transparent transition-all outline-none"
-              />
-            </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <FaGithub className="w-3.5 h-3.5 text-gray-500" />
+              GitHub URL
+            </label>
+            <input
+              type="url"
+              name="links.github"
+              value={state.personalInfo.links?.github || ''}
+              onChange={handleChange}
+              placeholder="e.g. github.com/johnsmith"
+              className="w-full h-9 px-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
+            />
           </div>
         </div>
       </div>

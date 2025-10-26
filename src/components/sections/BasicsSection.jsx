@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import { Camera, User, Mail, Phone, MapPin, Globe } from "lucide-react"
+import { HiUser, HiEnvelope, HiPhone, HiMapPin, HiGlobeAlt, HiCamera } from "react-icons/hi2"
 import { useResume } from "../../contexts/ResumeContext"
 
 const BasicsSection = () => {
@@ -30,15 +30,18 @@ const BasicsSection = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center space-x-3 mb-6">
-        <User className="w-6 h-6 text-primary-500" />
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Basic Information</h2>
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center">
+          <HiUser className="w-5 h-5 text-orange-400" />
+        </div>
+        <h2 className="text-xl font-semibold text-white">Basic Information</h2>
       </div>
 
       {/* Profile Picture */}
-      <div className="flex items-center space-x-4">
-        <div className="relative">
-          <div className="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center overflow-hidden">
+      <div className="flex items-center gap-5 p-4 bg-[#0a0a0a] rounded-lg border border-gray-800/50">
+        <div className="relative group">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden border-2 border-gray-800 bg-[#1a1a1a] transition-all group-hover:border-orange-500/50">
             {basics.profilePicture ? (
               <img
                 src={basics.profilePicture || "/placeholder.svg"}
@@ -46,14 +49,14 @@ const BasicsSection = () => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <User className="w-8 h-8 text-gray-400" />
+              <HiUser className="w-8 h-8 text-gray-600" />
             )}
           </div>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="absolute -bottom-1 -right-1 p-2 bg-primary-500 hover:bg-primary-600 text-white rounded-full shadow-lg transition-colors"
+            className="absolute -bottom-0.5 -right-0.5 p-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full shadow-lg transition-all duration-200 hover:scale-105"
           >
-            <Camera className="w-4 h-4" />
+            <HiCamera className="w-3.5 h-3.5" />
           </button>
           <input
             ref={fileInputRef}
@@ -64,26 +67,30 @@ const BasicsSection = () => {
           />
         </div>
         <div>
-          <h3 className="font-medium text-gray-900 dark:text-white">Profile Picture</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Upload a professional headshot</p>
+          <h3 className="text-sm font-medium text-white mb-0.5">Profile Picture</h3>
+          <p className="text-xs text-gray-500">Upload a professional headshot</p>
         </div>
       </div>
 
       {/* Form Fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
+      <div className="space-y-4">
+        {/* Full Name */}
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-300">
+            Full Name <span className="text-orange-400">*</span>
+          </label>
           <input
             type="text"
             value={basics.fullName}
             onChange={(e) => handleInputChange("fullName", e.target.value)}
             placeholder="John Doe"
-            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+            className="w-full h-9 px-3 text-sm bg-[#0a0a0a] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
           />
         </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {/* Professional Headline */}
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-300">
             Professional Headline
           </label>
           <input
@@ -91,64 +98,70 @@ const BasicsSection = () => {
             value={basics.headline}
             onChange={(e) => handleInputChange("headline", e.target.value)}
             placeholder="Senior Software Engineer"
-            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+            className="w-full h-9 px-3 text-sm bg-[#0a0a0a] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <Mail className="w-4 h-4 inline mr-1" />
-            Email Address *
-          </label>
-          <input
-            type="email"
-            value={basics.email}
-            onChange={(e) => handleInputChange("email", e.target.value)}
-            placeholder="john@example.com"
-            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-          />
+        {/* Email & Phone */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <HiEnvelope className="w-3.5 h-3.5 text-gray-500" />
+              Email <span className="text-orange-400">*</span>
+            </label>
+            <input
+              type="email"
+              value={basics.email}
+              onChange={(e) => handleInputChange("email", e.target.value)}
+              placeholder="john@example.com"
+              className="w-full h-9 px-3 text-sm bg-[#0a0a0a] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <HiPhone className="w-3.5 h-3.5 text-gray-500" />
+              Phone
+            </label>
+            <input
+              type="tel"
+              value={basics.phone}
+              onChange={(e) => handleInputChange("phone", e.target.value)}
+              placeholder="+1 (555) 123-4567"
+              className="w-full h-9 px-3 text-sm bg-[#0a0a0a] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <Phone className="w-4 h-4 inline mr-1" />
-            Phone Number
-          </label>
-          <input
-            type="tel"
-            value={basics.phone}
-            onChange={(e) => handleInputChange("phone", e.target.value)}
-            placeholder="+1 (555) 123-4567"
-            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-          />
-        </div>
+        {/* Location & Website */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <HiMapPin className="w-3.5 h-3.5 text-gray-500" />
+              Location
+            </label>
+            <input
+              type="text"
+              value={basics.location}
+              onChange={(e) => handleInputChange("location", e.target.value)}
+              placeholder="New York, NY"
+              className="w-full h-9 px-3 text-sm bg-[#0a0a0a] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <MapPin className="w-4 h-4 inline mr-1" />
-            Location
-          </label>
-          <input
-            type="text"
-            value={basics.location}
-            onChange={(e) => handleInputChange("location", e.target.value)}
-            placeholder="New York, NY"
-            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <Globe className="w-4 h-4 inline mr-1" />
-            Website
-          </label>
-          <input
-            type="url"
-            value={basics.website}
-            onChange={(e) => handleInputChange("website", e.target.value)}
-            placeholder="https://johndoe.com"
-            className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-          />
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+              <HiGlobeAlt className="w-3.5 h-3.5 text-gray-500" />
+              Website
+            </label>
+            <input
+              type="url"
+              value={basics.website}
+              onChange={(e) => handleInputChange("website", e.target.value)}
+              placeholder="https://johndoe.com"
+              className="w-full h-9 px-3 text-sm bg-[#0a0a0a] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 transition-all"
+            />
+          </div>
         </div>
       </div>
     </div>

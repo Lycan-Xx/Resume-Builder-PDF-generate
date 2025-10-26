@@ -1,5 +1,5 @@
 "use client"
-import { FileText } from "lucide-react"
+import { HiDocumentText, HiLightBulb } from "react-icons/hi2"
 import { useResume } from "../../contexts/ResumeContext"
 import { useState, useEffect } from "react"
 
@@ -26,13 +26,17 @@ const SummarySection = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center space-x-3 mb-6">
-        <FileText className="w-6 h-6 text-primary-500" />
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Professional Summary</h2>
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center">
+          <HiDocumentText className="w-5 h-5 text-orange-400" />
+        </div>
+        <h2 className="text-xl font-semibold text-white">Professional Summary</h2>
       </div>
 
+      {/* Content */}
       <div className="space-y-4">
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-400">
           Write a compelling summary that highlights your key achievements, skills, and career objectives.
         </p>
 
@@ -42,22 +46,36 @@ const SummarySection = () => {
             onChange={handleContentChange}
             placeholder="Write your professional summary here..."
             rows={8}
-            className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 resize-none"
+            className="w-full px-3 py-3 text-sm bg-[#111111] border border-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-white placeholder-gray-600 resize-none transition-all"
           />
-          <div className="absolute bottom-3 right-3 text-xs text-gray-500 dark:text-gray-400">
+          <div className="absolute bottom-3 right-3 text-xs text-gray-500">
             {charCount}/{maxChars}
           </div>
         </div>
 
-        <div className="text-sm text-gray-500 dark:text-gray-400">
-          <p>
-            💡 <strong>Tips:</strong>
-          </p>
-          <ul className="list-disc list-inside space-y-1 mt-2">
-            <li>Keep it concise (2-4 sentences)</li>
-            <li>Highlight your most relevant achievements</li>
-            <li>Include keywords from your target job</li>
-            <li>Show your value proposition</li>
+        {/* Tips Section */}
+        <div className="bg-[#0a0a0a] p-4 rounded-lg border border-gray-800">
+          <div className="flex items-center gap-2 mb-3">
+            <HiLightBulb className="w-4 h-4 text-orange-400" />
+            <span className="text-sm font-medium text-gray-300">Pro Tips</span>
+          </div>
+          <ul className="space-y-2 text-xs text-gray-400">
+            <li className="flex items-start gap-2">
+              <span className="text-orange-400 mt-0.5">•</span>
+              <span>Keep it concise (2-4 sentences)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-orange-400 mt-0.5">•</span>
+              <span>Highlight your most relevant achievements</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-orange-400 mt-0.5">•</span>
+              <span>Include keywords from your target job</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-orange-400 mt-0.5">•</span>
+              <span>Show your value proposition</span>
+            </li>
           </ul>
         </div>
       </div>
