@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { HiChevronRight, HiPlus, HiTrash, HiDocumentText } from "react-icons/hi2";
+import { HiChevronRight, HiPlus, HiTrash, HiDocumentText, HiCloud, HiCloudArrowUp } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
+import { useResumeSync } from "../../hooks/useResumeSync";
 
 const StashPanel = ({ resumes, onCreateResume, onDeleteResume, onSelectResume }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+  const { isOnline, isSyncing, pendingCount } = useResumeSync();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -64,7 +66,33 @@ const StashPanel = ({ resumes, onCreateResume, onDeleteResume, onSelectResume })
             <div className="h-full flex flex-col p-6">
               {/* Header */}
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-white mb-1">Stash</h2>
+                <div className="flex items-center justify-between mb-1">
+                  <h2 className="text-2xl font-semibold text-white">Stash</h2>
+                  {/* Sync Status Indicator */}
+                  <div className="flex items-center gap-1.5 text-xs">
+                    {!isOnline ? (
+                      <span className="flex items-center gap-1 text-yellow-400">
+                        <HiCloudArrowUp className="w-4 h-4" />
+                        Offline
+                      </span>
+                    ) : isSyncing ? (
+                      <span className="flex items-center gap-1 text-blue-400">
+                        <HiCloudArrowUp className="w-4 h-4 animate-pulse" />
+                        Syncing...
+                      </span>
+                    ) : pendingCount > 0 ? (
+                      <span className="flex items-center gap-1 text-orange-400">
+                        <HiCloudArrowUp className="w-4 h-4" />
+                        {pendingCount} pending
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-green-400">
+                        <HiCloud className="w-4 h-4" />
+                        Synced
+                      </span>
+                    )}
+                  </div>
+                </div>
                 <p className="text-sm text-gray-400/80">Your resume library</p>
               </div>
 
@@ -117,8 +145,19 @@ const StashPanel = ({ resumes, onCreateResume, onDeleteResume, onSelectResume })
                               {resume.name}
                             </h3>
                             <p className="text-xs text-gray-400 mt-1">
-                              {formatDate(resume.updatedAt)}
+                              Updated {formatDate(resume.updatedAt)}
                             </p>
+                            {resume.lastSyncedAt && (
+                              <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                                <HiCloud className="w-3 h-3" />
+                                Synced {formatDate(resume.lastSyncedAt)}
+                              </p>
+                            )}
+                            {resume.syncStatus === "limit_reached" && (
+                              <p className="text-xs text-yellow-400 mt-0.5">
+                                Not synced (limit reached)
+                              </p>
+                            )}
                           </div>
                           <button
                             onClick={(e) => {

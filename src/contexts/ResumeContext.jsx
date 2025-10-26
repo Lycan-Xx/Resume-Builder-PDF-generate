@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useReducer, useEffect, useCallback } from "react"
 import { debounce } from "lodash"
+import { useAuth } from "./AuthContext"
+import { syncService } from "../services/sync.service"
 
 const initialState = {
   // Core sections
@@ -155,8 +157,9 @@ export const useResume = () => {
 
 export const ResumeProvider = ({ children }) => {
   const [state, dispatch] = useReducer(resumeReducer, initialState)
+  const { user } = useAuth()
 
-  // Auto-save to localStorage
+  // Auto-save to localStorage and sync to Firestore
   const saveToStorage = useCallback(
     debounce((state) => {
       localStorage.setItem("resumeData", JSON.stringify(state))
@@ -174,6 +177,11 @@ export const ResumeProvider = ({ children }) => {
               resumesList[resumeIndex].data = state
               resumesList[resumeIndex].updatedAt = new Date().toISOString()
               localStorage.setItem("resumes", JSON.stringify(resumesList))
+
+              // Sync to Firestore if user is logged in
+              if (user) {
+                syncService.queueSave(user.uid, resumesList[resumeIndex])
+              }
             }
           } catch (error) {
             console.error("Failed to update resume in list:", error)
@@ -181,7 +189,7 @@ export const ResumeProvider = ({ children }) => {
         }
       }
     }, 1000),
-    [],
+    [user],
   )
 
   useEffect(() => {

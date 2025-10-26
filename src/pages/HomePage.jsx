@@ -5,6 +5,8 @@ import logo from "../assets/logo.png";
 import { useAuth } from "../contexts/AuthContext";
 import StashPanel from "./new_resume/StashPanel";
 import ResumeNameDialog from "./new_resume/ResumeNameDialouge";
+import { firestoreService, MAX_FREE_RESUMES } from "../services/firestore.service";
+import { syncService } from "../services/sync.service";
 
 const MinimalResumeLanding = () => {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ const MinimalResumeLanding = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [resumes, setResumes] = useState([]);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncError, setSyncError] = useState(null);
 
   // Migration function to convert old resumeData to new stash format
   const migrateOldResumeData = () => {
@@ -30,7 +34,9 @@ const MinimalResumeLanding = () => {
 
         // Check if this data is already in the stash by comparing basics.fullName
         const dataName = parsedData.basics?.fullName || "Untitled Resume";
-        const alreadyExists = resumesList.some((r) => r.data?.basics?.fullName === dataName);
+        const alreadyExists = resumesList.some(
+          (r) => r.data?.basics?.fullName === dataName
+        );
 
         if (!alreadyExists) {
           // Create a new resume entry from the old data
@@ -58,12 +64,47 @@ const MinimalResumeLanding = () => {
     }
   };
 
+  // Sync local resumes with Firestore when user logs in
+  useEffect(() => {
+    if (user) {
+      syncLocalResumesWithFirestore();
+      syncService.startAutoSync();
+    } else {
+      syncService.stopAutoSync();
+    }
+  }, [user]);
+
+  const syncLocalResumesWithFirestore = async () => {
+    if (!user) return;
+
+    setIsSyncing(true);
+    setSyncError(null);
+
+    try {
+      const localResumes = resumes.length > 0 ? resumes : JSON.parse(localStorage.getItem("resumes") || "[]");
+      
+      console.log("🔄 Syncing local resumes with Firestore...");
+      const syncedResumes = await firestoreService.syncLocalResumes(user.uid, localResumes);
+      
+      // Update local storage with synced resumes
+      localStorage.setItem("resumes", JSON.stringify(syncedResumes));
+      setResumes(syncedResumes);
+      
+      console.log("✅ Sync complete:", syncedResumes.length, "resumes");
+    } catch (error) {
+      console.error("❌ Sync error:", error);
+      setSyncError(error.message);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   useEffect(() => {
     setIsVisible(true);
-    
+
     // First, try to migrate any old resume data
     migrateOldResumeData();
-    
+
     // Then load resumes from localStorage
     loadResumes();
 
@@ -121,11 +162,27 @@ const MinimalResumeLanding = () => {
     }
   };
 
-  const handleCreateResume = () => {
+  const handleCreateResume = async () => {
+    // Check resume limit if user is logged in
+    if (user) {
+      try {
+        const canCreate = await firestoreService.canCreateResume(user.uid);
+        if (!canCreate) {
+          alert(`You've reached the maximum of ${MAX_FREE_RESUMES} free resumes. Please delete one to create a new resume.`);
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking resume limit:", error);
+      }
+    } else if (resumes.length >= MAX_FREE_RESUMES) {
+      alert(`You've reached the maximum of ${MAX_FREE_RESUMES} free resumes. Please delete one or sign in to sync your resumes.`);
+      return;
+    }
+
     setIsDialogOpen(true);
   };
 
-  const handleConfirmResumeName = (name) => {
+  const handleConfirmResumeName = async (name) => {
     const newResume = {
       id: Date.now().toString(),
       name,
@@ -136,6 +193,16 @@ const MinimalResumeLanding = () => {
 
     const updatedResumes = [...resumes, newResume];
     saveResumes(updatedResumes);
+
+    // Sync to Firestore if user is logged in
+    if (user) {
+      try {
+        await firestoreService.saveResume(user.uid, newResume);
+      } catch (error) {
+        console.error("Error saving resume to Firestore:", error);
+        // Continue anyway - will sync later
+      }
+    }
 
     // Store the active resume ID
     localStorage.setItem("activeResumeId", newResume.id);
@@ -154,10 +221,20 @@ const MinimalResumeLanding = () => {
     }
   };
 
-  const handleDeleteResume = (resumeId) => {
+  const handleDeleteResume = async (resumeId) => {
     if (window.confirm("Are you sure you want to delete this resume?")) {
       const updatedResumes = resumes.filter((r) => r.id !== resumeId);
       saveResumes(updatedResumes);
+
+      // Delete from Firestore if user is logged in
+      if (user) {
+        try {
+          await firestoreService.deleteResume(resumeId);
+        } catch (error) {
+          console.error("Error deleting resume from Firestore:", error);
+          // Continue anyway - local delete succeeded
+        }
+      }
 
       // Clear active resume if it was deleted
       const activeResumeId = localStorage.getItem("activeResumeId");
@@ -380,13 +457,15 @@ const MinimalResumeLanding = () => {
         </p>
 
         {/* CTA Button - Now triggers dialog */}
-        <button
-          onClick={handleCreateResume}
-          className="group inline-flex items-center space-x-3 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/20"
-        >
-          <span>Start Building</span>
-          <HiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </button>
+        <div className="flex justify-center">
+          <button
+            onClick={handleCreateResume}
+            className="group h-12 px-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full transition-all duration-200 flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-orange-500/30"
+          >
+            <span>Start Building</span>
+            <HiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
 
         {/* Subtle feature hint */}
         <div className="mt-16 flex justify-center space-x-8 text-sm text-zinc-600">
