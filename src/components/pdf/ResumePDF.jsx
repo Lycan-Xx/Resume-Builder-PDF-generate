@@ -406,9 +406,15 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
             <SafeText style={styles.itemTitle}>
               {profile.network || "Network"}
             </SafeText>
-            <SafeText style={styles.description}>
-              {profile.username || profile.url || "Profile"}
-            </SafeText>
+            {profile.url ? (
+              <Text style={styles.contactLink} src={profile.url}>
+                {profile.username || profile.url}
+              </Text>
+            ) : (
+              <SafeText style={styles.description}>
+                {profile.username || "Profile"}
+              </SafeText>
+            )}
           </View>
         ))}
       </View>
@@ -558,36 +564,28 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
   };
 
   const renderReferences = () => {
-    if (
-      !state.references?.items?.length &&
-      !state.references?.availableUponRequest
-    )
-      return null;
+    if (!state.references?.items?.length) return null;
 
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>References</Text>
-        {state.references.availableUponRequest ? (
-          <SafeText style={styles.description}>Available upon request</SafeText>
-        ) : (
-          state.references.items.map((ref, index) => (
-            <View key={index} style={styles.item}>
-              <SafeText style={styles.itemTitle}>
-                {ref.name || "Reference Name"}
-              </SafeText>
-              <SafeText style={styles.itemSubtitle}>
-                {(ref.title && ref.title.trim()) || "Title"} at{" "}
-                {(ref.company && ref.company.trim()) || "Company"}
-              </SafeText>
-              {ref.email && (
-                <SafeText style={styles.description}>{ref.email}</SafeText>
-              )}
-              {ref.phone && (
-                <SafeText style={styles.description}>{ref.phone}</SafeText>
-              )}
-            </View>
-          ))
-        )}
+        {state.references.items.map((ref, index) => (
+          <View key={index} style={styles.item}>
+            <SafeText style={styles.itemTitle}>
+              {ref.name || "Reference Name"}
+            </SafeText>
+            <SafeText style={styles.itemSubtitle}>
+              {(ref.title && ref.title.trim()) || "Title"} at{" "}
+              {(ref.company && ref.company.trim()) || "Company"}
+            </SafeText>
+            {ref.email && (
+              <SafeText style={styles.description}>{ref.email}</SafeText>
+            )}
+            {ref.phone && (
+              <SafeText style={styles.description}>{ref.phone}</SafeText>
+            )}
+          </View>
+        ))}
       </View>
     );
   };

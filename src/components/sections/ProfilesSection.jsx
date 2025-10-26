@@ -8,35 +8,30 @@ const ProfilesSection = () => {
 
   const handleAddProfile = () => {
     dispatch({
-      type: "UPDATE_SECTION",
+      type: "ADD_ITEM",
       section: "profiles",
-      data: [
-        ...state.profiles,
-        {
-          network: "",
-          username: "",
-          url: "",
-        },
-      ],
+      item: {
+        network: "",
+        username: "",
+        url: "",
+      },
     })
   }
 
   const handleRemoveProfile = (index) => {
-    const newProfiles = state.profiles.filter((_, i) => i !== index)
     dispatch({
-      type: "UPDATE_SECTION",
+      type: "REMOVE_ITEM",
       section: "profiles",
-      data: newProfiles,
+      index,
     })
   }
 
   const handleProfileChange = (index, field, value) => {
-    const newProfiles = [...state.profiles]
-    newProfiles[index] = { ...newProfiles[index], [field]: value }
     dispatch({
-      type: "UPDATE_SECTION",
+      type: "UPDATE_ITEM",
       section: "profiles",
-      data: newProfiles,
+      index,
+      data: { [field]: value },
     })
   }
 
@@ -52,7 +47,7 @@ const ProfilesSection = () => {
 
       {/* Profiles List */}
       <div className="space-y-4">
-        {state.profiles.map((profile, index) => (
+        {(state.profiles || []).map((profile, index) => (
           <div
             key={index}
             className="p-6 bg-[#0a0a0a] rounded-xl border border-gray-800 space-y-5"

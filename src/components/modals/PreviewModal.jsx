@@ -4,7 +4,7 @@ import { Download, X, AlertCircle, FileText } from 'lucide-react';
 import ResumePDF from '../pdf/ResumePDF';
 import { useResume } from '../../contexts/ResumeContext';
 
-const MemoizedPDFViewer = memo(({ data }) => {
+const MemoizedPDFViewer = memo(({ data, templateId }) => {
   
   try {
     return (
@@ -13,7 +13,7 @@ const MemoizedPDFViewer = memo(({ data }) => {
         height="100%" 
         className="w-full h-full rounded-lg"
       >
-        <ResumePDF data={data} />
+        <ResumePDF data={data} templateId={templateId} />
       </PDFViewer>
     );
   } catch (err) {
@@ -65,7 +65,7 @@ const PreviewModal = ({ isOpen, onClose }) => {
           
           <div className="flex items-center gap-2">
             <PDFDownloadLink
-              document={<ResumePDF data={pdfData} />}
+              document={<ResumePDF data={pdfData} templateId={state.selectedTemplate} />}
               fileName={`${state.basics?.fullName?.replace(/\s+/g, '_') || 'resume'}.pdf`}
               className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/20"
             >
@@ -89,14 +89,14 @@ const PreviewModal = ({ isOpen, onClose }) => {
         {/* PDF Viewer */}
         <div className="flex-1 p-4 sm:p-6 bg-gray-900/30 overflow-hidden">
           <div className="w-full h-full rounded-lg overflow-hidden shadow-2xl">
-            <MemoizedPDFViewer data={pdfData} />
+            <MemoizedPDFViewer data={pdfData} templateId={state.selectedTemplate} />
           </div>
         </div>
 
         {/* Mobile Download Button */}
         <div className="sm:hidden p-4 border-t border-gray-800 bg-[#0a0a0a]">
           <PDFDownloadLink
-            document={<ResumePDF data={pdfData} />}
+            document={<ResumePDF data={pdfData} templateId={state.selectedTemplate} />}
             fileName={`${state.basics?.fullName?.replace(/\s+/g, '_') || 'resume'}.pdf`}
             className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 active:from-orange-600 active:to-orange-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/20"
           >
