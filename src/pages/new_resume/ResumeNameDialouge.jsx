@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { HiXMark } from "react-icons/hi2";
 
-const ResumeNameDialog = ({ isOpen, onClose, onConfirm }) => {
+const ResumeNameDialog = ({ isOpen, onClose, onConfirm, isLoading = false }) => {
   const [resumeName, setResumeName] = useState("");
   const [error, setError] = useState("");
   const inputRef = useRef(null);
@@ -15,7 +15,7 @@ const ResumeNameDialog = ({ isOpen, onClose, onConfirm }) => {
     }
   }, [isOpen]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const trimmedName = resumeName.trim();
 
@@ -29,9 +29,7 @@ const ResumeNameDialog = ({ isOpen, onClose, onConfirm }) => {
       return;
     }
 
-    onConfirm(trimmedName);
-    setResumeName("");
-    setError("");
+    await onConfirm(trimmedName);
   };
 
   const handleKeyDown = (e) => {
@@ -101,16 +99,24 @@ const ResumeNameDialog = ({ isOpen, onClose, onConfirm }) => {
             <button
               type="button"
               onClick={onClose}
-              className="h-10 px-5 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all"
+              disabled={isLoading}
+              className="h-10 px-5 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={!resumeName.trim()}
-              className="h-10 px-6 text-sm font-medium bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-orange-500 disabled:hover:to-orange-600"
+              disabled={!resumeName.trim() || isLoading}
+              className="h-10 px-6 text-sm font-medium bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-orange-500 disabled:hover:to-orange-600 flex items-center gap-2"
             >
-              Create Resume
+              {isLoading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Creating...</span>
+                </>
+              ) : (
+                <span>Create Resume</span>
+              )}
             </button>
           </div>
         </form>

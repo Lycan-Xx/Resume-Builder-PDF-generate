@@ -67,6 +67,7 @@ const ResumeBuilder = () => {
   const [activeSection, setActiveSection] = useState("basics");
   const [activeTab, setActiveTab] = useState("content");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   
   // Debounced state for PDF rendering (updates 800ms after last change)
   const [debouncedState, setDebouncedState] = useState(state);
@@ -162,12 +163,28 @@ const ResumeBuilder = () => {
 
       {/* Mobile Preview Button - Opens Modal */}
       <button
-        onClick={() => setShowPreviewModal(true)}
-        className="lg:hidden fixed bottom-6 right-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-4 rounded-full shadow-xl transition-all duration-300 z-50 flex items-center gap-2 hover:scale-105 active:scale-95"
+        onClick={() => {
+          setIsPreviewLoading(true);
+          setTimeout(() => {
+            setShowPreviewModal(true);
+            setIsPreviewLoading(false);
+          }, 300);
+        }}
+        disabled={isPreviewLoading}
+        className="lg:hidden fixed bottom-6 right-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-4 rounded-full shadow-xl transition-all duration-300 z-50 flex items-center gap-2 hover:scale-105 active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed"
         aria-label="Preview Resume"
       >
-        <HiEye className="w-5 h-5" />
-        <span className="font-medium text-sm">Preview</span>
+        {isPreviewLoading ? (
+          <>
+            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span className="font-medium text-sm">Loading...</span>
+          </>
+        ) : (
+          <>
+            <HiEye className="w-5 h-5" />
+            <span className="font-medium text-sm">Preview</span>
+          </>
+        )}
       </button>
 
       {/* Preview Modal for Mobile */}

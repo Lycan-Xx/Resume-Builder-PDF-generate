@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Download, CheckCircle, ArrowLeft, Eye } from "lucide-react";
+import { Download, CheckCircle, ArrowLeft, Eye, Share2 } from "lucide-react";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { useResume } from "../contexts/ResumeContext";
 import { useAuth } from "../contexts/AuthContext";
 import ResumePDF from "../components/pdf/ResumePDF";
+import ThankYouModal from "../components/modals/ThankYouModal";
 
 const MinimalExportPage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,10 @@ const MinimalExportPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [downloadReady, setDownloadReady] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
+  const downloadLinkRef = useRef(null);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -20,7 +25,10 @@ const MinimalExportPage = () => {
   }, []);
 
   const handleBack = () => {
-    navigate("/builder");
+    setIsNavigating(true);
+    setTimeout(() => {
+      navigate("/builder");
+    }, 300);
   };
 
   const pdfData = { state };
@@ -28,8 +36,81 @@ const MinimalExportPage = () => {
     state.basics?.fullName?.replace(/\s+/g, "_") || "Resume"
   }.pdf`;
 
+  const handlePreviewToggle = () => {
+    if (!showPreview) {
+      setIsPreviewLoading(true);
+      setTimeout(() => {
+        setShowPreview(true);
+        setIsPreviewLoading(false);
+      }, 500);
+    } else {
+      setShowPreview(false);
+    }
+  };
+
+  const handleDownloadClick = () => {
+    setShowThankYouModal(true);
+  };
+
+  const handleModalDownload = () => {
+    // Trigger the hidden download link
+    if (downloadLinkRef.current) {
+      downloadLinkRef.current.click();
+    }
+    setShowThankYouModal(false);
+  };
+
+  const handleShare = async () => {
+    const shareUrl = "https://resumeforge.pages.dev/";
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "ResumeForge - Professional Resume Builder",
+          text: "Check out ResumeForge! Create professional resumes easily.",
+          url: shareUrl,
+        });
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.log("Error sharing:", error);
+          // Fallback: copy link to clipboard
+          navigator.clipboard.writeText(shareUrl);
+          alert("Link copied to clipboard!");
+        }
+      }
+    } else {
+      // Fallback: copy link to clipboard
+      navigator.clipboard.writeText(shareUrl);
+      alert("Link copied to clipboard!");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center relative overflow-hidden">
+    <>
+      {/* Hidden Download Link */}
+      <PDFDownloadLink
+        ref={downloadLinkRef}
+        document={
+          <ResumePDF
+            data={pdfData}
+            templateId={state.selectedTemplate}
+          />
+        }
+        fileName={fileName}
+        style={{ display: 'none' }}
+      >
+        {({ loading }) => (loading ? 'Loading...' : 'Download')}
+      </PDFDownloadLink>
+
+      {/* Thank You Modal */}
+      <ThankYouModal
+        isOpen={showThankYouModal}
+        onClose={() => setShowThankYouModal(false)}
+        onDownload={handleModalDownload}
+        onShare={handleShare}
+      />
+
+      <div className="min-h-screen bg-black text-white flex items-center justify-center relative overflow-hidden">
       {/* Background image from Unsplash */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -55,10 +136,20 @@ const MinimalExportPage = () => {
       {/* Back Button */}
       <button
         onClick={handleBack}
-        className="absolute top-8 left-8 z-50 flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
+        disabled={isNavigating}
+        className="absolute top-8 left-8 z-50 flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-        <span className="hidden sm:inline">Back</span>
+        {isNavigating ? (
+          <>
+            <div className="w-5 h-5 border-2 border-zinc-400/30 border-t-zinc-400 rounded-full animate-spin" />
+            <span className="hidden sm:inline">Going back...</span>
+          </>
+        ) : (
+          <>
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <span className="hidden sm:inline">Back</span>
+          </>
+        )}
       </button>
 
       {/* Sign In/Welcome Button - Top Right */}
@@ -159,39 +250,38 @@ const MinimalExportPage = () => {
           <div className="mb-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
             {downloadReady ? (
               <>
-                <PDFDownloadLink
-                  document={
-                    <ResumePDF
-                      data={pdfData}
-                      templateId={state.selectedTemplate}
-                    />
-                  }
-                  fileName={fileName}
+                <button
+                  onClick={handleDownloadClick}
                   className="group h-12 px-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full transition-all duration-200 flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-orange-500/30"
                 >
-                  {({ loading }) => (
-                    <>
-                      {loading ? (
-                        <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                          <span>Preparing...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
-                          <span>Download PDF</span>
-                        </>
-                      )}
-                    </>
-                  )}
-                </PDFDownloadLink>
+                  <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+                  <span>Download PDF</span>
+                </button>
 
                 <button
-                  onClick={() => setShowPreview(!showPreview)}
+                  onClick={handlePreviewToggle}
+                  disabled={isPreviewLoading}
+                  className="group h-12 px-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full transition-all duration-200 flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isPreviewLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <span>Loading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Eye className="w-5 h-5" />
+                      <span>{showPreview ? "Hide" : "Preview"}</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={handleShare}
                   className="group h-12 px-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full transition-all duration-200 flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-orange-500/30"
                 >
-                  <Eye className="w-5 h-5" />
-                  <span>{showPreview ? "Hide" : "Preview"}</span>
+                  <Share2 className="w-5 h-5" />
+                  <span>Share</span>
                 </button>
               </>
             ) : (
@@ -214,7 +304,7 @@ const MinimalExportPage = () => {
         {showPreview && downloadReady && (
           <div className="relative w-full max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="bg-zinc-900/50 backdrop-blur-sm rounded-xl border border-zinc-800/50 p-4 shadow-2xl">
-              <div className="w-full h-[700px] rounded-lg overflow-hidden">
+              <div className="w-full h-[500px] md:h-[600px] lg:h-[700px] rounded-lg overflow-hidden">
                 <PDFViewer width="100%" height="100%" className="w-full h-full">
                   <ResumePDF
                     data={pdfData}
@@ -346,6 +436,7 @@ const MinimalExportPage = () => {
         </a>
       </div>
     </div>
+    </>
   );
 };
 

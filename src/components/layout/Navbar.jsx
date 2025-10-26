@@ -1,30 +1,49 @@
 "use client";
-import { HiSparkles, HiUser } from "react-icons/hi2";
+import { HiUser, HiArrowLeft, HiHome } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
-import { useResume } from "../../contexts/ResumeContext";
 import logo from "../../assets/logo.svg";
 
 const Navbar = () => {
-  const { state } = useResume();
   const navigate = useNavigate();
 
   return (
-    <nav className="bg-[#0a0a0a] border-b border-gray-800 px-6 py-4">
+    <nav className="bg-[#0a0a0a] border-b border-gray-800 px-4 md:px-6 py-4">
       <div className="flex items-center justify-between">
-        {/* Logo - Clickable to Homepage */}
-        <button
-          onClick={() => navigate("/")}
-          className="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200"
-        >
-          <img
-            src={logo}
-            alt="ResumeForge Logo"
-            className="w-12 h-12 object-contain rounded-sm"
-          />
-          <div className="hidden md:block">
-            <h1 className="text-2xl font-bold text-white">ResumeForge</h1>
+        {/* Left Side - Logo + Homepage Button */}
+        <div className="flex items-center gap-3">
+          {/* Mobile: Logo + Home in Border */}
+          <button
+            onClick={() => navigate("/")}
+            className="md:hidden flex items-center gap-2 px-3 py-2 border border-gray-700 rounded-lg hover:border-orange-500 hover:bg-gray-800/50 transition-all duration-200"
+          >
+            <img
+              src={logo}
+              alt="ResumeForge Logo"
+              className="w-8 h-8 object-contain rounded-sm"
+            />
+            <span className="text-sm font-medium text-white">Homepage</span>
+          </button>
+
+          {/* Desktop: Logo + Title + Homepage Button */}
+          <div className="hidden md:flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <img
+                src={logo}
+                alt="ResumeForge Logo"
+                className="w-12 h-12 object-contain rounded-sm"
+              />
+              <h1 className="text-2xl font-bold text-white">ResumeForge</h1>
+            </div>
+            
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center gap-2 px-4 py-2 border border-gray-700 rounded-lg hover:border-orange-500 hover:bg-gray-800/50 transition-all duration-200"
+            >
+              <HiArrowLeft className="w-4 h-4 text-gray-400" />
+              <span className="text-sm font-medium text-white">Homepage</span>
+            </button>
           </div>
-        </button>
+        </div>
 
         {/* Actions */}
         <div className="flex items-center gap-3">

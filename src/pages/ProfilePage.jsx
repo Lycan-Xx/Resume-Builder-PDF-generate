@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User, Mail, Shield, Trash2, MessageSquare } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import DeleteAccountDialog from "../components/modals/DeleteAccountDialog";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ const ProfilePage = () => {
     username: "",
     email: "",
   });
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   // Populate profile data from authenticated user
   useEffect(() => {
@@ -39,6 +42,18 @@ const ProfilePage = () => {
     } catch (error) {
       console.error("Sign out error:", error);
     }
+  };
+
+  const handleSendFeedback = () => {
+    const subject = encodeURIComponent("ResumeForge Feedback");
+    const body = encodeURIComponent(
+      `Hi ResumeForge Team,\n\nI would like to share the following feedback:\n\n[Please write your feedback here]\n\nBest regards,\n${profileData.fullName || 'User'}`
+    );
+    window.location.href = `mailto:msbello@cc.cc?subject=${subject}&body=${body}`;
+  };
+
+  const handleDeleteAccount = () => {
+    setShowDeleteDialog(true);
   };
 
   if (loading) {
@@ -75,11 +90,24 @@ const ProfilePage = () => {
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8">
         {/* Back Button */}
         <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-8"
+          onClick={() => {
+            setIsNavigating(true);
+            setTimeout(() => navigate(-1), 300);
+          }}
+          disabled={isNavigating}
+          className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-8 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back</span>
+          {isNavigating ? (
+            <>
+              <div className="w-5 h-5 border-2 border-zinc-400/30 border-t-zinc-400 rounded-full animate-spin" />
+              <span>Going back...</span>
+            </>
+          ) : (
+            <>
+              <ArrowLeft className="w-5 h-5" />
+              <span>Back</span>
+            </>
+          )}
         </button>
 
         {/* Page Title */}
@@ -183,7 +211,10 @@ const ProfilePage = () => {
               <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:text-gray-400 rotate-180 transition-colors" />
             </a>
 
-            <button className="w-full flex items-center justify-between p-4 bg-black border border-red-900/50 rounded-lg hover:border-red-800 transition-all group">
+            <button 
+              onClick={handleDeleteAccount}
+              className="w-full flex items-center justify-between p-4 bg-black border border-red-900/50 rounded-lg hover:border-red-800 transition-all group"
+            >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
                   <Trash2 className="w-5 h-5 text-red-400" />
@@ -202,7 +233,10 @@ const ProfilePage = () => {
         <div className="bg-[#0a0a0a] border border-gray-800 rounded-2xl p-6 sm:p-8">
           <h2 className="text-xl font-semibold text-white mb-6">Support & Feedback</h2>
 
-          <button className="w-full flex items-center justify-between p-4 bg-black border border-gray-800 rounded-lg hover:border-gray-700 transition-all group">
+          <button 
+            onClick={handleSendFeedback}
+            className="w-full flex items-center justify-between p-4 bg-black border border-gray-800 rounded-lg hover:border-gray-700 transition-all group"
+          >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
                 <MessageSquare className="w-5 h-5 text-green-400" />
@@ -216,6 +250,12 @@ const ProfilePage = () => {
           </button>
         </div>
       </div>
+
+      {/* Delete Account Dialog */}
+      <DeleteAccountDialog 
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+      />
     </div>
   );
 };

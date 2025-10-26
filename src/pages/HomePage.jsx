@@ -15,6 +15,7 @@ const MinimalResumeLanding = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [limitDialogOpen, setLimitDialogOpen] = useState(false);
+  const [isCreatingResume, setIsCreatingResume] = useState(false);
   const [resumes, setResumes] = useState([]);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncError, setSyncError] = useState(null);
@@ -212,8 +213,11 @@ const MinimalResumeLanding = () => {
   };
 
   const handleConfirmResumeName = async (name) => {
-    // Create empty initial state for new resume
-    const emptyResumeData = {
+    setIsCreatingResume(true);
+    
+    try {
+      // Create empty initial state for new resume
+      const emptyResumeData = {
       basics: {
         fullName: "",
         headline: "",
@@ -298,27 +302,32 @@ const MinimalResumeLanding = () => {
     // Clear the resumeData cache and set new empty data
     localStorage.setItem("resumeData", JSON.stringify(emptyResumeData));
 
-    // Sync to Firestore if user is logged in
-    if (user) {
-      try {
-        const synced = await firestoreService.saveResume(user.uid, newResume);
-        // Update with synced data
-        const resumeIndex = updatedResumes.findIndex(r => r.id === newResume.id);
-        if (resumeIndex !== -1) {
-          updatedResumes[resumeIndex] = synced;
-          saveResumes(updatedResumes);
+      // Sync to Firestore if user is logged in
+      if (user) {
+        try {
+          const synced = await firestoreService.saveResume(user.uid, newResume);
+          // Update with synced data
+          const resumeIndex = updatedResumes.findIndex(r => r.id === newResume.id);
+          if (resumeIndex !== -1) {
+            updatedResumes[resumeIndex] = synced;
+            saveResumes(updatedResumes);
+          }
+        } catch (error) {
+          console.error("Error saving resume to Firestore:", error);
+          // Continue anyway - will sync later
         }
-      } catch (error) {
-        console.error("Error saving resume to Firestore:", error);
-        // Continue anyway - will sync later
       }
+
+      // Store the active resume ID
+      localStorage.setItem("activeResumeId", newResume.id);
+
+      setIsDialogOpen(false);
+      navigate("/builder");
+    } catch (error) {
+      console.error("Error creating resume:", error);
+    } finally {
+      setIsCreatingResume(false);
     }
-
-    // Store the active resume ID
-    localStorage.setItem("activeResumeId", newResume.id);
-
-    setIsDialogOpen(false);
-    navigate("/builder");
   };
 
   const handleSelectResume = (resumeId) => {
@@ -389,6 +398,7 @@ const MinimalResumeLanding = () => {
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onConfirm={handleConfirmResumeName}
+        isLoading={isCreatingResume}
       />
 
       {/* Resume Limit Dialog */}
