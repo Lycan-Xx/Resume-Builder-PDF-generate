@@ -2,6 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getAnalytics, isSupported } from 'firebase/analytics';
 
 // Your Firebase configuration
 // Replace these with your actual Firebase config values
@@ -31,5 +32,20 @@ const app = isConfigured ? initializeApp(firebaseConfig) : null;
 export const auth = app ? getAuth(app) : null;
 export const googleProvider = app ? new GoogleAuthProvider() : null;
 export const db = app ? getFirestore(app) : null;
+
+// Initialize Analytics (only in browser and if supported)
+let analyticsInstance = null;
+if (app && typeof window !== 'undefined') {
+  isSupported().then(supported => {
+    if (supported) {
+      analyticsInstance = getAnalytics(app);
+      console.log('✅ Firebase Analytics initialized');
+    }
+  }).catch(err => {
+    console.warn('Analytics not supported:', err);
+  });
+}
+
+export const analytics = analyticsInstance;
 
 export default app;
