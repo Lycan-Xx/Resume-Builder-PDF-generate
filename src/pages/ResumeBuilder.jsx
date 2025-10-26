@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, memo, useMemo } from "react";
+import { useState, memo, useMemo, useEffect } from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import { useResume } from "../contexts/ResumeContext";
 import { HiDocumentText, HiEye } from "react-icons/hi2";
@@ -46,7 +46,7 @@ const sectionComponents = {
   references: ReferencesSection,
 };
 
-// Memoized PDF Viewer to prevent re-rendering on every keystroke
+// Memoized PDF Viewer with deep comparison to prevent unnecessary re-renders
 const MemoizedPDFViewer = memo(({ state, templateId }) => {
   const pdfData = useMemo(() => ({ state }), [state]);
 
@@ -55,6 +55,10 @@ const MemoizedPDFViewer = memo(({ state, templateId }) => {
       <ResumePDF data={pdfData} templateId={templateId} />
     </PDFViewer>
   );
+}, (prevProps, nextProps) => {
+  // Custom comparison: only re-render if state or template actually changed
+  return JSON.stringify(prevProps.state) === JSON.stringify(nextProps.state) 
+    && prevProps.templateId === nextProps.templateId;
 });
 
 const ResumeBuilder = () => {
@@ -62,6 +66,17 @@ const ResumeBuilder = () => {
   const [activeSection, setActiveSection] = useState("basics");
   const [activeTab, setActiveTab] = useState("content");
   const [showPreview, setShowPreview] = useState(false);
+  
+  // Debounced state for PDF rendering (updates 800ms after last change)
+  const [debouncedState, setDebouncedState] = useState(state);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedState(state);
+    }, 800); // 800ms debounce - feels instant but reduces renders significantly
+
+    return () => clearTimeout(timer);
+  }, [state]);
 
   const ActiveSectionComponent = sectionComponents[activeSection];
 
@@ -138,8 +153,15 @@ const ResumeBuilder = () => {
           } w-full lg:w-1/2 bg-[#0a0a0a] border-t lg:border-t-0 lg:border-l border-gray-800`}
         >
           <div className="h-full p-6">
-            <div className="h-full bg-[#111111] rounded-xl overflow-hidden border border-gray-800">
-              <MemoizedPDFViewer state={state} templateId={state.selectedTemplate} />
+            <div className="h-full bg-[#111111] rounded-xl overflow-hidden border border-gray-800 relative">
+              {/* Loading indicator when debouncing */}
+              {JSON.stringify(state) !== JSON.stringify(debouncedState) && (
+                <div className="absolute top-4 right-4 z-10 bg-orange-500/90 text-white text-xs px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                  Updating...
+                </div>
+              )}
+              <MemoizedPDFViewer state={debouncedState} templateId={state.selectedTemplate} />
             </div>
           </div>
         </div>
