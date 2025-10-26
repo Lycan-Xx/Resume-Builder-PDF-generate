@@ -18,6 +18,52 @@ const SafeText = ({ children, style, ...props }) => {
   );
 };
 
+// Helper function to calculate duration for PDF
+const calculateDuration = (startDate, endDate, isCurrent = false) => {
+  if (!startDate) return '';
+  
+  const [startYear, startMonth] = startDate.split('-').map(Number);
+  
+  let endYear, endMonth;
+  if (isCurrent || !endDate) {
+    const now = new Date();
+    endYear = now.getFullYear();
+    endMonth = now.getMonth() + 1;
+  } else {
+    [endYear, endMonth] = endDate.split('-').map(Number);
+  }
+  
+  if (!startYear || !startMonth || !endYear || !endMonth) return '';
+  
+  let totalMonths = (endYear - startYear) * 12 + (endMonth - startMonth);
+  
+  if (totalMonths === 0) return '1 month';
+  if (totalMonths < 0) return '';
+  
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  
+  if (years === 0) {
+    return `${months} ${months === 1 ? 'month' : 'months'}`;
+  }
+  
+  if (months === 0) {
+    return `${years} ${years === 1 ? 'year' : 'years'}`;
+  }
+  
+  return `${years} ${years === 1 ? 'year' : 'years'} ${months} ${months === 1 ? 'month' : 'months'}`;
+};
+
+// Helper to format month-year
+const formatMonthYear = (dateString) => {
+  if (!dateString) return '';
+  const [year, month] = dateString.split('-');
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const monthIndex = parseInt(month, 10) - 1;
+  if (monthIndex < 0 || monthIndex > 11 || !year) return dateString;
+  return `${monthNames[monthIndex]} ${year}`;
+};
+
 export default function ResumePDF({ data, templateId = "professional-red" }) {
   const { state } = data;
   const template = getTemplate(templateId);
@@ -222,33 +268,37 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Professional Experience</Text>
-        {state.experience.map((exp, index) => (
-          <View key={index} style={styles.item}>
-            <View style={styles.itemHeader}>
-              <SafeText style={styles.itemTitle}>
-                {exp.position || "Position"}
-              </SafeText>
-              <SafeText style={styles.itemDate}>
-                {exp.startDate || "Start"} -{" "}
-                {exp.current ? "Present" : exp.endDate || "End"}
-              </SafeText>
-            </View>
-            <SafeText style={styles.itemSubtitle}>
-              {exp.company || "Company"}
-              {exp.location && exp.location.trim() ? ` • ${exp.location}` : ""}
-            </SafeText>
-            {exp.description && (
-              <SafeText style={styles.description}>{exp.description}</SafeText>
-            )}
-            {exp.achievements?.map((achievement, idx) =>
-              achievement && achievement.trim() ? (
-                <SafeText key={idx} style={styles.bulletPoint}>
-                  • {achievement}
+        {state.experience.map((exp, index) => {
+          const duration = calculateDuration(exp.startDate, exp.endDate, exp.current);
+          return (
+            <View key={index} style={styles.item}>
+              <View style={styles.itemHeader}>
+                <SafeText style={styles.itemTitle}>
+                  {exp.position || "Position"}
                 </SafeText>
-              ) : null
-            )}
-          </View>
-        ))}
+                <SafeText style={styles.itemDate}>
+                  {formatMonthYear(exp.startDate) || "Start"} -{" "}
+                  {exp.current ? "Present" : formatMonthYear(exp.endDate) || "End"}
+                  {duration && ` (${duration})`}
+                </SafeText>
+              </View>
+              <SafeText style={styles.itemSubtitle}>
+                {exp.company || "Company"}
+                {exp.location && exp.location.trim() ? ` • ${exp.location}` : ""}
+              </SafeText>
+              {exp.description && (
+                <SafeText style={styles.description}>{exp.description}</SafeText>
+              )}
+              {exp.achievements?.map((achievement, idx) =>
+                achievement && achievement.trim() ? (
+                  <SafeText key={idx} style={styles.bulletPoint}>
+                    • {achievement}
+                  </SafeText>
+                ) : null
+              )}
+            </View>
+          );
+        })}
       </View>
     );
   };
@@ -259,35 +309,44 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Education</Text>
-        {state.education.map((edu, index) => (
-          <View key={index} style={styles.item}>
-            <View style={styles.itemHeader}>
-              <SafeText style={styles.itemTitle}>
-                {edu.degree || "Degree"}
+        {state.education.map((edu, index) => {
+          const duration = calculateDuration(edu.startDate, edu.endDate, false);
+          return (
+            <View key={index} style={styles.item}>
+              <View style={styles.itemHeader}>
+                <SafeText style={styles.itemTitle}>
+                  {edu.degree || "Degree"}
+                </SafeText>
+                <SafeText style={styles.itemDate}>
+                  {formatMonthYear(edu.startDate) || "Start"} - {formatMonthYear(edu.endDate) || "End"}
+                  {duration && ` (${duration})`}
+                </SafeText>
+              </View>
+              <SafeText style={styles.itemSubtitle}>
+                {edu.institution || "Institution"}
+                {edu.location && edu.location.trim() ? ` • ${edu.location}` : ""}
               </SafeText>
-              <SafeText style={styles.itemDate}>
-                {edu.startDate || "Start"} - {edu.endDate || "End"}
-              </SafeText>
+              {edu.fieldOfStudy && (
+                <SafeText style={styles.description}>
+                  Field of Study: {edu.fieldOfStudy}
+                </SafeText>
+              )}
+              {edu.description && (
+                <SafeText style={styles.description}>
+                  {edu.description}
+                </SafeText>
+              )}
+              {edu.gpa && (
+                <SafeText style={styles.description}>GPA: {edu.gpa}</SafeText>
+              )}
+              {edu.honors && (
+                <SafeText style={styles.description}>
+                  Honors: {edu.honors}
+                </SafeText>
+              )}
             </View>
-            <SafeText style={styles.itemSubtitle}>
-              {edu.institution || "Institution"}
-              {edu.location && edu.location.trim() ? ` • ${edu.location}` : ""}
-            </SafeText>
-            {edu.fieldOfStudy && (
-              <SafeText style={styles.description}>
-                Field of Study: {edu.fieldOfStudy}
-              </SafeText>
-            )}
-            {edu.gpa && (
-              <SafeText style={styles.description}>GPA: {edu.gpa}</SafeText>
-            )}
-            {edu.honors && (
-              <SafeText style={styles.description}>
-                Honors: {edu.honors}
-              </SafeText>
-            )}
-          </View>
-        ))}
+          );
+        })}
       </View>
     );
   };
@@ -427,33 +486,46 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Projects</Text>
-        {state.projects.map((project, index) => (
-          <View key={index} style={styles.item}>
-            <View style={styles.itemHeader}>
-              <SafeText style={styles.itemTitle}>
-                {project.name || "Project Name"}
-              </SafeText>
-              <SafeText style={styles.itemDate}>
-                {project.startDate || "Start"} - {project.endDate || "End"}
-              </SafeText>
-            </View>
-            {project.url && (
-              <SafeText style={styles.itemSubtitle}>{project.url}</SafeText>
-            )}
-            {project.description && (
-              <SafeText style={styles.description}>
-                {project.description}
-              </SafeText>
-            )}
-            {project.highlights?.map((highlight, idx) =>
-              highlight && highlight.trim() ? (
-                <SafeText key={idx} style={styles.bulletPoint}>
-                  • {highlight}
+        {state.projects.map((project, index) => {
+          const duration = calculateDuration(project.startDate, project.endDate, project.current);
+          const hasDateRange = project.startDate && (project.endDate || project.current);
+          
+          return (
+            <View key={index} style={styles.item}>
+              <View style={styles.itemHeader}>
+                <SafeText style={styles.itemTitle}>
+                  {project.name || "Project Name"}
                 </SafeText>
-              ) : null
-            )}
-          </View>
-        ))}
+                {hasDateRange && (
+                  <SafeText style={styles.itemDate}>
+                    {formatMonthYear(project.startDate)} - {project.current ? "Present" : formatMonthYear(project.endDate)}
+                    {duration && ` (${duration})`}
+                  </SafeText>
+                )}
+              </View>
+              {project.url && (
+                <SafeText style={styles.itemSubtitle}>{project.url}</SafeText>
+              )}
+              {project.technologies && (
+                <SafeText style={styles.description}>
+                  Technologies: {project.technologies}
+                </SafeText>
+              )}
+              {project.description && (
+                <SafeText style={styles.description}>
+                  {project.description}
+                </SafeText>
+              )}
+              {project.highlights?.map((highlight, idx) =>
+                highlight && highlight.trim() ? (
+                  <SafeText key={idx} style={styles.bulletPoint}>
+                    • {highlight}
+                  </SafeText>
+                ) : null
+              )}
+            </View>
+          );
+        })}
       </View>
     );
   };
@@ -543,22 +615,26 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Volunteering</Text>
-        {state.volunteering.map((vol, index) => (
-          <View key={index} style={styles.item}>
-            <View style={styles.itemHeader}>
-              <SafeText style={styles.itemTitle}>{vol.role || "Role"}</SafeText>
-              <SafeText style={styles.itemDate}>
-                {vol.startDate || "Start"} - {vol.endDate || "End"}
+        {state.volunteering.map((vol, index) => {
+          const duration = calculateDuration(vol.startDate, vol.endDate, vol.current);
+          return (
+            <View key={index} style={styles.item}>
+              <View style={styles.itemHeader}>
+                <SafeText style={styles.itemTitle}>{vol.role || "Role"}</SafeText>
+                <SafeText style={styles.itemDate}>
+                  {formatMonthYear(vol.startDate) || "Start"} - {vol.current ? "Present" : formatMonthYear(vol.endDate) || "End"}
+                  {duration && ` (${duration})`}
+                </SafeText>
+              </View>
+              <SafeText style={styles.itemSubtitle}>
+                {vol.organization || "Organization"}
               </SafeText>
+              {vol.description && (
+                <SafeText style={styles.description}>{vol.description}</SafeText>
+              )}
             </View>
-            <SafeText style={styles.itemSubtitle}>
-              {vol.organization || "Organization"}
-            </SafeText>
-            {vol.description && (
-              <SafeText style={styles.description}>{vol.description}</SafeText>
-            )}
-          </View>
-        ))}
+          );
+        })}
       </View>
     );
   };
@@ -571,13 +647,24 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
         <Text style={styles.sectionTitle}>References</Text>
         {state.references.items.map((ref, index) => (
           <View key={index} style={styles.item}>
-            <SafeText style={styles.itemTitle}>
-              {ref.name || "Reference Name"}
-            </SafeText>
+            {ref.email ? (
+              <Text style={styles.contactLink} src={`mailto:${ref.email}`}>
+                {ref.name || "Reference Name"}
+              </Text>
+            ) : (
+              <SafeText style={styles.itemTitle}>
+                {ref.name || "Reference Name"}
+              </SafeText>
+            )}
             <SafeText style={styles.itemSubtitle}>
               {(ref.title && ref.title.trim()) || "Title"} at{" "}
               {(ref.company && ref.company.trim()) || "Company"}
             </SafeText>
+            {ref.relationship && (
+              <SafeText style={styles.description}>
+                Relationship: {ref.relationship}
+              </SafeText>
+            )}
             {ref.email && (
               <SafeText style={styles.description}>{ref.email}</SafeText>
             )}
