@@ -4,6 +4,7 @@ import { useState, memo, useMemo, useEffect } from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import { useResume } from "../contexts/ResumeContext";
 import { HiDocumentText, HiEye } from "react-icons/hi2";
+import PreviewModal from "../components/modals/PreviewModal";
 
 // Layout Components
 import Navbar from "../components/layout/Navbar";
@@ -65,7 +66,7 @@ const ResumeBuilder = () => {
   const { state } = useResume();
   const [activeSection, setActiveSection] = useState("basics");
   const [activeTab, setActiveTab] = useState("content");
-  const [showPreview, setShowPreview] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
   
   // Debounced state for PDF rendering (updates 800ms after last change)
   const [debouncedState, setDebouncedState] = useState(state);
@@ -129,12 +130,8 @@ const ResumeBuilder = () => {
       </div>
 
       <div className="flex flex-col lg:flex-row h-[calc(100vh-200px)]">
-        {/* Left Panel */}
-        <div
-          className={`${
-            showPreview ? "hidden lg:block" : "block"
-          } w-full lg:w-1/2 overflow-y-auto bg-[#0a0a0a]`}
-        >
+        {/* Left Panel - Always visible on mobile, half width on desktop */}
+        <div className="w-full lg:w-1/2 overflow-y-auto bg-[#0a0a0a]">
           <div className="p-6">
             <div className="bg-[#111111] rounded-xl border border-gray-800 p-6">
               {activeTab === "content" ? (
@@ -146,12 +143,8 @@ const ResumeBuilder = () => {
           </div>
         </div>
 
-        {/* Right Panel - PDF Preview */}
-        <div
-          className={`${
-            showPreview ? "block" : "hidden lg:block"
-          } w-full lg:w-1/2 bg-[#0a0a0a] border-t lg:border-t-0 lg:border-l border-gray-800`}
-        >
+        {/* Right Panel - PDF Preview (Desktop only) */}
+        <div className="hidden lg:block w-1/2 bg-[#0a0a0a] border-l border-gray-800">
           <div className="h-full p-6">
             <div className="h-full bg-[#111111] rounded-xl overflow-hidden border border-gray-800 relative">
               {/* Loading indicator when debouncing */}
@@ -167,18 +160,21 @@ const ResumeBuilder = () => {
         </div>
       </div>
 
-      {/* Mobile Preview Toggle */}
+      {/* Mobile Preview Button - Opens Modal */}
       <button
-        onClick={() => setShowPreview(!showPreview)}
-        className="lg:hidden fixed bottom-6 right-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white p-4 rounded-full shadow-xl transition-all duration-300 z-50 min-h-[56px] min-w-[56px] flex items-center justify-center hover:scale-105 active:scale-95"
-        aria-label={showPreview ? "Switch to form view" : "Switch to preview"}
+        onClick={() => setShowPreviewModal(true)}
+        className="lg:hidden fixed bottom-6 right-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-4 rounded-full shadow-xl transition-all duration-300 z-50 flex items-center gap-2 hover:scale-105 active:scale-95"
+        aria-label="Preview Resume"
       >
-        {showPreview ? (
-          <HiDocumentText className="w-6 h-6" />
-        ) : (
-          <HiEye className="w-6 h-6" />
-        )}
+        <HiEye className="w-5 h-5" />
+        <span className="font-medium text-sm">Preview</span>
       </button>
+
+      {/* Preview Modal for Mobile */}
+      <PreviewModal 
+        isOpen={showPreviewModal} 
+        onClose={() => setShowPreviewModal(false)} 
+      />
     </div>
   );
 };
