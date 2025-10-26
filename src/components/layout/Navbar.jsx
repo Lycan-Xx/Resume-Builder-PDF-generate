@@ -37,7 +37,7 @@ const Navbar = () => {
           {/* Profile Button Mobile */}
           <button
             onClick={() => navigate("/profile")}
-            className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-200"
+            className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg border-2 border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800 hover:border-orange-500 transition-all duration-200"
             title="Profile"
           >
             <HiUser className="w-5 h-5" />
