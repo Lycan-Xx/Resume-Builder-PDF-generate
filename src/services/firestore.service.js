@@ -83,16 +83,20 @@ class FirestoreService {
     }
 
     try {
-      // Check resume limit for new resumes
-      if (!resume.firestoreId) {
+      const resumeId = resume.firestoreId || resume.id;
+      const resumeRef = doc(db, RESUMES_COLLECTION, resumeId);
+
+      // Check if resume already exists in Firestore
+      const existingDoc = await getDoc(resumeRef);
+      const isUpdate = existingDoc.exists();
+
+      // Only check resume limit for new resumes (not updates)
+      if (!isUpdate) {
         const userResumes = await this.getUserResumes(userId);
         if (userResumes.length >= MAX_FREE_RESUMES) {
           throw new Error(`You've reached the maximum of ${MAX_FREE_RESUMES} free resumes. Please delete one to create a new resume.`);
         }
       }
-
-      const resumeId = resume.firestoreId || resume.id;
-      const resumeRef = doc(db, RESUMES_COLLECTION, resumeId);
 
       const resumeData = {
         userId,
