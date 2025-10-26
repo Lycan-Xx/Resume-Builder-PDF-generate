@@ -64,14 +64,6 @@ const ReferencesSection = () => {
         </button>
       </div>
 
-      {/* Available upon request notice */}
-      <div className="p-4 bg-[#0a0a0a] border border-gray-800 rounded-lg">
-        <div className="flex items-center gap-3">
-          <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-          <p className="text-sm text-gray-400">Available upon request</p>
-        </div>
-      </div>
-
       {state.references.items.length === 0 ? (
         <div className="text-center py-12 bg-[#0a0a0a] rounded-lg border border-dashed border-gray-800">
           <div className="w-12 h-12 rounded-full bg-gray-800/50 flex items-center justify-center mx-auto mb-3">
