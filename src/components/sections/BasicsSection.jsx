@@ -38,23 +38,23 @@ const BasicsSection = () => {
         <h2 className="text-xl font-semibold text-white">Basic Information</h2>
       </div>
 
-      {/* Profile Picture */}
-      <div className="flex items-center gap-5 p-4 bg-[#0a0a0a] rounded-lg border border-gray-800/50">
+      {/* Profile Picture - Disabled */}
+      <div className="relative flex items-center gap-5 p-4 bg-[#0a0a0a] rounded-lg border border-gray-800/50 opacity-60">
         <div className="relative group">
-          <div className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden border-2 border-gray-800 bg-[#1a1a1a] transition-all group-hover:border-orange-500/50">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden border-2 border-gray-700 bg-[#1a1a1a]">
             {basics.profilePicture ? (
               <img
                 src={basics.profilePicture || "/placeholder.svg"}
                 alt="Profile"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover grayscale"
               />
             ) : (
               <HiUser className="w-8 h-8 text-gray-600" />
             )}
           </div>
           <button
-            onClick={() => fileInputRef.current?.click()}
-            className="absolute -bottom-0.5 -right-0.5 p-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full shadow-lg transition-all duration-200 hover:scale-105"
+            disabled
+            className="absolute -bottom-0.5 -right-0.5 p-2 bg-gray-700 text-gray-500 rounded-full shadow-lg cursor-not-allowed"
           >
             <HiCamera className="w-3.5 h-3.5" />
           </button>
@@ -64,11 +64,17 @@ const BasicsSection = () => {
             accept="image/*"
             onChange={handleProfilePictureChange}
             className="hidden"
+            disabled
           />
         </div>
         <div>
-          <h3 className="text-sm font-medium text-white mb-0.5">Profile Picture</h3>
-          <p className="text-xs text-gray-500">Upload a professional headshot</p>
+          <h3 className="text-sm font-medium text-gray-400 mb-0.5">Profile Picture</h3>
+          <p className="text-xs text-gray-600">Upload a professional headshot</p>
+        </div>
+        
+        {/* Coming Soon Badge */}
+        <div className="absolute top-2 right-2 px-3 py-1 bg-orange-500/20 border border-orange-500/30 rounded-full">
+          <span className="text-xs font-medium text-orange-400">Coming Soon</span>
         </div>
       </div>
 
