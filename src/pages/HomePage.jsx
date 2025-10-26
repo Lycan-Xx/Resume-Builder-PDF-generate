@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import logo from "../assets/logo.png";
+import { signInWithGoogle } from "../firebase"; // Import the signInWithGoogle function
 
 const MinimalResumeLanding = () => {
   const navigate = useNavigate();
@@ -10,6 +11,10 @@ const MinimalResumeLanding = () => {
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  const handleSignIn = () => {
+    signInWithGoogle();
+  };
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center relative overflow-hidden">
@@ -38,7 +43,7 @@ const MinimalResumeLanding = () => {
       {/* Glassy Navbar - Positioned top right on desktop, normal on mobile */}
       <nav className="absolute top-8 right-8 z-50 hidden md:block">
         <button
-          onClick={() => navigate("/builder")}
+          onClick={handleSignIn} // Add onClick handler
           className="backdrop-blur-md bg-white/10 border border-white/20 px-6 py-3 rounded-full text-white font-medium hover:bg-white/20 transition-all duration-300 shadow-lg flex items-center gap-2"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -54,7 +59,7 @@ const MinimalResumeLanding = () => {
       {/* Regular navbar for mobile */}
       <nav className="absolute top-6 left-0 right-0 z-50 md:hidden px-4">
         <button
-          onClick={() => navigate("/builder")}
+          onClick={handleSignIn} // Add onClick handler
           className="w-full backdrop-blur-md bg-white/10 border border-white/20 px-6 py-3 rounded-full text-white font-medium hover:bg-white/20 transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
