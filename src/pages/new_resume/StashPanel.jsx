@@ -93,7 +93,7 @@ const StashPanel = ({ resumes, onCreateResume, onDeleteResume, onSelectResume })
           isExpanded ? "translate-x-0" : "translate-x-full md:translate-x-[340px]"
         }`}
       >
-        <div className="relative h-full w-full md:w-[380px] flex items-center p-4 md:pr-0 md:py-0">
+        <div className="relative h-full w-full md:w-[380px] flex items-center p-4 md:p-0">
           {/* Toggle Button - Hidden on mobile when expanded */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}

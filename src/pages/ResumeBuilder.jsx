@@ -52,7 +52,7 @@ const MemoizedPDFViewer = memo(({ state, templateId }) => {
   const pdfData = useMemo(() => ({ state }), [state]);
 
   return (
-    <PDFViewer width="100%" height="100%" className="w-full h-full">
+    <PDFViewer width="100%" height="100%" className="w-full h-full" showToolbar={false}>
       <ResumePDF data={pdfData} templateId={templateId} />
     </PDFViewer>
   );
@@ -130,11 +130,11 @@ const ResumeBuilder = () => {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-200px)]">
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-180px)] md:h-[calc(100vh-200px)]">
         {/* Left Panel - Always visible on mobile, half width on desktop */}
         <div className="w-full lg:w-1/2 overflow-y-auto bg-[#0a0a0a]">
-          <div className="p-6">
-            <div className="bg-[#111111] rounded-xl border border-gray-800 p-6">
+          <div className="p-4 md:p-6">
+            <div className="bg-[#111111] rounded-xl border border-gray-800 p-4 md:p-6">
               {activeTab === "content" ? (
                 <ActiveSectionComponent />
               ) : (
@@ -146,7 +146,7 @@ const ResumeBuilder = () => {
 
         {/* Right Panel - PDF Preview (Desktop only) */}
         <div className="hidden lg:block w-1/2 bg-[#0a0a0a] border-l border-gray-800">
-          <div className="h-full p-6">
+          <div className="h-full p-4 md:p-6">
             <div className="h-full bg-[#111111] rounded-xl overflow-hidden border border-gray-800 relative">
               {/* Loading indicator when debouncing */}
               {JSON.stringify(state) !== JSON.stringify(debouncedState) && (

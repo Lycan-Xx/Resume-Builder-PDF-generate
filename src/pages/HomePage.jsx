@@ -6,7 +6,10 @@ import { useAuth } from "../contexts/AuthContext";
 import StashPanel from "./new_resume/StashPanel";
 import ResumeNameDialog from "./new_resume/ResumeNameDialouge";
 import ConfirmDialog from "../components/modals/ConfirmDialog";
-import { firestoreService, MAX_FREE_RESUMES } from "../services/firestore.service";
+import {
+  firestoreService,
+  MAX_FREE_RESUMES,
+} from "../services/firestore.service";
 import { syncService } from "../services/sync.service";
 
 const MinimalResumeLanding = () => {
@@ -96,22 +99,28 @@ const MinimalResumeLanding = () => {
     setSyncError(null);
 
     try {
-      const localResumes = resumes.length > 0 ? resumes : JSON.parse(localStorage.getItem("resumes") || "[]");
-      
+      const localResumes =
+        resumes.length > 0
+          ? resumes
+          : JSON.parse(localStorage.getItem("resumes") || "[]");
+
       console.log("🔄 Syncing local resumes with Firestore...");
-      const syncedResumes = await firestoreService.syncLocalResumes(user.uid, localResumes);
-      
+      const syncedResumes = await firestoreService.syncLocalResumes(
+        user.uid,
+        localResumes
+      );
+
       // Ensure all synced resumes have proper timestamps and status
-      const resumesWithStatus = syncedResumes.map(resume => ({
+      const resumesWithStatus = syncedResumes.map((resume) => ({
         ...resume,
         lastSyncedAt: resume.lastSyncedAt || new Date().toISOString(),
         syncStatus: resume.syncStatus || "synced",
       }));
-      
+
       // Update local storage with synced resumes
       localStorage.setItem("resumes", JSON.stringify(resumesWithStatus));
       setResumes(resumesWithStatus);
-      
+
       console.log("✅ Sync complete:", resumesWithStatus.length, "resumes");
     } catch (error) {
       console.error("❌ Sync error:", error);
@@ -166,13 +175,13 @@ const MinimalResumeLanding = () => {
   const saveResumes = (updatedResumes) => {
     try {
       // Ensure all resumes have proper timestamps
-      const resumesWithTimestamps = updatedResumes.map(resume => ({
+      const resumesWithTimestamps = updatedResumes.map((resume) => ({
         ...resume,
         updatedAt: resume.updatedAt || new Date().toISOString(),
         lastSyncedAt: resume.lastSyncedAt || null,
         syncStatus: resume.syncStatus || (user ? "pending" : null),
       }));
-      
+
       localStorage.setItem("resumes", JSON.stringify(resumesWithTimestamps));
       setResumes(resumesWithTimestamps);
     } catch (error) {
@@ -214,100 +223,102 @@ const MinimalResumeLanding = () => {
 
   const handleConfirmResumeName = async (name) => {
     setIsCreatingResume(true);
-    
+
     try {
       // Create empty initial state for new resume
       const emptyResumeData = {
-      basics: {
-        fullName: "",
-        headline: "",
-        email: "",
-        phone: "",
-        location: "",
-        website: "",
-        profilePicture: null,
-      },
-      summary: {
-        content: "",
-      },
-      experience: [],
-      education: [],
-      skills: [],
-      languages: [],
-      awards: [],
-      profiles: [],
-      projects: [],
-      interests: [],
-      certifications: [],
-      publications: [],
-      volunteering: [],
-      references: {
-        items: [],
-        availableUponRequest: true,
-      },
-      customSections: [],
-      includedSections: {
-        basics: true,
-        summary: true,
-        experience: true,
-        education: true,
-        skills: true,
-        languages: false,
-        awards: false,
-        profiles: false,
-        projects: false,
-        interests: false,
-        certifications: false,
-        publications: false,
-        volunteering: false,
-        references: false,
-      },
-      sectionsOrder: [
-        "basics",
-        "summary",
-        "experience",
-        "education",
-        "skills",
-        "languages",
-        "awards",
-        "profiles",
-        "projects",
-        "interests",
-        "certifications",
-        "publications",
-        "volunteering",
-        "references",
-      ],
-      selectedTemplate: "professional-red",
-      history: {
-        past: [],
-        present: null,
-        future: [],
-      },
-    };
+        basics: {
+          fullName: "",
+          headline: "",
+          email: "",
+          phone: "",
+          location: "",
+          website: "",
+          profilePicture: null,
+        },
+        summary: {
+          content: "",
+        },
+        experience: [],
+        education: [],
+        skills: [],
+        languages: [],
+        awards: [],
+        profiles: [],
+        projects: [],
+        interests: [],
+        certifications: [],
+        publications: [],
+        volunteering: [],
+        references: {
+          items: [],
+          availableUponRequest: true,
+        },
+        customSections: [],
+        includedSections: {
+          basics: true,
+          summary: true,
+          experience: true,
+          education: true,
+          skills: true,
+          languages: false,
+          awards: false,
+          profiles: false,
+          projects: false,
+          interests: false,
+          certifications: false,
+          publications: false,
+          volunteering: false,
+          references: false,
+        },
+        sectionsOrder: [
+          "basics",
+          "summary",
+          "experience",
+          "education",
+          "skills",
+          "languages",
+          "awards",
+          "profiles",
+          "projects",
+          "interests",
+          "certifications",
+          "publications",
+          "volunteering",
+          "references",
+        ],
+        selectedTemplate: "professional-red",
+        history: {
+          past: [],
+          present: null,
+          future: [],
+        },
+      };
 
-    const newResume = {
-      id: Date.now().toString(),
-      name,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      lastSyncedAt: user ? new Date().toISOString() : null,
-      syncStatus: user ? "pending" : null,
-      data: emptyResumeData,
-    };
+      const newResume = {
+        id: Date.now().toString(),
+        name,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        lastSyncedAt: user ? new Date().toISOString() : null,
+        syncStatus: user ? "pending" : null,
+        data: emptyResumeData,
+      };
 
-    const updatedResumes = [...resumes, newResume];
-    saveResumes(updatedResumes);
+      const updatedResumes = [...resumes, newResume];
+      saveResumes(updatedResumes);
 
-    // Clear the resumeData cache and set new empty data
-    localStorage.setItem("resumeData", JSON.stringify(emptyResumeData));
+      // Clear the resumeData cache and set new empty data
+      localStorage.setItem("resumeData", JSON.stringify(emptyResumeData));
 
       // Sync to Firestore if user is logged in
       if (user) {
         try {
           const synced = await firestoreService.saveResume(user.uid, newResume);
           // Update with synced data
-          const resumeIndex = updatedResumes.findIndex(r => r.id === newResume.id);
+          const resumeIndex = updatedResumes.findIndex(
+            (r) => r.id === newResume.id
+          );
           if (resumeIndex !== -1) {
             updatedResumes[resumeIndex] = synced;
             saveResumes(updatedResumes);
@@ -407,7 +418,9 @@ const MinimalResumeLanding = () => {
         onClose={() => setLimitDialogOpen(false)}
         onConfirm={() => setLimitDialogOpen(false)}
         title="Resume Limit Reached"
-        message={`You've reached the maximum of ${MAX_FREE_RESUMES} free resumes. Please delete an existing resume to create a new one${!user ? ', or sign in to sync your resumes across devices' : ''}.`}
+        message={`You've reached the maximum of ${MAX_FREE_RESUMES} free resumes. Please delete an existing resume to create a new one${
+          !user ? ", or sign in to sync your resumes across devices" : ""
+        }.`}
         confirmText="Got it"
         cancelText=""
         type="warning"
@@ -598,12 +611,67 @@ const MinimalResumeLanding = () => {
         </div>
 
         {/* Subtle feature hint */}
-        <div className="mt-16 flex justify-center space-x-8 text-sm text-zinc-600">
-          <span>PDF Export</span>
-          <span className="text-zinc-800">•</span>
-          <span>Multiple Templates</span>
-          <span className="text-zinc-800">•</span>
-          <span>ATS-Friendly</span>
+        <div className="mt-12 md:mt-16">
+          {/* Desktop: Horizontal */}
+          <div className="hidden md:flex justify-center space-x-8 text-sm text-zinc-600">
+            <span>Multiple Templates</span>
+            <span className="text-zinc-800">•</span>
+            <span>ATS-Friendly</span>
+            <span className="text-zinc-800">•</span>
+            <span>PDF Export</span>
+          </div>
+
+          {/* Mobile: Vertical with icons */}
+          <div className="md:hidden flex flex-col items-center gap-3 text-sm text-zinc-600">
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-4 h-4 text-orange-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"
+                />
+              </svg>
+              <span>Multiple Templates</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-4 h-4 text-orange-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>ATS-Friendly</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-4 h-4 text-orange-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+              <span>PDF Export</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -655,7 +723,9 @@ const MinimalResumeLanding = () => {
       {/* Privacy Policy - Bottom Left */}
       <div className="absolute bottom-8 left-8 z-10">
         <a
-          href="/privacy"
+          href="https://github.com/Lycan-Xx/Resume-Builder-PDF-generate/blob/1c28fb728cd6372e9db9aa11a542c2107a2ae586/privacy-policy.md"
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-zinc-600 hover:text-zinc-400 text-sm transition-colors duration-300"
         >
           Privacy Policy

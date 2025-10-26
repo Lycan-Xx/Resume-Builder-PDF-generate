@@ -64,6 +64,14 @@ const SectionsNavbar = ({ activeSection, onSectionChange }) => {
   const scrollContainerRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExport = () => {
+    setIsExporting(true);
+    setTimeout(() => {
+      navigate("/export");
+    }, 5000); // 5 second delay
+  };
 
   // Check scroll position to show/hide arrows
   const checkScroll = () => {
@@ -129,12 +137,23 @@ const SectionsNavbar = ({ activeSection, onSectionChange }) => {
           <div className="flex items-center gap-2">
             {/* Finish & Export Button */}
             <button
-              onClick={() => navigate("/export")}
-              className="flex items-center gap-2 h-8 px-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all duration-200 shadow-lg font-medium text-sm"
+              onClick={handleExport}
+              disabled={isExporting}
+              className="flex items-center gap-2 h-8 px-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all duration-200 shadow-lg font-medium text-sm disabled:opacity-75 disabled:cursor-not-allowed"
             >
-              <HiSparkles className="w-4 h-4" />
-              <span className="sm:hidden">Export</span>
-              <span className="hidden sm:inline">Finish & Export</span>
+              {isExporting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="sm:hidden">Exporting...</span>
+                  <span className="hidden sm:inline">Preparing Export...</span>
+                </>
+              ) : (
+                <>
+                  <HiSparkles className="w-4 h-4" />
+                  <span className="sm:hidden">Export</span>
+                  <span className="hidden sm:inline">Finish & Export</span>
+                </>
+              )}
             </button>
           </div>
         </div>

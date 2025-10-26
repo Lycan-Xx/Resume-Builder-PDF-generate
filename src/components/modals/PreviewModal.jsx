@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
-import { Download, X, AlertCircle, FileText } from "lucide-react";
+import { PDFViewer } from "@react-pdf/renderer";
+import { X, AlertCircle, FileText } from "lucide-react";
 import { HiCheckCircle } from "react-icons/hi2";
 import ResumePDF from "../pdf/ResumePDF";
 import { useResume } from "../../contexts/ResumeContext";
@@ -13,6 +13,7 @@ const MemoizedPDFViewer = memo(({ data, templateId }) => {
         width="100%"
         height="100%"
         className="w-full h-full rounded-lg"
+        showToolbar={false}
       >
         <ResumePDF data={data} templateId={templateId} />
       </PDFViewer>
@@ -53,7 +54,7 @@ const PreviewModal = ({ isOpen, onClose }) => {
       />
 
       {/* Modal */}
-      <div className="relative w-full h-full sm:h-auto sm:max-h-[95vh] sm:max-w-5xl bg-[#0a0a0a] sm:rounded-2xl border-0 sm:border border-gray-800 shadow-2xl flex flex-col overflow-hidden">
+      <div className="relative w-full h-full md:h-auto md:max-h-[95vh] lg:max-w-5xl md:max-w-4xl bg-[#0a0a0a] md:rounded-2xl border-0 md:border border-gray-800 shadow-2xl flex flex-col overflow-hidden">
         {/* Header with Template Selector */}
         <div className="border-b border-gray-800 bg-[#0a0a0a]">
           <div className="flex items-center justify-between p-4 sm:p-6">
@@ -72,28 +73,6 @@ const PreviewModal = ({ isOpen, onClose }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <PDFDownloadLink
-                document={
-                  <ResumePDF
-                    data={pdfData}
-                    templateId={state.selectedTemplate}
-                  />
-                }
-                fileName={`${
-                  state.basics?.fullName?.replace(/\s+/g, "_") || "resume"
-                }.pdf`}
-                className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/20"
-              >
-                {({ loading }) => (
-                  <>
-                    <Download size={18} />
-                    <span className="text-sm">
-                      {loading ? "Preparing..." : "Download"}
-                    </span>
-                  </>
-                )}
-              </PDFDownloadLink>
-
               <button
                 onClick={onClose}
                 className="p-2.5 hover:bg-gray-800 rounded-lg transition-colors"
@@ -104,7 +83,7 @@ const PreviewModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Template Selector */}
-          <div className="px-4 sm:px-6 pb-4">
+          <div className="px-4 md:px-6 pb-4">
             <p className="text-xs text-gray-400 mb-3">Switch Template:</p>
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
               {templatesList.map((template) => (
@@ -130,33 +109,13 @@ const PreviewModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* PDF Viewer */}
-        <div className="flex-1 p-4 sm:p-6 bg-gray-900/30 overflow-hidden">
+        <div className="flex-1 p-4 md:p-6 bg-gray-900/30 overflow-hidden min-h-0">
           <div className="w-full h-full rounded-lg overflow-hidden shadow-2xl">
             <MemoizedPDFViewer
               data={pdfData}
               templateId={state.selectedTemplate}
             />
           </div>
-        </div>
-
-        {/* Mobile Download Button */}
-        <div className="sm:hidden p-4 border-t border-gray-800 bg-[#0a0a0a]">
-          <PDFDownloadLink
-            document={
-              <ResumePDF data={pdfData} templateId={state.selectedTemplate} />
-            }
-            fileName={`${
-              state.basics?.fullName?.replace(/\s+/g, "_") || "resume"
-            }.pdf`}
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 active:from-orange-600 active:to-orange-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/20"
-          >
-            {({ loading }) => (
-              <>
-                <Download size={20} />
-                <span>{loading ? "Preparing PDF..." : "Download PDF"}</span>
-              </>
-            )}
-          </PDFDownloadLink>
         </div>
       </div>
     </div>

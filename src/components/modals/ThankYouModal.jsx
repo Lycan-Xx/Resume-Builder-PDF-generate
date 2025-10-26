@@ -46,8 +46,11 @@ const ThankYouModal = ({ isOpen, onClose, onDownload, onShare }) => {
           </p>
 
           <div className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border border-orange-500/20 rounded-lg p-4 md:p-5">
-            <p className="text-sm md:text-base text-gray-300 text-center">
-              Please share this with your friends, family, and colleagues if you find it helpful so they can also have a test! 🚀
+            <p className="text-sm md:text-base text-gray-300 text-center mb-2">
+              <span className="text-orange-400 font-semibold">Love ResumeForge?</span> Help others discover it! 🚀
+            </p>
+            <p className="text-xs md:text-sm text-gray-400 text-center">
+              Share the app with friends, family, and colleagues so they can create professional resumes too!
             </p>
           </div>
         </div>
@@ -63,10 +66,10 @@ const ThankYouModal = ({ isOpen, onClose, onDownload, onShare }) => {
           </button>
           <button
             onClick={onShare}
-            className="flex-1 h-11 md:h-12 px-5 md:px-6 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-orange-500/50 text-white rounded-lg transition-all duration-200 flex items-center justify-center gap-2 font-medium"
+            className="flex-1 h-11 md:h-12 px-5 md:px-6 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-orange-500/50 text-white rounded-lg transition-all duration-200 flex items-center justify-center gap-2 font-medium group"
           >
-            <HiShare className="w-5 h-5" />
-            <span>Share</span>
+            <HiShare className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            <span>Share App</span>
           </button>
         </div>
       </div>

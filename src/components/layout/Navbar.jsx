@@ -1,7 +1,7 @@
 "use client";
 import { HiUser, HiArrowLeft, HiHome } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo.png";
 
 const Navbar = () => {
   const navigate = useNavigate();

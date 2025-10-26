@@ -1,268 +1,204 @@
-# ResumeForge - Professional Resume Builder
+# ResumeForge
 
-A modern, React-based resume builder application that allows users to create professional, ATS-friendly resumes with real-time PDF preview and multiple template options.
+A modern, offline-first resume builder with real-time PDF preview, cloud sync, and multiple professional templates.
 
-## Features
+## What It Is
 
-- **Real-time PDF Preview**: See your resume as you build it
-- **Multiple Templates**: Choose from professional, modern, and minimalist designs
-- **Comprehensive Sections**: Support for all resume sections including experience, education, skills, projects, certifications, and more
-- **Template Customization**: Dynamic styling with customizable colors, fonts, and layouts
-- **Dark Mode Support**: Built-in theme switching
-- **Local Storage**: Auto-save your progress
-- **Export to PDF**: Download your resume as a PDF file
+ResumeForge is a web-based resume builder that helps you create professional, ATS-friendly resumes with ease. Build your resume once, access it anywhere, and export to PDF instantly.
+
+## Key Features
+
+- **Real-time PDF Preview** - See your resume as you build it
+- **Multiple Templates** - Professional, Modern, and Minimalist designs
+- **Cloud Sync** - Save up to 3 resumes with Google Sign-In
+- **Offline-First** - Build resumes without internet, sync when back online
+- **Resume Stash** - Manage multiple resumes with a sleek side panel
+- **Auto-Save** - Never lose your work with automatic local and cloud backup
+- **Mobile Responsive** - Build resumes on any device
 
 ## Tech Stack
 
-- **React** - UI library
-- **React Router** - Navigation
-- **@react-pdf/renderer** - PDF generation
-- **Tailwind CSS** - Styling
-- **Lucide React** - Icons
-- **Vite** - Build tool
+**Frontend**
 
-## Project Structure
+- React 18 + Vite
+- React Router for navigation
+- Tailwind CSS for styling
+- @react-pdf/renderer for PDF generation
 
-```
-.
-├── public/
-│   ├── fonts/                    # Custom fonts for PDF rendering
-│   │   ├── roboto-mono-*.woff
-│   │   └── arimo-*.woff
-│   └── favicon.svg
-├── src/
-│   ├── components/               # UI Components (organized by function)
-│   │   ├── layout/              # Navigation and layout components
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── ProgressNavbar.jsx
-│   │   │   └── SectionsNavbar.jsx
-│   │   ├── modals/              # Modal dialogs
-│   │   │   ├── ManageSectionsModal.jsx
-│   │   │   └── PreviewModal.jsx
-│   │   ├── pdf/                 # PDF generation and templates
-│   │   │   ├── ResumePDF.jsx
-│   │   │   └── TemplateSelector.jsx
-│   │   └── sections/            # Resume section form components
-│   │       ├── AwardsSection.jsx
-│   │       ├── BasicsSection.jsx
-│   │       ├── CertificationsSection.jsx
-│   │       ├── EducationSection.jsx
-│   │       ├── ExperienceSection.jsx
-│   │       ├── InterestsSection.jsx
-│   │       ├── LanguagesSection.jsx
-│   │       ├── PersonalInfoSection.jsx
-│   │       ├── ProfilesSection.jsx
-│   │       ├── ProjectsSection.jsx
-│   │       ├── PublicationsSection.jsx
-│   │       ├── ReferencesSection.jsx
-│   │       ├── SkillsSection.jsx
-│   │       ├── SummarySection.jsx
-│   │       └── VolunteeringSection.jsx
-│   ├── contexts/                 # React Context providers
-│   │   ├── ResumeContext.jsx     # Resume data state management
-│   │   └── ThemeContext.jsx      # Theme state management
-│   ├── lib/
-│   │   └── utils.ts              # Utility functions
-│   ├── pages/                    # Page components
-│   │   ├── HomePage.jsx          # Landing page
-│   │   ├── ResumeBuilder.jsx     # Main resume builder page
-│   │   └── ExportPage.jsx        # Final export & download page
-│   ├── templates/                # PDF template configurations
-│   │   ├── index.js
-│   │   ├── minimalist.js
-│   │   ├── modernBlue.js
-│   │   └── professionalRed.js
-│   ├── App.jsx                   # Main app component with routing
-│   ├── fonts.js                  # Font registration for PDF
-│   ├── index.css                 # Global styles
-│   └── main.jsx                  # App entry point
-├── index.html
-├── package.json
-├── tailwind.config.js
-├── vite.config.js
-└── README.md
-```
+**Backend & Services**
 
-## Component Architecture
+- Firebase Authentication (Google Sign-In)
+- Firestore for cloud storage
+- LocalStorage for offline persistence
 
-### Core Components
+**State Management**
 
-#### 1. **App.jsx**
-
-- Sets up React Router with two main routes: home and builder
-- Wraps the application with ThemeProvider
-- Provides ResumeProvider to the builder route
-
-#### 2. **ResumeBuilder.jsx**
-
-- Main page where users build their resume
-- Contains two panels: form inputs (left) and PDF preview (right)
-- Manages active section state and tab switching (Content/Template)
-- Responsive design with mobile preview toggle
-
-#### 3. **ResumePDF.jsx**
-
-- Generates PDF using `@react-pdf/renderer`
-- Receives resume data and template ID as props
-- Dynamically applies template styles
-- Renders all resume sections based on available data
-- Supports both single-column and two-column layouts
-
-### Component Categories
-
-#### Layout Components (`src/components/layout/`)
-- **Navbar**: Top navigation with theme toggle and PDF download
-- **SectionsNavbar**: Horizontal navigation for switching between resume sections
-- **ProgressNavbar**: Shows completion progress (if implemented)
-
-#### Modal Components (`src/components/modals/`)
-- **ManageSectionsModal**: Dialog for showing/hiding resume sections
-- **PreviewModal**: Full-screen PDF preview modal
-
-#### PDF Components (`src/components/pdf/`)
-- **ResumePDF**: Main PDF generation component using @react-pdf/renderer
-- **TemplateSelector**: UI for selecting and previewing resume templates
-
-#### Section Components (`src/components/sections/`)
-All form components for editing resume data:
-- **BasicsSection**: Personal information (name, email, phone, location, website)
-- **SummarySection**: Professional summary/objective
-- **ExperienceSection**: Work experience with achievements
-- **EducationSection**: Educational background
-- **SkillsSection**: Technical and soft skills with proficiency levels
-- **ProjectsSection**: Personal/professional projects
-- **LanguagesSection**: Language proficiency
-- **CertificationsSection**: Professional certifications
-- **AwardsSection**: Awards and recognitions
-- **PublicationsSection**: Published works
-- **VolunteeringSection**: Volunteer experience
-- **InterestsSection**: Personal interests and hobbies
-- **ReferencesSection**: Professional references
-- **ProfilesSection**: Social media and professional profiles
-
-### Context Providers
-
-#### ResumeContext
-
-- Manages all resume data using useReducer
-- Provides actions for CRUD operations on resume sections
-- Auto-saves to localStorage with debouncing
-- Loads saved data on mount
-
-#### ThemeContext
-
-- Manages dark/light theme state
-- Persists theme preference to localStorage
-
-### Templates
-
-Templates define the visual styling of the PDF output:
-
-- **professionalRed**: Clean design with red accents
-- **modernBlue**: Contemporary design with blue gradients
-- **minimalist**: Simple and elegant with subtle accents
-
-Each template includes:
-
-- Color scheme (primary, secondary, text, background)
-- Font configuration (family, sizes)
-- Spacing (margins, padding, line height)
-- Layout type (single-column or two-column)
-
-## User Flow
-
-1. **Landing Page** (`/`) - Introduction and getting started
-2. **Resume Builder** (`/builder`) - Main editing interface
-   - User inputs data in section components
-   - Components dispatch actions to ResumeContext
-   - ResumeContext updates state and saves to localStorage
-   - Real-time PDF preview on the right panel
-3. **Export Page** (`/export`) - Final download page
-   - Celebration animation with confetti
-   - PDF preview and download button
-   - Social media links to support developer
-   - Resume statistics display
-
-## Navigation
-
-- **"Finish & Export"** button in Navbar → Redirects to Export Page
-- **"Back to Editor"** button on Export Page → Returns to Builder
+- React Context API
+- Custom sync service with offline queue
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
-- npm or yarn
+- Node.js 16+
+- Firebase project (for authentication)
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-
-# Navigate to project directory
-cd pdf-generate
+git clone https://github.com/Lycan-Xx/Resume-Builder-PDF-generate.git
+cd Resume-Builder-PDF-generate
 
 # Install dependencies
 npm install
 
+# Set up environment variables
+cp .env.example .env.local
+# Add your Firebase credentials to .env.local
+
 # Start development server
 npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
 ```
 
-## Development
+### Firebase Setup
 
-### Adding a New Section
+1. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
+2. Enable Google Authentication
+3. Create a Firestore database
+4. Copy your Firebase config to `.env.local`
+5. Deploy Firestore rules from `firestore.rules`
 
-1. Create a new component in `src/components/`
-2. Add the section to `ResumeContext` initial state
-3. Create a render function in `ResumePDF.jsx`
-4. Add the section to `sectionComponents` in `ResumeBuilder.jsx`
-5. Update the sections navbar
+See [FIRESTORE_SETUP_INSTRUCTIONS.md](FIRESTORE_SETUP_INSTRUCTIONS.md) for detailed setup.
 
-### Creating a New Template
+## How It Works
 
-1. Create a new file in `src/templates/`
-2. Define colors, fonts, spacing, and layout
-3. Export the template object
-4. Import and add to `templates` object in `src/templates/index.js`
+### Architecture
 
-## Known Issues & Fixes
+```
+User Input → ResumeContext → LocalStorage + Firestore
+                ↓
+         Real-time PDF Preview
+```
 
-- **Skills Section**: Uses array of objects `[{name, level}]` format
-- **Interests Section**: Uses array of objects `[{name, description}]` format
-- **Border Radius Error**: Fixed by adding `borderRadius: 0` and fallback checks for template properties
-- **Font Sizes**: Standardized to 15px for section titles, 11px for dates
+**Offline-First Sync**
 
-## Future Enhancements
+- Changes saved locally first
+- Queued for cloud sync when online
+- Last-write-wins conflict resolution
+- Auto-sync every 5 seconds
 
-- User authentication with Firebase
-- Cloud storage for resumes
-- More template options
-- Export to Word format
-- Resume analytics and ATS scoring
-- Collaborative editing
+**Resume Management**
 
+- Create up to 3 free resumes
+- Each resume stored separately
+- Switch between resumes via Stash Panel
+- Delete resumes with confirmation
 
----
-### constraints and limitations
+### Project Structure
 
-- User can only create a single resume
-- sections cannot be rearranged
-- Can only be exported to PDF
-- 
+```
+src/
+├── components/
+│   ├── layout/          # Navbar, navigation
+│   ├── modals/          # Dialogs and modals
+│   ├── pdf/             # PDF generation
+│   └── sections/        # Resume section forms
+├── contexts/            # State management
+├── services/            # Firestore & sync logic
+├── hooks/               # Custom React hooks
+├── pages/               # Route pages
+└── templates/           # PDF templates
+```
 
-## License
+## Challenges Encountered
 
-MIT
+### 1. **Offline Sync Complexity**
+
+- **Problem**: Managing resume edits across devices while offline
+- **Solution**: Implemented queue-based sync service with timestamp comparison
+
+### 2. **PDF Generation Performance**
+
+- **Problem**: Large resumes caused slow rendering
+- **Solution**: Debounced state updates (800ms) and memoized PDF viewer
+
+### 3. **Resume Limit Enforcement**
+
+- **Problem**: Limit check triggered on every save, including updates
+- **Solution**: Check Firestore document existence before enforcing limit
+
+### 4. **Mobile UX**
+
+- **Problem**: Desktop-focused UI didn't work on mobile
+- **Solution**: Responsive stash panel, mobile-optimized dialogs, touch-friendly buttons
+
+### 5. **State Synchronization**
+
+- **Problem**: Local and cloud data getting out of sync
+- **Solution**: Single source of truth with bidirectional sync on login
+
+## Future Plans
+
+- [ ] **Premium Features** - Unlimited resumes, advanced templates
+- [ ] **AI Suggestions** - Content recommendations for each section
+- [ ] **ATS Scoring** - Real-time resume optimization tips
+- [ ] **Export Formats** - Word, JSON, Markdown
+- [ ] **Collaborative Editing** - Share resumes for feedback
+- [ ] **Version History** - Restore previous versions
+- [ ] **Custom Templates** - User-created template builder
+- [ ] **Resume Analytics** - Track views and downloads
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Here's how:
+
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Make your changes**
+   - Follow existing code style
+   - Add comments for complex logic
+   - Test on mobile and desktop
+4. **Commit your changes**
+   ```bash
+   git commit -m "feat: add amazing feature"
+   ```
+5. **Push to your fork**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+6. **Open a Pull Request**
+
+### Development Guidelines
+
+- Use functional components with hooks
+- Follow the existing folder structure
+- Add PropTypes or TypeScript types
+- Test offline functionality
+- Ensure mobile responsiveness
+
+## License
+
+This project is licensed under the [Boost Software License 1.0](LICENSE) - see the LICENSE file for details.
+
+## Contact
+
+**Mohammad Bello** (Lycan_Xx)
+
+- Email: [msbello@cc.cc](mailto:msbello@cc.cc)
+- Twitter: [@LycanXx0](https://x.com/LycanXx0)
+- LinkedIn: [mohammad-bello](https://linkedin.com/in/mohammad-bello/)
+- GitHub: [@Lycan-Xx](https://github.com/Lycan-Xx)
+
+## Acknowledgments
+
+- Built with ❤️ using React and Firebase
+- Icons by [Lucide](https://lucide.dev) and [Heroicons](https://heroicons.com)
+- Fonts by Google Fonts
+
+---
+
+**Star ⭐ this repo if you find it helpful!**
