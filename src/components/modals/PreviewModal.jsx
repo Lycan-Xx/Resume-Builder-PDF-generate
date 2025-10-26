@@ -74,7 +74,10 @@ const PreviewModal = ({ isOpen, onClose }) => {
             <div className="flex items-center gap-2">
               <PDFDownloadLink
                 document={
-                  <ResumePDF data={pdfData} templateId={state.selectedTemplate} />
+                  <ResumePDF
+                    data={pdfData}
+                    templateId={state.selectedTemplate}
+                  />
                 }
                 fileName={`${
                   state.basics?.fullName?.replace(/\s+/g, "_") || "resume"
@@ -107,11 +110,13 @@ const PreviewModal = ({ isOpen, onClose }) => {
               {templatesList.map((template) => (
                 <button
                   key={template.id}
-                  onClick={() => dispatch({ type: 'SET_TEMPLATE', template: template.id })}
+                  onClick={() =>
+                    dispatch({ type: "SET_TEMPLATE", template: template.id })
+                  }
                   className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
                     state.selectedTemplate === template.id
-                      ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20'
-                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                      ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20"
+                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                   }`}
                 >
                   {state.selectedTemplate === template.id && (

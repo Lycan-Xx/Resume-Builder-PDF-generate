@@ -250,6 +250,15 @@ npm run preview
 - Resume analytics and ATS scoring
 - Collaborative editing
 
+
+---
+### constraints and limitations
+
+- User can only create a single resume
+- sections cannot be rearranged
+- Can only be exported to PDF
+- 
+
 ## License
 
 MIT
