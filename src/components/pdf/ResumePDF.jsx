@@ -437,7 +437,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
                 {award.title || "Award Title"}
               </SafeText>
               <SafeText style={styles.itemDate}>
-                {award.date || "Date"}
+                {formatMonthYear(award.date) || "Date"}
               </SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
@@ -566,7 +566,9 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               <SafeText style={styles.itemTitle}>
                 {cert.name || "Certification Name"}
               </SafeText>
-              <SafeText style={styles.itemDate}>{cert.date || "Date"}</SafeText>
+              <SafeText style={styles.itemDate}>
+                {formatMonthYear(cert.date) || "Date"}
+              </SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
               {cert.issuer || "Issuer"}
@@ -592,7 +594,9 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
               <SafeText style={styles.itemTitle}>
                 {pub.title || "Publication Title"}
               </SafeText>
-              <SafeText style={styles.itemDate}>{pub.date || "Date"}</SafeText>
+              <SafeText style={styles.itemDate}>
+                {formatMonthYear(pub.date) || "Date"}
+              </SafeText>
             </View>
             <SafeText style={styles.itemSubtitle}>
               {pub.publisher || "Publisher"}
