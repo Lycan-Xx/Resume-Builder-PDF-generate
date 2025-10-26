@@ -32,6 +32,7 @@ export const modernBlueTemplate = {
     page: { top: 40, bottom: 40, left: 50, right: 50 },
     sectionMargin: 35,
     itemMargin: 28,
+    headerMargin: 25,
     lineHeight: 1.6
   },
   

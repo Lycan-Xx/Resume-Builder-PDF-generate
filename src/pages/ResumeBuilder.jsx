@@ -47,12 +47,12 @@ const sectionComponents = {
 };
 
 // Memoized PDF Viewer to prevent re-rendering on every keystroke
-const MemoizedPDFViewer = memo(({ state }) => {
+const MemoizedPDFViewer = memo(({ state, templateId }) => {
   const pdfData = useMemo(() => ({ state }), [state]);
 
   return (
     <PDFViewer width="100%" height="100%" className="w-full h-full">
-      <ResumePDF data={pdfData} />
+      <ResumePDF data={pdfData} templateId={templateId} />
     </PDFViewer>
   );
 });
@@ -139,7 +139,7 @@ const ResumeBuilder = () => {
         >
           <div className="h-full p-6">
             <div className="h-full bg-[#111111] rounded-xl overflow-hidden border border-gray-800">
-              <MemoizedPDFViewer state={state} />
+              <MemoizedPDFViewer state={state} templateId={state.selectedTemplate} />
             </div>
           </div>
         </div>

@@ -37,7 +37,7 @@ const MinimalResumeLanding = () => {
 
       {/* Glassy Navbar - Positioned top right on desktop, normal on mobile */}
       <nav className="absolute top-8 right-8 z-50 hidden md:block">
-        <button 
+        <button
           onClick={() => navigate("/builder")}
           className="backdrop-blur-md bg-white/10 border border-white/20 px-6 py-3 rounded-full text-white font-medium hover:bg-white/20 transition-all duration-300 shadow-lg"
         >
@@ -47,7 +47,7 @@ const MinimalResumeLanding = () => {
 
       {/* Regular navbar for mobile */}
       <nav className="absolute top-6 left-0 right-0 z-50 md:hidden px-4">
-        <button 
+        <button
           onClick={() => navigate("/builder")}
           className="w-full backdrop-blur-md bg-white/10 border border-white/20 px-6 py-3 rounded-full text-white font-medium hover:bg-white/20 transition-all duration-300 shadow-lg"
         >
@@ -81,7 +81,7 @@ const MinimalResumeLanding = () => {
         </p>
 
         {/* CTA Button */}
-        <button 
+        <button
           onClick={() => navigate("/builder")}
           className="group inline-flex items-center space-x-3 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/20"
         >
