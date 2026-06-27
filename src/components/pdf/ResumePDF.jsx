@@ -125,15 +125,18 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
       fontFamily: template.fonts.header,
       fontWeight: "bold",
       color: template.colors.primary,
-      marginBottom: 6,
+      marginBottom: 2,
       textAlign: "left",
+      lineHeight: 1.2,
     },
 
     headline: {
       fontSize: template.fonts.sizes.headline,
       color: template.colors.lightText,
-      marginBottom: 8,
+      marginTop: 2,
+      marginBottom: 12,
       textAlign: "left",
+      lineHeight: 1.3,
     },
 
     contactInfo: {
@@ -142,6 +145,7 @@ export default function ResumePDF({ data, templateId = "professional-red" }) {
       gap: 4,
       fontSize: template.fonts.sizes.contactInfo,
       color: template.colors.text,
+      marginTop: 8,
     },
 
     contactLink: {
