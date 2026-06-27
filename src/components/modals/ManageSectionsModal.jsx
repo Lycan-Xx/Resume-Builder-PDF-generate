@@ -33,6 +33,7 @@ const sectionConfig = {
   publications: { label: "Publications", icon: HiBookOpen, color: "violet" },
   volunteering: { label: "Volunteering", icon: HiUserGroup, color: "lime" },
   references: { label: "References", icon: HiPhone, color: "slate" },
+  additionalInfo: { label: "Additional Info", icon: HiDocumentText, color: "blue" },
 }
 
 const ManageSectionsModal = ({ isOpen, onClose }) => {
@@ -73,8 +74,12 @@ const ManageSectionsModal = ({ isOpen, onClose }) => {
         {/* Sections Grid */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {state.sectionsOrder.map((sectionId) => {
+            {state.sectionsOrder?.map((sectionId) => {
               const config = sectionConfig[sectionId]
+              
+              // Skip if config doesn't exist for this section
+              if (!config) return null
+              
               const Icon = config.icon
               const isIncluded = state.includedSections[sectionId]
 
