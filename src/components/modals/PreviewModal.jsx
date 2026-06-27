@@ -9,14 +9,21 @@ import { templatesList } from "../../templates";
 const MemoizedPDFViewer = memo(({ data, templateId }) => {
   try {
     return (
-      <PDFViewer
-        width="100%"
-        height="100%"
-        className="w-full h-full rounded-lg"
-        showToolbar={false}
-      >
-        <ResumePDF data={data} templateId={templateId} />
-      </PDFViewer>
+      <div className="w-full h-full overflow-hidden">
+        <PDFViewer
+          width="100%"
+          height="100%"
+          showToolbar={false}
+          style={{
+            width: "100%",
+            height: "100%",
+            border: "none",
+            borderRadius: "0.5rem",
+          }}
+        >
+          <ResumePDF data={data} templateId={templateId} />
+        </PDFViewer>
+      </div>
     );
   } catch (err) {
     console.error("PDF Viewer Error:", err);
