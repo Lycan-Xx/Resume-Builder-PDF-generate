@@ -2,11 +2,13 @@
 import { professionalRedTemplate } from './professionalRed'
 import { modernBlueTemplate } from './modernBlue'
 import { minimalistTemplate } from './minimalist'
+import { cleanMinimalTemplate } from './cleanMinimal'
 
 export const templates = {
   'professional-red': professionalRedTemplate,
   'modern-blue': modernBlueTemplate,
-  'minimalist': minimalistTemplate
+  'minimalist': minimalistTemplate,
+  'clean-minimal': cleanMinimalTemplate
 }
 
 export const templatesList = Object.values(templates)

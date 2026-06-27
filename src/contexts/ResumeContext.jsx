@@ -35,6 +35,7 @@ const initialState = {
     availableUponRequest: true,
   },
   customSections: [],
+  additionalInfo: [],
 
   // Meta settings
   includedSections: {
@@ -52,21 +53,23 @@ const initialState = {
     publications: false,
     volunteering: false,
     references: false,
+    additionalInfo: false,
   },
   sectionsOrder: [
     "basics",
     "summary",
+    "skills",
     "experience",
     "education",
-    "skills",
+    "projects",
+    "additionalInfo",
     "languages",
     "awards",
-    "profiles",
-    "projects",
-    "interests",
     "certifications",
     "publications",
     "volunteering",
+    "interests",
+    "profiles",
     "references",
   ],
   selectedTemplate: "professional-red",
@@ -202,7 +205,6 @@ export const ResumeProvider = ({ children }) => {
     saveToStorage(state)
   }, [state, saveToStorage])
 
-  // Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem("resumeData")
     if (saved) {
@@ -211,13 +213,30 @@ export const ResumeProvider = ({ children }) => {
         
         // Migrate old skills format to new format if needed
         if (parsedState.skills) {
-          // If skills is an array, keep it as is (for sections/SkillsSection.jsx)
-          // If skills is not an array and not an object with technical/soft, convert it
           if (!Array.isArray(parsedState.skills) && 
               !parsedState.skills.technical && 
               !parsedState.skills.soft) {
-            // Invalid format, reset to empty array
             parsedState.skills = []
+          }
+        }
+
+        // Ensure additionalInfo exists (migration for older data)
+        if (!parsedState.additionalInfo) {
+          parsedState.additionalInfo = []
+        }
+
+        // Ensure includedSections has additionalInfo (migration)
+        if (parsedState.includedSections && !parsedState.includedSections.additionalInfo) {
+          parsedState.includedSections.additionalInfo = false
+        }
+
+        // Ensure sectionsOrder has additionalInfo (migration)
+        if (parsedState.sectionsOrder && !parsedState.sectionsOrder.includes('additionalInfo')) {
+          const refIndex = parsedState.sectionsOrder.indexOf('references')
+          if (refIndex !== -1) {
+            parsedState.sectionsOrder.splice(refIndex, 0, 'additionalInfo')
+          } else {
+            parsedState.sectionsOrder.push('additionalInfo')
           }
         }
         
