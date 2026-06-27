@@ -1,14 +1,13 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
     // Resumes collection
     match /resumes/{resumeId} {
-      // Allow users to read their own resumes
+      // Allow authenticated users to read their own resumes
       allow read: if request.auth != null && 
                      resource.data.userId == request.auth.uid;
       
-      // Allow users to create resumes (with userId validation)
+      // Allow authenticated users to create resumes
       allow create: if request.auth != null && 
                        request.resource.data.userId == request.auth.uid;
       
@@ -22,7 +21,7 @@ service cloud.firestore {
                        resource.data.userId == request.auth.uid;
     }
     
-    // Deny all other access
+    // Deny all other access by default
     match /{document=**} {
       allow read, write: if false;
     }
