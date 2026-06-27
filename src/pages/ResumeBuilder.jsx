@@ -133,8 +133,8 @@ const ResumeBuilder = () => {
       <div className="flex flex-col lg:flex-row h-[calc(100vh-180px)] md:h-[calc(100vh-200px)]">
         {/* Left Panel - Always visible on mobile, half width on desktop */}
         <div className="w-full lg:w-1/2 overflow-y-auto bg-[#0a0a0a]">
-          <div className="p-4 md:p-6">
-            <div className="bg-[#111111] rounded-xl border border-gray-800 p-4 md:p-6">
+          <div className="p-3 sm:p-4 md:p-6">
+            <div className="bg-[#111111] rounded-xl border border-gray-800 p-4 sm:p-5 md:p-6 shadow-lg">
               {activeTab === "content" ? (
                 <ActiveSectionComponent />
               ) : (
@@ -145,9 +145,9 @@ const ResumeBuilder = () => {
         </div>
 
         {/* Right Panel - PDF Preview (Desktop only) */}
-        <div className="hidden lg:block w-1/2 bg-[#0a0a0a] border-l border-gray-800">
+        <div className="hidden lg:block w-1/2 bg-[#0a0a0a] border-l border-gray-800 overflow-hidden">
           <div className="h-full p-4 md:p-6">
-            <div className="h-full bg-[#111111] rounded-xl overflow-hidden border border-gray-800 relative">
+            <div className="h-full bg-[#111111] rounded-xl overflow-hidden border border-gray-800 relative shadow-lg">
               {/* Loading indicator when debouncing */}
               {JSON.stringify(state) !== JSON.stringify(debouncedState) && (
                 <div className="absolute top-4 right-4 z-10 bg-orange-500/90 text-white text-xs px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2">
@@ -171,18 +171,18 @@ const ResumeBuilder = () => {
           }, 300);
         }}
         disabled={isPreviewLoading}
-        className="lg:hidden fixed bottom-6 right-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-4 rounded-full shadow-xl transition-all duration-300 z-50 flex items-center gap-2 hover:scale-105 active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed"
+        className="lg:hidden fixed bottom-6 right-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-5 sm:px-6 py-3 sm:py-4 rounded-full shadow-xl transition-all duration-300 z-50 flex items-center gap-2 hover:scale-105 active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed font-medium text-sm"
         aria-label="Preview Resume"
       >
         {isPreviewLoading ? (
           <>
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            <span className="font-medium text-sm">Loading...</span>
+            <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span className="hidden xs:inline">Loading...</span>
           </>
         ) : (
           <>
-            <HiEye className="w-5 h-5" />
-            <span className="font-medium text-sm">Preview</span>
+            <HiEye className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="hidden xs:inline">Preview</span>
           </>
         )}
       </button>
